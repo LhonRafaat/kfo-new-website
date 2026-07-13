@@ -1,0 +1,122 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --cream: #eae3db;
+    --ink: #2a1b1d;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-cream text-ink font-sans antialiased;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  /* Consistent, elegant text selection */
+  ::selection {
+    background: var(--ink);
+    color: var(--cream);
+  }
+}
+
+@layer components {
+  /* ---- Layout ---- */
+  .container-edge {
+    @apply mx-auto w-full max-w-content px-6 sm:px-8 lg:px-12 xl:px-[52px];
+  }
+
+  /* ---- Display type scale (fluid, serif) ---- */
+  .display-hero {
+    @apply font-serif font-bold uppercase tracking-wordmark;
+    font-size: clamp(1.35rem, 1rem + 1.8vw, 2rem);
+    line-height: 1.14;
+  }
+  .display-xl {
+    @apply font-serif font-medium;
+    font-size: clamp(2.5rem, 1.4rem + 4.4vw, 4rem);
+    line-height: 1.12;
+  }
+  .display-lg {
+    @apply font-serif font-medium;
+    font-size: clamp(2.25rem, 1.6rem + 2.9vw, 3.5rem);
+    line-height: 1.12;
+  }
+  .display-md {
+    @apply font-serif font-medium;
+    font-size: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+    line-height: 1.14;
+  }
+
+  /* ---- Eyebrow / label ---- */
+  .eyebrow {
+    @apply font-sans font-semibold uppercase tracking-label text-espresso;
+    font-size: 0.8125rem;
+  }
+  .eyebrow-light {
+    @apply font-sans uppercase tracking-label;
+    font-size: 0.75rem;
+  }
+
+  /* ---- Body copy ---- */
+  .body-lg {
+    @apply font-sans text-ink/90;
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.1875rem);
+    line-height: 1.55;
+  }
+
+  /* ---- Accent (italic serif) link with hand-drawn underline ---- */
+  .accent-link {
+    @apply relative inline-flex items-center gap-2 font-serif italic tracking-wide text-ink transition-colors duration-300;
+    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+  }
+  .accent-link::after {
+    content: "";
+    @apply pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left rounded-full bg-accent transition-transform duration-300 ease-out;
+  }
+  .accent-link:hover::after {
+    @apply scale-x-105;
+  }
+  .accent-link:hover {
+    @apply text-accent;
+  }
+  .accent-link .arrow {
+    @apply transition-transform duration-300 ease-out;
+  }
+  .accent-link:hover .arrow {
+    @apply translate-x-1;
+  }
+
+  /* ---- Simple hover-grow underline for nav / footer links ---- */
+  .link-underline {
+    @apply relative inline-block transition-colors duration-300;
+  }
+  .link-underline::after {
+    content: "";
+    @apply absolute -bottom-1 left-0 h-px w-full origin-left scale-x-0 bg-current transition-transform duration-300 ease-out;
+  }
+  .link-underline:hover::after {
+    @apply scale-x-100;
+  }
+}
+
+@layer utilities {
+  .texture-floral {
+    background-image: url("/images/floral-texture.webp");
+    background-size: cover;
+    background-position: center;
+  }
+  /* thin custom scrollbar for horizontal carousels */
+  .no-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .no-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+}
