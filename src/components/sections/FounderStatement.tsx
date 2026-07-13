@@ -8,12 +8,17 @@ export function FounderStatement() {
     <section className="relative bg-slate text-ink">
       <TextureOverlay src="/images/texture-paper-founder.webp" opacity={0.5} blend="multiply" />
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.18} blend="soft-light" />
+      {/* Paper-fold divider running the full height between the two columns */}
+      <div
+        aria-hidden
+        className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-ink/25 lg:block"
+      />
 
       <Container className="relative z-10 py-20 md:py-28">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Portrait + caption — sized to the Figma (560 × 419, full column width) */}
           <figure className="w-full">
-            <div className="relative aspect-[560/419] w-full overflow-hidden rounded-sm bg-ink/10 shadow-lg">
+            <div className="relative aspect-560/419 w-full overflow-hidden rounded-sm bg-ink/10 shadow-lg">
               <Image
                 src="/images/founder.jpg"
                 alt="Bavi Yassin, Founder of the Kurdistan Film Commission"

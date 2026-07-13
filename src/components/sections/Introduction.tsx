@@ -7,8 +7,8 @@ export function Introduction() {
   return (
     <section className="relative bg-cream">
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
-      {/* Signature flowing line — deliberately overflows into the section below */}
-      <CurveIntro className="pointer-events-none absolute left-0 top-[38%] z-0 h-[150%] w-full text-ink/30" />
+      {/* Signature flowing line — bottoms out around the "Untold Stories" heading below */}
+      <CurveIntro className="pointer-events-none absolute left-0 top-[42%] z-0 h-[115%] w-full text-ink/30" />
 
       <Container className="relative z-10 py-20 md:py-28">
         <Eyebrow>Introduction</Eyebrow>
