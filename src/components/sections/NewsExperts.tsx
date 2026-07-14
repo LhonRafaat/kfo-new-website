@@ -6,7 +6,8 @@ import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
-import { ArrowLeft, ArrowRight, CurveNews, PauseIcon, PlayIcon } from "@/components/icons";
+import { ScrollCurve } from "@/components/ScrollCurve";
+import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from "@/components/icons";
 import { news } from "@/lib/content";
 
 const ROTATE_MS = 5000;
@@ -28,7 +29,10 @@ export function NewsExperts() {
   return (
     <section className="relative overflow-hidden bg-cream">
       <TextureOverlay src="/images/texture-paper-news.webp" opacity={0.35} blend="multiply" />
-      <CurveNews className="pointer-events-none absolute bottom-0 left-0 h-[55%] w-full text-ink/20" />
+      <ScrollCurve
+        variant="news"
+        className="pointer-events-none absolute bottom-0 left-0 h-[55%] w-full text-ink/40"
+      />
 
       <Container className="relative z-10 py-20 md:py-24">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
@@ -49,7 +53,7 @@ export function NewsExperts() {
                     <Link href={item.href} onMouseEnter={() => setActive(i)} className="group block">
                       <span className="font-sans text-sm tracking-wide text-ink/60">{item.date}</span>
                       <p
-                        className={`mt-2 inline font-serif text-xl leading-snug transition-colors duration-300 md:text-2xl ${
+                        className={`mt-2 inline font-serif text-xl leading-snug transition-colors duration-500 md:text-2xl ${
                           isActive
                             ? "text-ink [box-shadow:inset_0_-2px_0_0_#F19352]"
                             : "text-ink/40 group-hover:text-ink/70"
@@ -68,7 +72,7 @@ export function NewsExperts() {
                 type="button"
                 onClick={() => setPlaying((p) => !p)}
                 aria-label={playing ? "Pause" : "Play"}
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:text-accent hover:border-accent"
+                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
               >
                 {playing ? <PauseIcon className="h-7 w-7" /> : <PlayIcon className="h-7 w-7" />}
               </button>
@@ -76,31 +80,36 @@ export function NewsExperts() {
                 type="button"
                 onClick={() => go(-1)}
                 aria-label="Previous news item"
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:text-accent hover:border-accent"
+                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
               >
-                <ArrowLeft className="h-7 w-7" />
+                <ArrowLeft className="h-7 w-7 rotate-90" />
               </button>
               <button
                 type="button"
                 onClick={() => go(1)}
                 aria-label="Next news item"
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:text-accent hover:border-accent"
+                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
               >
-                <ArrowRight className="h-7 w-7" />
+                <ArrowRight className="h-7 w-7 rotate-90" />
               </button>
             </div>
           </div>
 
-          {/* Feature image */}
+          {/* Feature image — crossfades to the highlighted item's image */}
           <div className="order-1 lg:order-2">
             <div className="relative aspect-[11/10] w-full overflow-hidden rounded-sm bg-ink/10 shadow-md">
-              <Image
-                src="/images/news.jpg"
-                alt="Panel discussion at a Kurdistan Film Commission industry event"
-                fill
-                sizes="(max-width: 1024px) 90vw, 45vw"
-                className="object-cover"
-              />
+              {news.map((item, i) => (
+                <Image
+                  key={item.title}
+                  src={item.image}
+                  alt={item.title}
+                  fill
+                  sizes="(max-width: 1024px) 90vw, 45vw"
+                  className={`object-cover transition-opacity duration-700 ease-out ${
+                    i === active ? "opacity-100" : "opacity-0"
+                  }`}
+                />
+              ))}
             </div>
           </div>
         </div>

@@ -1,14 +1,17 @@
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
-import { CurveIntro } from "@/components/icons";
+import { ScrollCurve } from "@/components/ScrollCurve";
 
 export function Introduction() {
   return (
     <section className="relative bg-cream">
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
-      {/* Signature flowing line — bottoms out around the "Untold Stories" heading below */}
-      <CurveIntro className="pointer-events-none absolute left-0 top-[42%] z-0 h-[115%] w-full text-ink/30" />
+      {/* Signature flowing line — draws on scroll, bottoms out at the "Untold Stories" heading */}
+      <ScrollCurve
+        variant="intro"
+        className="pointer-events-none absolute left-0 top-[42%] z-0 h-[115%] w-full text-ink/45"
+      />
 
       <Container className="relative z-10 py-20 md:py-28">
         <Eyebrow>Introduction</Eyebrow>

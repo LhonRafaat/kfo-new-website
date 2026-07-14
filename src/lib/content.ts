@@ -60,11 +60,11 @@ export const movies = [
   { src: "/images/poster-7.jpg", title: "Der Junge Siyar", featured: false },
 ] as const;
 
-/** News from experts carousel. */
+/** News from experts carousel. Each item carries its own image (same for now). */
 export const news = [
-  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour" },
-  { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani" },
-  { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou" },
+  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news.jpg" },
+  { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/news.jpg" },
+  { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/news.jpg" },
 ] as const;
 
 /** Footer link columns. */

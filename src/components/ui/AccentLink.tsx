@@ -1,10 +1,13 @@
+"use client";
+
 import Link from "next/link";
-import { type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { ArrowRight } from "@/components/icons";
 
 /**
  * Italic-serif call-to-action with the signature orange underline used across
  * the site (View all database, Read full message, Read all news …).
+ * The underline draws itself in the first time the link scrolls into view.
  */
 export function AccentLink({
   href,
@@ -17,8 +20,27 @@ export function AccentLink({
   showArrow?: boolean;
   className?: string;
 }) {
+  const ref = useRef<HTMLAnchorElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setVisible(true);
+          io.disconnect();
+        }
+      },
+      { threshold: 0.7 },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
   return (
-    <Link href={href} className={`accent-link ${className}`}>
+    <Link ref={ref} href={href} className={`accent-link ${visible ? "is-visible" : ""} ${className}`}>
       <span>{children}</span>
       {showArrow && <ArrowRight className="arrow h-4 w-4" />}
     </Link>

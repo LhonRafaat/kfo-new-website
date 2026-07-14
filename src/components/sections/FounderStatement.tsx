@@ -6,13 +6,10 @@ import { TextureOverlay } from "@/components/ui/TextureOverlay";
 export function FounderStatement() {
   return (
     <section className="relative bg-slate text-ink">
-      <TextureOverlay src="/images/texture-paper-founder.webp" opacity={0.5} blend="multiply" />
+      {/* Folded-paper texture stretched to fill — its natural centre crease reads as
+          the vertical fold between the two columns, exactly like the Figma. */}
+      <TextureOverlay src="/images/texture-paper-founder.webp" opacity={0.6} blend="multiply" stretch />
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.18} blend="soft-light" />
-      {/* Paper-fold divider running the full height between the two columns */}
-      <div
-        aria-hidden
-        className="absolute inset-y-0 left-1/2 hidden w-px -translate-x-1/2 bg-ink/25 lg:block"
-      />
 
       <Container className="relative z-10 py-20 md:py-28">
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">

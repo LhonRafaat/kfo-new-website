@@ -33,7 +33,7 @@
   /* ---- Display type scale (fluid, serif) ---- */
   .display-hero {
     @apply font-serif font-bold uppercase tracking-wordmark;
-    font-size: clamp(1.35rem, 1rem + 1.8vw, 2rem);
+    font-size: clamp(1rem, 0.58rem + 1.9vw, 2rem);
     line-height: 1.14;
   }
   .display-xl {
@@ -76,10 +76,14 @@
   }
   .accent-link::after {
     content: "";
-    @apply pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left rounded-full bg-accent transition-transform duration-300 ease-out;
+    @apply pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-accent transition-transform duration-700 ease-out;
+  }
+  /* Underline draws itself in when the link scrolls into view */
+  .accent-link.is-visible::after {
+    @apply scale-x-100;
   }
   .accent-link:hover::after {
-    @apply scale-x-105;
+    @apply scale-x-105 duration-300;
   }
   .accent-link:hover {
     @apply text-accent;
