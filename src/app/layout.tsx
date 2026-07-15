@@ -1,20 +1,30 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import localFont from "next/font/local";
 import "./globals.css";
 
-const fraunces = Fraunces({
-  subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  style: ["normal", "italic"],
+// Flecha M — display serif (the design's headline + editorial face)
+const flecha = localFont({
   variable: "--font-serif",
   display: "swap",
+  src: [
+    { path: "../fonts/FlechaM-Regular.otf", weight: "400", style: "normal" },
+    { path: "../fonts/FlechaM-RegularItalic.otf", weight: "400", style: "italic" },
+    { path: "../fonts/FlechaM-Medium.otf", weight: "500", style: "normal" },
+    { path: "../fonts/FlechaM-MediumItalic.otf", weight: "500", style: "italic" },
+    { path: "../fonts/FlechaM-Bold.otf", weight: "700", style: "normal" },
+    { path: "../fonts/FlechaM-BoldItalic.otf", weight: "700", style: "italic" },
+  ],
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+// Cadiz — grotesque sans for body copy and labels
+const cadiz = localFont({
   variable: "--font-sans",
   display: "swap",
+  src: [
+    { path: "../fonts/Cadiz-Book.otf", weight: "400", style: "normal" },
+    { path: "../fonts/Cadiz-Regular.otf", weight: "500", style: "normal" },
+    { path: "../fonts/Cadiz-SemiBold.otf", weight: "600", style: "normal" },
+  ],
 });
 
 const siteUrl = "https://kurdistanfilmcommission.org";
@@ -82,7 +92,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable}`}>
+    <html lang="en" className={`${flecha.variable} ${cadiz.variable}`}>
       <body>{children}</body>
     </html>
   );

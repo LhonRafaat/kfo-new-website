@@ -1,43 +1,27 @@
-# Brand fonts (Flecha M + Cadiz VF)
+# Brand fonts
 
-The design uses two commercial Latinotype fonts. Until they're added, the site
-falls back to **Fraunces** (serif) and **Inter** (sans) loaded via `next/font/google`
-in `src/app/layout.tsx`.
+The site uses the licensed **Flecha M** (display serif) and **Cadiz** (grotesque
+sans), self-hosted via `next/font/local` in `src/app/layout.tsx` and exposed as
+the `--font-serif` / `--font-sans` CSS variables (wired into `tailwind.config.ts`).
 
-## To install the real fonts
+## Files in use
 
-1. Drop the licensed files into this folder, e.g.:
-   ```
-   src/fonts/FlechaM-Regular.woff2
-   src/fonts/FlechaM-Italic.woff2
-   src/fonts/FlechaM-Medium.woff2
-   src/fonts/FlechaM-MediumItalic.woff2
-   src/fonts/FlechaM-Bold.woff2
-   src/fonts/CadizVF.woff2            # variable, or individual weights
-   ```
-   `.woff2` is preferred; `.otf`/`.ttf`/`.woff` also work. Variable fonts are fine.
+| Family | File | CSS weight / style |
+|--------|------|--------------------|
+| Flecha M | `FlechaM-Regular.otf` | 400 normal |
+| Flecha M | `FlechaM-RegularItalic.otf` | 400 italic |
+| Flecha M | `FlechaM-Medium.otf` | 500 normal |
+| Flecha M | `FlechaM-MediumItalic.otf` | 500 italic |
+| Flecha M | `FlechaM-Bold.otf` | 700 normal |
+| Flecha M | `FlechaM-BoldItalic.otf` | 700 italic |
+| Cadiz | `Cadiz-Book.otf` | 400 normal (body, ≈ design w340) |
+| Cadiz | `Cadiz-Regular.otf` | 500 normal |
+| Cadiz | `Cadiz-SemiBold.otf` | 600 normal (labels, ≈ design w560) |
 
-2. Then `layout.tsx` switches from `next/font/google` to `next/font/local`:
-   ```ts
-   import localFont from "next/font/local";
+Full weight sets for both families (extra light → black, plus italics) are
+available in the original `~/Downloads/flenchaM.zip` and `cadiz.zip` if more
+weights are ever needed.
 
-   const flecha = localFont({
-     variable: "--font-serif",
-     display: "swap",
-     src: [
-       { path: "../fonts/FlechaM-Regular.woff2", weight: "400", style: "normal" },
-       { path: "../fonts/FlechaM-Italic.woff2",  weight: "400", style: "italic" },
-       { path: "../fonts/FlechaM-Medium.woff2",  weight: "500", style: "normal" },
-       { path: "../fonts/FlechaM-MediumItalic.woff2", weight: "500", style: "italic" },
-       { path: "../fonts/FlechaM-Bold.woff2",    weight: "700", style: "normal" },
-     ],
-   });
-
-   const cadiz = localFont({
-     variable: "--font-sans",
-     display: "swap",
-     src: "../fonts/CadizVF.woff2", // or a src[] array of weights
-   });
-   ```
-   The rest of the app already reads `--font-serif` / `--font-sans` (see
-   `tailwind.config.ts`), so no other changes are needed.
+> Optional: these are `.otf` (~740 KB total). Converting to `.woff2` (needs
+> `fonttools` + `brotli`) would cut that ~40% — just swap the file extensions in
+> `layout.tsx` after converting.
