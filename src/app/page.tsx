@@ -17,7 +17,11 @@ const jsonLd = {
   description:
     "The official, non-profit film commission in the Kurdistan region of Iraq — supporting filmmakers with locations, the Film Fund, and production services.",
   areaServed: "Kurdistan Region, Iraq",
-  sameAs: ["https://youtube.com", "https://linkedin.com", "https://instagram.com"],
+  sameAs: [
+    "https://youtube.com",
+    "https://linkedin.com",
+    "https://instagram.com",
+  ],
 };
 
 export default function HomePage() {

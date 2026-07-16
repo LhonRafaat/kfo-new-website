@@ -16,8 +16,10 @@ export function QuickLinks() {
               item.featured ? "bg-black/[0.07]" : "px-1"
             }`}
           >
-            <span className="eyebrow-light text-ink/70">{item.label}</span>
-            <span className="mt-2 font-serif text-2xl italic text-ink transition-colors duration-300 group-hover:text-accent md:text-[1.75rem]">
+            <span className="eyebrow-light font-sans text-link text-[18px]">
+              {item.label}
+            </span>
+            <span className="mt-2 font-serif text-[28px] font-medium italic text-ink transition-colors duration-300 group-hover:text-accent md:text-[1.75rem]">
               {item.title}
             </span>
           </Link>

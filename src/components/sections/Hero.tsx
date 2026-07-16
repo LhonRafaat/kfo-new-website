@@ -26,11 +26,15 @@ export function Hero() {
       />
 
       <div className="relative z-10 flex flex-col items-center px-6 text-center text-white">
-        <h1 className="display-hero drop-shadow-sm" aria-label="Kurdistan Film Commission">
+        <h1
+          className="display-hero drop-shadow-sm"
+          aria-label="Kurdistan Film Commission"
+        >
           <HeroWordmark />
         </h1>
         <p className="mt-4 font-serif text-lg font-medium text-white/95 drop-shadow-sm sm:text-xl md:text-2xl">
-          The official film commission in <em className="italic">Kurdistan &amp; Iraq</em>.
+          The official film commission in{" "}
+          <em className="italic">Kurdistan &amp; Iraq</em>.
         </p>
       </div>
     </section>

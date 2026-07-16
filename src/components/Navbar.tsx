@@ -28,7 +28,10 @@ export function Navbar() {
       {/* Transparent header sitting over the hero */}
       <header className="absolute inset-x-0 top-0 z-40">
         <Container className="flex items-center justify-between py-6 text-white">
-          <Logo wordmarkClassName="hidden text-sm sm:inline-block sm:text-[15px]" markClassName="h-[22px] w-[42px]" />
+          <Logo
+            wordmarkClassName="hidden text-sm sm:inline-block sm:text-[15px]"
+            markClassName="h-[22px] w-[42px]"
+          />
           <button
             type="button"
             onClick={() => setOpen(true)}
@@ -66,7 +69,11 @@ export function Navbar() {
           <div className="absolute inset-0 bg-cream/70" aria-hidden />
           <Container className="relative py-6">
             <div className="flex items-center justify-between">
-              <Logo wordmarkClassName="text-sm sm:text-[15px]" markClassName="h-[22px] w-[42px]" href="/" />
+              <Logo
+                wordmarkClassName="text-sm sm:text-[15px]"
+                markClassName="h-[22px] w-[42px]"
+                href="/"
+              />
               <button
                 type="button"
                 onClick={() => setOpen(false)}
@@ -85,7 +92,9 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="group block"
                 >
-                  <span className="block font-serif text-xl italic text-ink/50">{item.index}</span>
+                  <span className="block font-serif text-xl italic text-ink/50">
+                    {item.index}
+                  </span>
                   <span className="mt-1 block font-serif text-4xl italic leading-tight transition-colors duration-300 group-hover:text-accent md:text-5xl">
                     {item.label}
                   </span>
