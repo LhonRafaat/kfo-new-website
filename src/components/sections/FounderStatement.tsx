@@ -2,6 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
+import { Parallax } from "@/components/Parallax";
 
 export function FounderStatement() {
   return (
@@ -15,7 +16,7 @@ export function FounderStatement() {
         <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* Portrait + caption — sized to the Figma (560 × 419, full column width) */}
           <figure className="w-full">
-            <div className="relative aspect-560/419 w-full overflow-hidden rounded-sm bg-ink/10 shadow-lg">
+            <Parallax speed={0.1} className="relative aspect-560/419 w-full rounded-sm bg-ink/10 shadow-lg">
               <Image
                 src="/images/founder.jpg"
                 alt="Bavi Yassin, Founder of the Kurdistan Film Commission"
@@ -23,7 +24,7 @@ export function FounderStatement() {
                 sizes="(max-width: 1024px) 90vw, 45vw"
                 className="object-cover"
               />
-            </div>
+            </Parallax>
             <figcaption className="mt-6 text-center">
               <p className="font-serif text-2xl font-bold italic">Bavi Yassin</p>
               <p className="mt-1 font-serif text-xl">Founder, Kurdistan Film Commission</p>

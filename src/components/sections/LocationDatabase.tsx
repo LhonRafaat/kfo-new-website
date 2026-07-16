@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
+import { Parallax } from "@/components/Parallax";
 import { locationTiles, type LocationTile } from "@/lib/content";
 
 // Rebuild the Figma masonry: four columns, each a stack of one short + one tall tile.
@@ -18,13 +19,15 @@ function Tile({ tile }: { tile: LocationTile }) {
       className="relative min-h-0 basis-0 overflow-hidden rounded-sm bg-ink/10"
       style={{ flexGrow: tile.tall ? 320 : 234 }}
     >
-      <Image
-        src={tile.src}
-        alt={tile.alt}
-        fill
-        sizes="(max-width: 768px) 45vw, 22vw"
-        className="object-cover transition-transform duration-700 ease-out hover:scale-105"
-      />
+      <Parallax speed={0.08} className="absolute inset-0">
+        <Image
+          src={tile.src}
+          alt={tile.alt}
+          fill
+          sizes="(max-width: 768px) 45vw, 22vw"
+          className="object-cover"
+        />
+      </Parallax>
       {tile.overlay && (
         <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20 p-4 text-center text-white">
           <h3 className="font-serif text-xl italic md:text-2xl">{tile.overlay.title}</h3>

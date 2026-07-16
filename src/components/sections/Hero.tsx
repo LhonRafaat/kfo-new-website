@@ -1,17 +1,20 @@
 import Image from "next/image";
 import { HeroWordmark } from "@/components/HeroWordmark";
+import { Parallax } from "@/components/Parallax";
 
 export function Hero() {
   return (
     <section className="relative flex min-h-[88vh] items-center justify-center overflow-hidden bg-ink">
-      <Image
-        src="/images/hero.jpg"
-        alt="Snow-dusted mountains of Kurdistan glowing at golden hour"
-        fill
-        priority
-        sizes="100vw"
-        className="object-cover object-center"
-      />
+      <Parallax speed={0.18} className="absolute inset-0">
+        <Image
+          src="/images/hero.jpg"
+          alt="Snow-dusted mountains of Kurdistan glowing at golden hour"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
+      </Parallax>
       {/* Legibility wash — darker toward the base where it meets the cream band */}
       <div
         className="absolute inset-0"

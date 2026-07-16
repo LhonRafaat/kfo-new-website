@@ -6,6 +6,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
+import { Parallax } from "@/components/Parallax";
 import { ScrollCurve } from "@/components/ScrollCurve";
 import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from "@/components/icons";
 import { news } from "@/lib/content";
@@ -97,7 +98,7 @@ export function NewsExperts() {
 
           {/* Feature image — crossfades to the highlighted item's image */}
           <div className="order-1 lg:order-2">
-            <div className="relative aspect-[11/10] w-full overflow-hidden rounded-sm bg-ink/10 shadow-md">
+            <Parallax speed={0.1} className="relative aspect-[11/10] w-full rounded-sm bg-ink/10 shadow-md">
               {news.map((item, i) => (
                 <Image
                   key={item.title}
@@ -110,7 +111,7 @@ export function NewsExperts() {
                   }`}
                 />
               ))}
-            </div>
+            </Parallax>
           </div>
         </div>
       </Container>
