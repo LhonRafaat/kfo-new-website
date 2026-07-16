@@ -14,7 +14,9 @@ export function MoviesMade() {
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
-    const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const reduce = window.matchMedia(
+      "(prefers-reduced-motion: reduce)",
+    ).matches;
     if (reduce) return;
 
     let offset = 0;
@@ -54,27 +56,36 @@ export function MoviesMade() {
 
   return (
     <section className="relative overflow-hidden bg-cocoa text-white">
-      <TextureOverlay src="/images/floral-texture.webp" opacity={0.19} blend="soft-light" />
+      <TextureOverlay
+        src="/images/floral-texture.webp"
+        opacity={0.19}
+        blend="soft-light"
+      />
 
-      <Container className="relative z-10 pt-20 md:pt-24">
+      <Container className="relative z-10 pt-16">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
           <Reveal as="h2" className="display-md text-white">
             Movies made
             <br />
-            <em className="italic">in Kurdistan</em>
+            in Kurdistan
           </Reveal>
           <Reveal
             as="p"
             delay={100}
-            className="max-w-sm font-sans text-base leading-relaxed text-white/80 md:text-right"
+            className="max-w-sm font-sans text-xl leading-relaxed tracking-[0.4px] text-white/80 md:text-right"
           >
-            Here are some of the movies that were shot in different regions of Kurdistan.
+            Here are some of the movies that were shot in different regions of
+            Kurdistan.
           </Reveal>
         </div>
       </Container>
 
-      <div className="relative z-10 mt-14 overflow-hidden pb-20">
-        <div ref={trackRef} className="flex w-max" style={{ willChange: "transform" }}>
+      <div className="relative z-10 mt-14 overflow-hidden pb-16">
+        <div
+          ref={trackRef}
+          className="flex w-max"
+          style={{ willChange: "transform" }}
+        >
           {reel.map((movie, i) => (
             <div
               key={`${movie.title}-${i}`}

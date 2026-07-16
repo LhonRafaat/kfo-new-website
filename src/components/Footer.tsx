@@ -14,12 +14,15 @@ const socialIcons = {
 export function Footer() {
   return (
     <footer className="bg-espresso text-white">
-      <Container className="py-16 md:py-20">
+      <Container className="py-12">
         <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.2fr_1fr]">
           {/* Brand + newsletter */}
           <div className="max-w-md">
-            <Logo wordmarkClassName="text-[15px]" markClassName="h-[22px] w-[42px]" />
-            <p className="mt-6 font-sans text-base leading-relaxed text-white/80">
+            <Logo
+              wordmarkClassName="text-[15px]"
+              markClassName="h-[22px] w-[42px]"
+            />
+            <p className="mt-6 font-sans text-xl leading-relaxed text-white/80">
               {site.description}
             </p>
             <div className="mt-8">
@@ -67,7 +70,10 @@ export function Footer() {
           </div>
           <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center font-sans text-sm text-white/70">
             <span>© 2026 Kurdistan Film Commission</span>
-            <Link href="/privacy-policy" className="link-underline hover:text-white">
+            <Link
+              href="/privacy-policy"
+              className="link-underline hover:text-white"
+            >
               Privacy Policy
             </Link>
           </div>

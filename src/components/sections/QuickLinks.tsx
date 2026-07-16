@@ -7,7 +7,7 @@ export function QuickLinks() {
   return (
     <section className="relative bg-cream">
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
-      <Container className="relative grid grid-cols-1 gap-x-6 gap-y-6 py-10 sm:grid-cols-2 lg:grid-cols-4 lg:py-14">
+      <Container className="relative grid grid-cols-1 gap-x-6 gap-y-6 py-8 sm:grid-cols-2 lg:grid-cols-4">
         {quickLinks.map((item) => (
           <Link
             key={item.title}

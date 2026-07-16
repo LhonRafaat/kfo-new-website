@@ -32,9 +32,8 @@ export function Hero() {
         >
           <HeroWordmark />
         </h1>
-        <p className="mt-4 font-serif text-lg font-medium text-white/95 drop-shadow-sm sm:text-xl md:text-2xl">
-          The official film commission in{" "}
-          <em className="italic">Kurdistan &amp; Iraq</em>.
+        <p className="mt-4 font-serif text-xl font-medium text-white/95 drop-shadow-sm md:text-2xl">
+          The official film commission in Kurdistan &amp; Iraq.
         </p>
       </div>
     </section>

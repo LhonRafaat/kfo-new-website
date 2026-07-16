@@ -14,7 +14,9 @@
 
   body {
     @apply bg-cream text-ink font-sans antialiased;
-    font-feature-settings: "kern" 1, "liga" 1;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
   }
 
   /* Consistent, elegant text selection */
@@ -32,7 +34,8 @@
 
   /* ---- Display type scale (fluid, serif) ---- */
   .display-hero {
-    @apply font-serif font-bold uppercase tracking-wordmark;
+    @apply font-serif font-bold uppercase;
+    letter-spacing: 0.03em;
     font-size: clamp(1rem, 0.58rem + 1.9vw, 2rem);
     line-height: 1.14;
   }
@@ -43,19 +46,19 @@
   }
   .display-lg {
     @apply font-serif font-medium;
-    font-size: clamp(2.25rem, 1.6rem + 2.9vw, 3.5rem);
+    font-size: clamp(2.25rem, 1.6rem + 2.9vw, 3rem);
     line-height: 1.12;
   }
   .display-md {
     @apply font-serif font-medium;
-    font-size: clamp(2rem, 1.5rem + 2.2vw, 3rem);
+    font-size: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
     line-height: 1.14;
   }
 
   /* ---- Eyebrow / label ---- */
   .eyebrow {
     @apply font-sans font-semibold uppercase tracking-label text-espresso;
-    font-size: 0.8125rem;
+    font-size: 1.25rem;
   }
   .eyebrow-light {
     @apply font-sans uppercase tracking-label;
@@ -65,7 +68,7 @@
   /* ---- Body copy ---- */
   .body-lg {
     @apply font-sans text-ink/90;
-    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.1875rem);
+    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
     line-height: 1.55;
   }
 

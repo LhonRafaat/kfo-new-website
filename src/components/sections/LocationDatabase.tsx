@@ -27,7 +27,9 @@ function Tile({ tile }: { tile: LocationTile }) {
       role="button"
       tabIndex={0}
       aria-expanded={open}
-      aria-label={tile.overlay ? `${tile.overlay.title} — show details` : tile.alt}
+      aria-label={
+        tile.overlay ? `${tile.overlay.title} — show details` : tile.alt
+      }
       onClick={() => setOpen((o) => !o)}
       onKeyDown={(e) => {
         if (e.key === "Enter" || e.key === " ") {
@@ -49,11 +51,17 @@ function Tile({ tile }: { tile: LocationTile }) {
       {tile.overlay && (
         <div
           className={`absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20 p-4 text-center text-white transition-opacity duration-500 ${
-            open ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+            open
+              ? "opacity-100"
+              : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
           }`}
         >
-          <h3 className="font-serif text-xl italic md:text-2xl">{tile.overlay.title}</h3>
-          <p className="font-sans text-sm text-white/85">{tile.overlay.subtitle}</p>
+          <h3 className="font-serif text-xl italic md:text-2xl">
+            {tile.overlay.title}
+          </h3>
+          <p className="font-sans text-sm text-white/85">
+            {tile.overlay.subtitle}
+          </p>
           <Link
             href="/locations"
             onClick={(e) => e.stopPropagation()}
@@ -70,7 +78,7 @@ function Tile({ tile }: { tile: LocationTile }) {
 export function LocationDatabase() {
   return (
     <section className="relative">
-      <Container className="relative z-10 py-20 md:py-24">
+      <Container className="relative z-10 py-16">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
             <Reveal as="h2" className="display-lg text-ink">
@@ -79,9 +87,9 @@ export function LocationDatabase() {
               Untold Stories
             </Reveal>
             <Reveal as="p" delay={80} className="body-lg mt-6 max-w-2xl">
-              We offer you the largest location database in the Kurdistan Region. We also add new
-              locations regularly. If you cannot find the location you are looking for, do not
-              hesitate to contact us.
+              We offer you the largest location database in the Kurdistan
+              Region. We also add new locations regularly. If you cannot find
+              the location you are looking for, do not hesitate to contact us.
             </Reveal>
           </div>
           <AccentLink href="/locations" className="shrink-0 md:pb-2">

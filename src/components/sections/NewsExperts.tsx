@@ -28,7 +28,10 @@ export function NewsExperts() {
 
   useEffect(() => {
     if (!playing) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % news.length), ROTATE_MS);
+    const id = setInterval(
+      () => setIndex((i) => (i + 1) % news.length),
+      ROTATE_MS,
+    );
     return () => clearInterval(id);
   }, [playing]);
 
@@ -50,11 +53,16 @@ export function NewsExperts() {
   }, []);
 
   // Arrows page through the pool — three brand-new articles each click.
-  const goPage = (dir: 1 | -1) => setIndex(((page + dir + pages) % pages) * PAGE_SIZE);
+  const goPage = (dir: 1 | -1) =>
+    setIndex(((page + dir + pages) % pages) * PAGE_SIZE);
 
   return (
     <section className="relative overflow-hidden bg-cream">
-      <TextureOverlay src="/images/texture-paper-news.webp" opacity={0.35} blend="multiply" />
+      <TextureOverlay
+        src="/images/texture-paper-news.webp"
+        opacity={0.35}
+        blend="multiply"
+      />
       {/* Flowing line — reveals on scroll and rides over a portion of the image */}
       <ScrollCurve
         variant="news"
@@ -64,7 +72,7 @@ export function NewsExperts() {
       <Container className="relative z-10 py-20 md:py-24">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Reveal as="h2" className="display-lg text-ink">
-            News from <em className="italic">Experts</em>
+            News from Experts
           </Reveal>
           <AccentLink href="/news">Read all news</AccentLink>
         </div>
@@ -72,21 +80,31 @@ export function NewsExperts() {
         <div className="mt-12 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* News list + controls */}
           <div className="order-2 lg:order-1">
-            <div ref={listRef} key={page} className="flex flex-col gap-8 overflow-hidden">
+            <div
+              ref={listRef}
+              key={page}
+              className="flex flex-col gap-8 overflow-hidden"
+            >
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
                 return (
                   <div
                     key={i}
                     className={revealed ? "news-rise" : "opacity-0"}
-                    style={{ ["--rise-delay" as string]: `${i * 110}ms` } as CSSProperties}
+                    style={
+                      {
+                        ["--rise-delay" as string]: `${i * 110}ms`,
+                      } as CSSProperties
+                    }
                   >
                     <Link
                       href={item.href}
                       onMouseEnter={() => setIndex(page * PAGE_SIZE + i)}
                       className="group block"
                     >
-                      <span className="font-sans text-sm tracking-wide text-ink/60">{item.date}</span>
+                      <span className="font-sans text-sm tracking-wide text-ink/60">
+                        {item.date}
+                      </span>
                       <p
                         className={`mt-2 inline font-serif text-xl leading-snug transition-colors duration-500 md:text-2xl ${
                           isActive
@@ -109,7 +127,11 @@ export function NewsExperts() {
                 aria-label={playing ? "Pause" : "Play"}
                 className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
               >
-                {playing ? <PauseIcon className="h-7 w-7" /> : <PlayIcon className="h-7 w-7" />}
+                {playing ? (
+                  <PauseIcon className="h-7 w-7" />
+                ) : (
+                  <PlayIcon className="h-7 w-7" />
+                )}
               </button>
               <button
                 type="button"
@@ -132,7 +154,10 @@ export function NewsExperts() {
 
           {/* Feature image — crossfades to the highlighted item's image */}
           <div className="relative order-1 lg:order-2">
-            <Parallax speed={0.1} className="relative aspect-[11/10] w-full rounded-sm bg-ink/10 shadow-md">
+            <Parallax
+              speed={0.1}
+              className="relative aspect-[11/10] w-full rounded-sm bg-ink/10 shadow-md"
+            >
               {visible.map((item, i) => (
                 <Image
                   key={`${page}-${i}`}
