@@ -9,12 +9,14 @@ export function TextureOverlay({
   opacity,
   blend,
   stretch = false,
+  flipX = false,
   className = "",
 }: {
   src: string;
   opacity: number;
   blend?: "multiply" | "overlay" | "soft-light" | "normal";
   stretch?: boolean;
+  flipX?: boolean;
   className?: string;
 }) {
   return (
@@ -27,6 +29,7 @@ export function TextureOverlay({
         backgroundPosition: "center",
         opacity,
         mixBlendMode: blend,
+        transform: flipX ? "scaleX(-1)" : undefined,
       }}
     />
   );

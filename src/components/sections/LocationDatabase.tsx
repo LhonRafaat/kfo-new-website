@@ -1,8 +1,12 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { Parallax } from "@/components/Parallax";
+import { Reveal } from "@/components/Reveal";
 import { locationTiles, type LocationTile } from "@/lib/content";
 
 // Rebuild the Figma masonry: four columns, each a stack of one short + one tall tile.
@@ -14,10 +18,23 @@ const columns: LocationTile[][] = [
 ];
 
 function Tile({ tile }: { tile: LocationTile }) {
+  const [open, setOpen] = useState(false);
+
   return (
     <div
-      className="relative min-h-0 basis-0 overflow-hidden rounded-sm bg-ink/10"
+      className="group relative min-h-0 basis-0 cursor-pointer overflow-hidden rounded-sm bg-ink/10"
       style={{ flexGrow: tile.tall ? 320 : 234 }}
+      role="button"
+      tabIndex={0}
+      aria-expanded={open}
+      aria-label={tile.overlay ? `${tile.overlay.title} — show details` : tile.alt}
+      onClick={() => setOpen((o) => !o)}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          setOpen((o) => !o);
+        }
+      }}
     >
       <Parallax speed={0.08} className="absolute inset-0">
         <Image
@@ -28,12 +45,18 @@ function Tile({ tile }: { tile: LocationTile }) {
           className="object-cover"
         />
       </Parallax>
+
       {tile.overlay && (
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20 p-4 text-center text-white">
+        <div
+          className={`absolute inset-0 flex flex-col items-center justify-center gap-2 bg-gradient-to-t from-ink/85 via-ink/45 to-ink/20 p-4 text-center text-white transition-opacity duration-500 ${
+            open ? "opacity-100" : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
+          }`}
+        >
           <h3 className="font-serif text-xl italic md:text-2xl">{tile.overlay.title}</h3>
           <p className="font-sans text-sm text-white/85">{tile.overlay.subtitle}</p>
           <Link
             href="/locations"
+            onClick={(e) => e.stopPropagation()}
             className="mt-3 rounded-full bg-white px-5 py-2 text-[13px] font-medium text-ink transition-colors duration-300 hover:bg-cream"
           >
             Get access to all database
@@ -50,16 +73,16 @@ export function LocationDatabase() {
       <Container className="relative z-10 py-20 md:py-24">
         <div className="flex flex-col gap-8 md:flex-row md:items-end md:justify-between">
           <div>
-            <h2 className="display-lg text-ink">
+            <Reveal as="h2" className="display-lg text-ink">
               A Land of
               <br />
               Untold Stories
-            </h2>
-            <p className="body-lg mt-6 max-w-2xl">
+            </Reveal>
+            <Reveal as="p" delay={80} className="body-lg mt-6 max-w-2xl">
               We offer you the largest location database in the Kurdistan Region. We also add new
               locations regularly. If you cannot find the location you are looking for, do not
               hesitate to contact us.
-            </p>
+            </Reveal>
           </div>
           <AccentLink href="/locations" className="shrink-0 md:pb-2">
             View all database

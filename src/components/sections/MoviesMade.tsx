@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Container } from "@/components/ui/Container";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
+import { Reveal } from "@/components/Reveal";
 import { movies } from "@/lib/content";
 
 export function MoviesMade() {
@@ -57,14 +58,18 @@ export function MoviesMade() {
 
       <Container className="relative z-10 pt-20 md:pt-24">
         <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
-          <h2 className="display-md text-white">
+          <Reveal as="h2" className="display-md text-white">
             Movies made
             <br />
             <em className="italic">in Kurdistan</em>
-          </h2>
-          <p className="max-w-sm font-sans text-base leading-relaxed text-white/80 md:text-right">
+          </Reveal>
+          <Reveal
+            as="p"
+            delay={100}
+            className="max-w-sm font-sans text-base leading-relaxed text-white/80 md:text-right"
+          >
             Here are some of the movies that were shot in different regions of Kurdistan.
-          </p>
+          </Reveal>
         </div>
       </Container>
 

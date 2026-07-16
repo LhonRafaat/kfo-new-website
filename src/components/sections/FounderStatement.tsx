@@ -3,13 +3,14 @@ import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
 import { Parallax } from "@/components/Parallax";
+import { Reveal } from "@/components/Reveal";
 
 export function FounderStatement() {
   return (
     <section className="relative bg-slate text-ink">
       {/* Folded-paper texture stretched to fill — its natural centre crease reads as
           the vertical fold between the two columns, exactly like the Figma. */}
-      <TextureOverlay src="/images/texture-paper-founder.webp" opacity={0.6} blend="multiply" stretch />
+      <TextureOverlay src="/images/texture-paper-founder.webp" opacity={0.6} blend="multiply" stretch flipX />
       <TextureOverlay src="/images/floral-texture.webp" opacity={0.18} blend="soft-light" />
 
       <Container className="relative z-10 py-20 md:py-28">
@@ -33,10 +34,12 @@ export function FounderStatement() {
 
           {/* Statement */}
           <div>
-            <h2 className="display-xl text-ink">
+            <Reveal as="h2" className="display-xl text-ink">
               We have so much more than just <em className="italic">the mountains</em>.
-            </h2>
-            <p className="mt-8 font-serif text-2xl">Founder&apos;s Statement &amp; Vision</p>
+            </Reveal>
+            <Reveal as="p" delay={80} className="mt-8 font-serif text-2xl">
+              Founder&apos;s Statement &amp; Vision
+            </Reveal>
             <blockquote className="mt-5 max-w-xl">
               <p className="body-lg relative pl-6 leading-relaxed">
                 <span className="absolute left-0 top-0 font-serif text-3xl leading-none text-accent" aria-hidden>

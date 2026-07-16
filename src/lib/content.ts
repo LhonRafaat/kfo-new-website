@@ -40,13 +40,13 @@ export type LocationTile = {
 
 export const locationTiles: LocationTile[] = [
   { src: "/images/loc-bazyan.jpg", alt: "Bazyan archaeological remains", tall: false, overlay: { title: "Bazyan Remains", subtitle: "Description." } },
-  { src: "/images/loc-2.jpg", alt: "Brick university building in Kurdistan", tall: true },
-  { src: "/images/loc-3.jpg", alt: "Narrow limestone canyon", tall: false },
-  { src: "/images/loc-4.jpg", alt: "City overlook across the plains", tall: true },
-  { src: "/images/loc-5.jpg", alt: "Snow-capped mountain range", tall: true },
-  { src: "/images/loc-6.jpg", alt: "Lake at sunset among the hills", tall: false },
-  { src: "/images/loc-7.jpg", alt: "Snowy house glowing at night", tall: true },
-  { src: "/images/loc-8.jpg", alt: "Green valley meeting the water", tall: false },
+  { src: "/images/loc-2.jpg", alt: "Brick university building in Kurdistan", tall: true, overlay: { title: "Sulaimani University", subtitle: "Description." } },
+  { src: "/images/loc-3.jpg", alt: "Narrow limestone canyon", tall: false, overlay: { title: "Gali Ali Beg", subtitle: "Description." } },
+  { src: "/images/loc-4.jpg", alt: "City overlook across the plains", tall: true, overlay: { title: "Erbil Overlook", subtitle: "Description." } },
+  { src: "/images/loc-5.jpg", alt: "Snow-capped mountain range", tall: true, overlay: { title: "Halgurd Peaks", subtitle: "Description." } },
+  { src: "/images/loc-6.jpg", alt: "Lake at sunset among the hills", tall: false, overlay: { title: "Dukan Lake", subtitle: "Description." } },
+  { src: "/images/loc-7.jpg", alt: "Snowy house glowing at night", tall: true, overlay: { title: "Winter Village", subtitle: "Description." } },
+  { src: "/images/loc-8.jpg", alt: "Green valley meeting the water", tall: false, overlay: { title: "Rawanduz Valley", subtitle: "Description." } },
 ];
 
 /** Movies shot in Kurdistan (poster carousel). `featured` sits raised, per Figma. */
@@ -60,11 +60,18 @@ export const movies = [
   { src: "/images/poster-7.jpg", title: "Der Junge Siyar", featured: false },
 ] as const;
 
-/** News from experts carousel. Each item carries its own image (same for now). */
+/** News from experts pool — shown three at a time; the arrows page through it.
+ *  Same image for every item for now. */
 export const news = [
   { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news.jpg" },
   { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/news.jpg" },
   { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/news.jpg" },
+  { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/news.jpg" },
+  { date: "21, Oct 2025", title: "International Producers Scout the Erbil Citadel for an Upcoming Feature", href: "/news/erbil-citadel-scout", image: "/images/news.jpg" },
+  { date: "14, Oct 2025", title: "New Co-Production Treaty Opens Doors for Kurdish Filmmakers", href: "/news/co-production-treaty", image: "/images/news.jpg" },
+  { date: "6, Oct 2025", title: "Duhok International Film Festival Announces its 2026 Programme", href: "/news/duhok-festival-2026", image: "/images/news.jpg" },
+  { date: "29, Sep 2025", title: "Location Database Expands with 200 New Verified Filming Sites", href: "/news/database-expansion", image: "/images/news.jpg" },
+  { date: "22, Sep 2025", title: "Masterclass Series Brings Cannes Mentors to Slemani", href: "/news/cannes-masterclass", image: "/images/news.jpg" },
 ] as const;
 
 /** Footer link columns. */
