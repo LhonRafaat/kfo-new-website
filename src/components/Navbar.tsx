@@ -29,8 +29,8 @@ export function Navbar() {
       <header className="absolute inset-x-0 top-0 z-40">
         <Container className="flex items-center justify-between py-6 text-white">
           <Logo
-            wordmarkClassName="hidden text-sm sm:inline-block sm:text-[15px]"
-            markClassName="h-[22px] w-[42px]"
+            wordmarkClassName="hidden sm:inline-block sm:text-base xl:text-2xl"
+            markClassName="h-[22px] w-[44px] xl:h-[25px] xl:w-[50px]"
           />
           <button
             type="button"
@@ -70,8 +70,8 @@ export function Navbar() {
           <Container className="relative py-6">
             <div className="flex items-center justify-between">
               <Logo
-                wordmarkClassName="text-sm sm:text-[15px]"
-                markClassName="h-[22px] w-[42px]"
+                wordmarkClassName="text-base xl:text-2xl"
+                markClassName="h-[22px] w-[44px] xl:h-[25px] xl:w-[50px]"
                 href="/"
               />
               <button
@@ -92,7 +92,7 @@ export function Navbar() {
                   onClick={() => setOpen(false)}
                   className="group block"
                 >
-                  <span className="block font-serif text-xl italic text-ink/50">
+                  <span className="block font-serif text-2xl italic text-ink/50">
                     {item.index}
                   </span>
                   <span className="mt-1 block font-serif text-4xl italic leading-tight transition-colors duration-300 group-hover:text-accent md:text-5xl">
@@ -108,7 +108,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="link-underline font-serif text-lg italic md:text-xl"
+                  className="link-underline font-serif text-xl italic md:text-2xl"
                 >
                   {item.label}
                 </Link>
