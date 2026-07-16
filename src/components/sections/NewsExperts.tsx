@@ -155,7 +155,7 @@ export function NewsExperts() {
           {/* Feature image — crossfades to the highlighted item's image */}
           <div className="relative order-1 lg:order-2">
             <Parallax
-              speed={0.1}
+              speed={0.15}
               className="relative aspect-[11/10] w-full rounded-sm bg-ink/10 shadow-md"
             >
               {visible.map((item, i) => (

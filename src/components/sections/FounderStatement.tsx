@@ -28,7 +28,7 @@ export function FounderStatement() {
           {/* Portrait + caption — sized to the Figma (560 × 419, full column width) */}
           <figure className="w-full">
             <Parallax
-              speed={0.1}
+              speed={0.15}
               className="relative aspect-560/419 w-full rounded-sm bg-ink/10 shadow-lg"
             >
               <Image

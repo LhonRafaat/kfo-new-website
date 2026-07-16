@@ -70,8 +70,14 @@ export function Parallax({
       <div
         ref={innerRef}
         className={`absolute will-change-transform ${innerClassName}`}
-        // oversize a little more than the max travel (height * speed) so edges stay covered
-        style={{ inset: `${-(speed * 130)}%` }}
+        // oversize vertically only — horizontal expansion is not needed for the
+        // translateY movement and would cause images to appear zoomed in
+        style={{
+          top: `${-(speed * 130)}%`,
+          bottom: `${-(speed * 130)}%`,
+          left: 0,
+          right: 0,
+        }}
       >
         {children}
       </div>

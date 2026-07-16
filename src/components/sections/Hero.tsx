@@ -5,7 +5,7 @@ import { Parallax } from "@/components/Parallax";
 export function Hero() {
   return (
     <section className="relative flex min-h-[88vh] items-center justify-center overflow-hidden bg-ink">
-      <Parallax speed={0.18} className="absolute inset-0">
+      <Parallax speed={0.4} className="absolute inset-0">
         <Image
           src="/images/hero.jpg"
           alt="Snow-dusted mountains of Kurdistan glowing at golden hour"

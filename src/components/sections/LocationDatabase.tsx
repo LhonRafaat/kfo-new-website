@@ -38,7 +38,7 @@ function Tile({ tile }: { tile: LocationTile }) {
         }
       }}
     >
-      <Parallax speed={0.08} className="absolute inset-0">
+      <Parallax speed={0.22} className="absolute inset-0">
         <Image
           src={tile.src}
           alt={tile.alt}
