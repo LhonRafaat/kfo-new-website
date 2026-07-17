@@ -10,7 +10,7 @@ import { site } from "@/lib/content";
  */
 export function Logo({
   className = "",
-  markClassName = "h-[26px] w-[50px]",
+  markClassName = "h-[25px] w-[48px]",
   wordmarkClassName = "h-[18px] w-auto",
   href = "/",
 }: {

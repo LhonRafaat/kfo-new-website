@@ -12,7 +12,7 @@ export function QuickLinks() {
           <Link
             key={item.title}
             href={item.href}
-            className={`group flex flex-col justify-center rounded-sm px-6 py-6 transition-colors duration-300 ${
+            className={`group flex flex-col justify-center rounded-lg px-6 py-6 transition-colors duration-300 ${
               item.featured ? "bg-black/[0.07]" : "px-1"
             }`}
           >

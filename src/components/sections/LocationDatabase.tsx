@@ -22,7 +22,7 @@ function Tile({ tile }: { tile: LocationTile }) {
 
   return (
     <div
-      className="group relative min-h-0 basis-0 cursor-pointer overflow-hidden rounded-sm bg-ink/10"
+      className="group relative min-h-0 basis-0 cursor-pointer overflow-hidden rounded-lg bg-ink/10"
       style={{ flexGrow: tile.tall ? 320 : 234 }}
       role="button"
       tabIndex={0}

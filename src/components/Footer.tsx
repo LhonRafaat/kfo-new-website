@@ -19,8 +19,8 @@ export function Footer() {
           {/* Brand + newsletter */}
           <div className="max-w-md">
             <Logo
-              wordmarkClassName="h-[15px] w-auto"
-              markClassName="h-[22px] w-[42px]"
+              wordmarkClassName="h-[14px] w-auto sm:h-[18px]"
+              markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
             />
             <p className="mt-6 font-sans text-xl leading-relaxed text-white/80">
               {site.description}

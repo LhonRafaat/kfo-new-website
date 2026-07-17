@@ -83,7 +83,7 @@ export function NewsExperts() {
             <div
               ref={listRef}
               key={page}
-              className="flex flex-col gap-14 overflow-hidden"
+              className="flex flex-col gap-8 overflow-hidden"
             >
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
@@ -120,7 +120,7 @@ export function NewsExperts() {
               })}
             </div>
 
-            <div className="mt-10 flex items-center gap-6">
+            <div className="mt-20 flex items-center gap-4">
               <button
                 type="button"
                 onClick={() => setPlaying((p) => !p)}
@@ -156,7 +156,7 @@ export function NewsExperts() {
           <div className="relative order-1 lg:order-2">
             <Parallax
               speed={0.15}
-              className="relative aspect-[11/10] w-full rounded-sm bg-ink/10 shadow-md"
+              className="relative aspect-[11/10] w-full rounded-2xl bg-ink/10"
             >
               {visible.map((item, i) => (
                 <Image
@@ -171,15 +171,6 @@ export function NewsExperts() {
                 />
               ))}
             </Parallax>
-            {/* Brand-orange wash fading to transparent toward the right */}
-            <div
-              className="pointer-events-none absolute inset-0 rounded-sm"
-              style={{
-                background:
-                  "linear-gradient(90deg, rgba(255,102,0,0.5) 0%, rgba(255,102,0,0.2) 30%, rgba(255,102,0,0) 62%)",
-              }}
-              aria-hidden
-            />
           </div>
         </div>
       </Container>

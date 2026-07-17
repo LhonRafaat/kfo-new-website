@@ -29,8 +29,8 @@ export function Navbar() {
       <header className="absolute inset-x-0 top-0 z-40">
         <Container className="flex items-center justify-between py-6 text-white">
           <Logo
-            wordmarkClassName="hidden h-[15px] w-auto sm:block xl:h-[17px]"
-            markClassName="h-[22px] w-[44px] xl:h-[25px] xl:w-[50px]"
+            wordmarkClassName="hidden h-[18px] w-auto sm:block"
+            markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
           />
           <button
             type="button"
@@ -70,8 +70,8 @@ export function Navbar() {
           <Container className="relative py-6">
             <div className="flex items-center justify-between">
               <Logo
-                wordmarkClassName="h-[15px] w-auto xl:h-[17px]"
-                markClassName="h-[22px] w-[44px] xl:h-[25px] xl:w-[50px]"
+                wordmarkClassName="h-[14px] w-auto sm:h-[18px]"
+                markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
                 href="/"
               />
               <button

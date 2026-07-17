@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
 import { Reveal } from "@/components/Reveal";
@@ -9,8 +9,9 @@ import { movies } from "@/lib/content";
 
 export function MoviesMade() {
   const trackRef = useRef<HTMLDivElement>(null);
+  const [popped, setPopped] = useState<number | null>(null);
 
-  // Continuous marquee that accelerates with scroll speed.
+  // Continuous marquee that eases up a little with scroll speed.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -29,7 +30,7 @@ export function MoviesMade() {
     const onScroll = () => {
       const dy = Math.abs(window.scrollY - lastY);
       lastY = window.scrollY;
-      boost = Math.min(boost + dy * 0.5, 45);
+      boost = Math.min(boost + dy * 0.12, 10); // gentle, short-lived nudge
     };
 
     const tick = (now: number) => {
@@ -39,7 +40,7 @@ export function MoviesMade() {
       const half = track.scrollWidth / 2;
       if (half > 0 && -offset >= half) offset += half;
       track.style.transform = `translate3d(${offset}px,0,0)`;
-      boost *= 0.94; // ease back to base speed
+      boost *= 0.9; // ease back to base speed quickly
       raf = requestAnimationFrame(tick);
     };
 
@@ -67,7 +68,7 @@ export function MoviesMade() {
           <Reveal as="h2" className="display-md text-white">
             Movies made
             <br />
-            in Kurdistan
+            <em className="italic">in Kurdistan</em>
           </Reveal>
           <Reveal
             as="p"
@@ -80,16 +81,21 @@ export function MoviesMade() {
         </div>
       </Container>
 
-      <div className="relative z-10 mt-14 overflow-hidden pb-16">
+      <div className="relative z-10 mt-6 overflow-hidden pb-16 pt-8">
         <div
           ref={trackRef}
           className="flex w-max"
           style={{ willChange: "transform" }}
         >
           {reel.map((movie, i) => (
-            <div
+            <button
+              type="button"
               key={`${movie.title}-${i}`}
-              className="group relative mr-4 aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-sm shadow-lg shadow-black/30 sm:w-48 md:w-56"
+              onClick={() => setPopped((prev) => (prev === i ? null : i))}
+              aria-label={movie.title}
+              className={`group relative mr-4 aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-sm shadow-lg shadow-black/30 transition-transform duration-300 ease-out sm:w-48 md:w-56 ${
+                popped === i ? "z-10 -translate-y-4 scale-105 shadow-2xl" : ""
+              }`}
             >
               <Image
                 src={movie.src}
@@ -98,7 +104,7 @@ export function MoviesMade() {
                 sizes="(max-width: 640px) 40vw, 224px"
                 className="object-cover"
               />
-            </div>
+            </button>
           ))}
         </div>
       </div>

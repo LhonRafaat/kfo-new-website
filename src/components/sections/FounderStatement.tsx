@@ -29,7 +29,7 @@ export function FounderStatement() {
           <figure className="w-full">
             <Parallax
               speed={0.15}
-              className="relative aspect-560/419 w-full rounded-sm bg-ink/10 shadow-lg"
+              className="relative aspect-560/419 w-full bg-ink/10"
             >
               <Image
                 src="/images/founder.jpg"
