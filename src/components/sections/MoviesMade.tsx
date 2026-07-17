@@ -57,10 +57,13 @@ export function MoviesMade() {
 
   return (
     <section className="relative overflow-hidden bg-cocoa text-white">
+      {/* Floral grunge — Figma composites this at 19% with a LINEAR_BURN layer
+          blend; CSS has no linear-burn, and `color-burn` reproduces it almost
+          exactly over the cocoa base (soft-light washed it out and read too pale). */}
       <TextureOverlay
         src="/images/floral-texture.webp"
         opacity={0.19}
-        blend="soft-light"
+        blend="color-burn"
       />
 
       <Container className="relative z-10 pt-16">

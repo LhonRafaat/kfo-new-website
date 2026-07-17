@@ -14,7 +14,7 @@ export function TextureOverlay({
 }: {
   src: string;
   opacity: number;
-  blend?: "multiply" | "overlay" | "soft-light" | "normal";
+  blend?: "multiply" | "overlay" | "soft-light" | "color-burn" | "darken" | "normal";
   stretch?: boolean;
   flipX?: boolean;
   className?: string;

@@ -44,6 +44,17 @@ export function ArrowRight(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/* Newsletter submit arrow — verbatim Figma geometry (node "Vector 8", 338:165).
+   Its own tight viewBox so the arrow fills the button boldly; the 56×56
+   carousel ArrowRight above renders too small/thin inside the circular field. */
+export function NewsletterArrow(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg viewBox="0 0 19 17" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden {...props}>
+      <path d="M1.25023 9.74987C5.41684 8.74989 17.75 8.24989 17.75 8.24989M11.2501 1.24998L17.75 8.24989L11.2501 15.2498" />
+    </svg>
+  );
+}
+
 export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
   return (
     <svg viewBox="0 0 56 56" fill="none" stroke="currentColor" strokeWidth={2.5} strokeLinecap="round" strokeLinejoin="round" aria-hidden {...props}>

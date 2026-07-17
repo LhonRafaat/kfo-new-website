@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowRight } from "@/components/icons";
+import { NewsletterArrow } from "@/components/icons";
 
 export function NewsletterForm() {
   const [email, setEmail] = useState("");
@@ -29,7 +29,7 @@ export function NewsletterForm() {
         aria-label="Subscribe to newsletter"
         className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-white text-ink transition-transform duration-300 hover:scale-105"
       >
-        <ArrowRight className="h-5 w-5" />
+        <NewsletterArrow className="h-4 w-4" />
       </button>
     </form>
   );

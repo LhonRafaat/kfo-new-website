@@ -80,16 +80,22 @@
     font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 20px */
     letter-spacing: 0.02em;
   }
+  /* Hand-drawn underline — the exact curved stroke from the Figma source
+     (node "Vector 5"), not a straight rule. Stretched to the link width and
+     revealed left-to-right (clip-path) the first time it scrolls into view. */
   .accent-link::after {
     content: "";
-    @apply pointer-events-none absolute -bottom-1.5 left-0 h-[2px] w-full origin-left scale-x-0 rounded-full bg-accent transition-transform duration-700 ease-out;
+    @apply pointer-events-none absolute -bottom-[5px] left-0 w-full;
+    height: 7px;
+    background: url("data:image/svg+xml,%3Csvg%20xmlns=%22http://www.w3.org/2000/svg%22%20width=%22150%22%20height=%227%22%20viewBox=%220%200%20150%207%22%20fill=%22none%22%20preserveAspectRatio=%22none%22%3E%3Cpath%20d=%22M0%205.58634C57.305%205.58635%20111.35%20-1.08112%20149.971%200.932787%22%20stroke=%22%23FF6600%22%20stroke-width=%221.10752%22/%3E%3C/svg%3E")
+      no-repeat;
+    background-size: 100% 100%;
+    clip-path: inset(0 100% 0 0);
+    transition: clip-path 0.7s ease-out;
   }
   /* Underline draws itself in when the link scrolls into view */
   .accent-link.is-visible::after {
-    @apply scale-x-100;
-  }
-  .accent-link:hover::after {
-    @apply scale-x-105 duration-300;
+    clip-path: inset(0 0 0 0);
   }
   .accent-link:hover {
     @apply text-accent;
