@@ -95,7 +95,7 @@ export function Navbar() {
                   <span className="block font-serif text-2xl italic text-ink/50">
                     {item.index}
                   </span>
-                  <span className="mt-1 block font-serif text-4xl italic leading-tight transition-colors duration-300 group-hover:text-accent md:text-5xl">
+                  <span className="mt-1 block font-serif text-4xl font-medium italic leading-[1.14] transition-colors duration-300 group-hover:text-accent md:text-5xl">
                     {item.label}
                   </span>
                 </Link>
@@ -108,7 +108,7 @@ export function Navbar() {
                   key={item.label}
                   href={item.href}
                   onClick={() => setOpen(false)}
-                  className="link-underline font-serif text-xl italic md:text-2xl"
+                  className="link-underline font-serif text-2xl font-medium italic"
                 >
                   {item.label}
                 </Link>

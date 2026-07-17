@@ -29,8 +29,8 @@ const config: Config = {
         content: "1200px",
       },
       letterSpacing: {
-        label: "0.12em",
-        wordmark: "0.06em",
+        label: "0.02em",
+        wordmark: "0.03em",
       },
       keyframes: {
         "fade-in": {

@@ -69,7 +69,7 @@ export function NewsExperts() {
         className="pointer-events-none absolute right-0 top-[26%] z-[15] h-[74%] w-full text-ink/60"
       />
 
-      <Container className="relative z-10 py-20 md:py-24">
+      <Container className="relative z-10 py-16">
         <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
           <Reveal as="h2" className="display-lg text-ink">
             News from Experts
@@ -83,7 +83,7 @@ export function NewsExperts() {
             <div
               ref={listRef}
               key={page}
-              className="flex flex-col gap-8 overflow-hidden"
+              className="flex flex-col gap-12 overflow-hidden"
             >
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
@@ -102,11 +102,11 @@ export function NewsExperts() {
                       onMouseEnter={() => setIndex(page * PAGE_SIZE + i)}
                       className="group block"
                     >
-                      <span className="font-sans text-sm tracking-wide text-ink/60">
+                      <span className="font-sans text-[18px] leading-[1.5] text-ink/60">
                         {item.date}
                       </span>
                       <p
-                        className={`mt-2 inline font-serif text-xl leading-snug transition-colors duration-500 md:text-2xl ${
+                        className={`mt-2 inline font-serif text-[24px] leading-[1.14] transition-colors duration-500 ${
                           isActive
                             ? "text-ink [box-shadow:inset_0_-2px_0_0_#F19352]"
                             : "text-ink/40 group-hover:text-ink/70"

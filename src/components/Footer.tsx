@@ -38,7 +38,7 @@ export function Footer() {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="link-underline font-serif text-xl italic text-white/90 hover:text-white md:text-[1.6rem]"
+                      className="link-underline font-serif text-[26px] italic leading-[1.14] text-white/90 hover:text-white"
                     >
                       {item.label}
                     </Link>
@@ -68,7 +68,7 @@ export function Footer() {
               );
             })}
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center font-sans text-sm text-white/70">
+          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center font-sans text-xl text-white/70">
             <span>© 2026 Kurdistan Film Commission</span>
             <Link
               href="/privacy-policy"

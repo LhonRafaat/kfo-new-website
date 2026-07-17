@@ -29,7 +29,7 @@
 @layer components {
   /* ---- Layout ---- */
   .container-edge {
-    @apply mx-auto w-full max-w-content px-6 sm:px-8 lg:px-12 xl:px-[52px];
+    @apply mx-auto w-full max-w-content px-6 sm:px-8 lg:px-12;
   }
 
   /* ---- Display type scale (fluid, serif) ---- */
@@ -41,41 +41,44 @@
   }
   .display-xl {
     @apply font-serif font-medium;
-    font-size: clamp(2.5rem, 1.4rem + 4.4vw, 4rem);
-    line-height: 1.12;
+    font-size: clamp(2.5rem, 1.4rem + 4.4vw, 4rem); /* 64px */
+    line-height: 1.14;
   }
   .display-lg {
     @apply font-serif font-medium;
-    font-size: clamp(2.25rem, 1.6rem + 2.9vw, 3rem);
-    line-height: 1.12;
+    font-size: clamp(2.25rem, 1.7rem + 2.2vw, 3rem); /* 48px */
+    line-height: 1.14;
   }
   .display-md {
     @apply font-serif font-medium;
-    font-size: clamp(2rem, 1.5rem + 2.2vw, 3.5rem);
+    font-size: clamp(2.25rem, 1.6rem + 2.6vw, 3.55rem); /* 56.8px */
     line-height: 1.14;
   }
 
   /* ---- Eyebrow / label ---- */
   .eyebrow {
-    @apply font-sans font-semibold uppercase tracking-label text-espresso;
-    font-size: 1.25rem;
+    @apply font-sans font-semibold uppercase text-espresso;
+    font-size: 1.25rem; /* 20px */
+    letter-spacing: 0.02em;
   }
   .eyebrow-light {
-    @apply font-sans uppercase tracking-label;
-    font-size: 0.75rem;
+    @apply font-sans uppercase;
+    font-size: 1.125rem; /* 18px */
+    letter-spacing: 0;
   }
 
   /* ---- Body copy ---- */
   .body-lg {
     @apply font-sans text-ink/90;
-    font-size: clamp(1rem, 0.95rem + 0.25vw, 1.25rem);
-    line-height: 1.55;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 20px */
+    line-height: 1.4;
   }
 
   /* ---- Accent (italic serif) link with hand-drawn underline ---- */
   .accent-link {
-    @apply relative inline-flex items-center gap-2 font-serif italic tracking-wide text-ink transition-colors duration-300;
-    font-size: clamp(1.05rem, 1rem + 0.3vw, 1.25rem);
+    @apply relative inline-flex items-center gap-2 font-serif italic capitalize text-ink transition-colors duration-300;
+    font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 20px */
+    letter-spacing: 0.02em;
   }
   .accent-link::after {
     content: "";

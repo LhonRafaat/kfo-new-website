@@ -56,16 +56,16 @@ function Tile({ tile }: { tile: LocationTile }) {
               : "opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100"
           }`}
         >
-          <h3 className="font-serif text-xl italic md:text-2xl">
+          <h3 className="font-serif text-2xl italic leading-[1.14]">
             {tile.overlay.title}
           </h3>
-          <p className="font-sans text-sm text-white/85">
+          <p className="font-sans text-xl text-white/85">
             {tile.overlay.subtitle}
           </p>
           <Link
             href="/locations"
             onClick={(e) => e.stopPropagation()}
-            className="mt-3 rounded-full bg-white px-5 py-2 text-[13px] font-medium text-ink transition-colors duration-300 hover:bg-cream"
+            className="mt-3 rounded-full bg-white px-5 py-2 font-serif text-[15px] text-ink transition-colors duration-300 hover:bg-cream"
           >
             Get access to all database
           </Link>
