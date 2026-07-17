@@ -49,8 +49,17 @@ export const locationTiles: LocationTile[] = [
   { src: "/images/loc-8.jpg", alt: "Green valley meeting the water", tall: false, overlay: { title: "Rawanduz Valley", subtitle: "Description." } },
 ];
 
-/** Movies shot in Kurdistan (poster carousel). `featured` sits raised, per Figma. */
-export const movies = [
+/** Movies shot in Kurdistan (poster carousel). `featured` sits raised, per Figma.
+ *  `href` is the external page opened (new tab) when a poster is clicked; leave
+ *  it unset to fall back to an IMDb title search. */
+export type Movie = {
+  src: string;
+  title: string;
+  featured: boolean;
+  href?: string;
+};
+
+export const movies: Movie[] = [
   { src: "/images/poster-1.jpg", title: "Før Snøen Faller", featured: false },
   { src: "/images/poster-2.jpg", title: "Bekas", featured: true },
   { src: "/images/poster-3.jpg", title: "L'Hirondelle", featured: false },
@@ -58,7 +67,7 @@ export const movies = [
   { src: "/images/poster-5.jpg", title: "A Noiva", featured: false },
   { src: "/images/poster-6.jpg", title: "09", featured: false },
   { src: "/images/poster-7.jpg", title: "Der Junge Siyar", featured: false },
-] as const;
+];
 
 /** News from experts pool — shown three at a time; the arrows page through it.
  *  Same image for every item for now. */

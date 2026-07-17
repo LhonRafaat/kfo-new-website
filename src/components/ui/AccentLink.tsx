@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useRef, useState, type ReactNode } from "react";
-import { ArrowRight } from "@/components/icons";
+import { ArrowRight, Underline } from "@/components/icons";
 
 /**
  * Italic-serif call-to-action with the signature orange underline used across
@@ -14,11 +14,14 @@ export function AccentLink({
   children,
   showArrow = false,
   className = "",
+  underlineClassName = "",
 }: {
   href: string;
   children: ReactNode;
   showArrow?: boolean;
   className?: string;
+  /** Controls the underline's length/thickness, e.g. "w-32" or "w-full". */
+  underlineClassName?: string;
 }) {
   const ref = useRef<HTMLAnchorElement>(null);
   const [visible, setVisible] = useState(false);
@@ -40,8 +43,15 @@ export function AccentLink({
   }, []);
 
   return (
-    <Link ref={ref} href={href} className={`accent-link ${visible ? "is-visible" : ""} ${className}`}>
-      <span>{children}</span>
+    <Link
+      ref={ref}
+      href={href}
+      className={`accent-link ${visible ? "is-visible" : ""} ${className}`}
+    >
+      <div className="flex flex-col">
+        <span>{children}</span>
+        <Underline className={underlineClassName} />
+      </div>
       {showArrow && <ArrowRight className="arrow h-4 w-4" />}
     </Link>
   );

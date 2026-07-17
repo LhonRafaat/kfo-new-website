@@ -91,12 +91,17 @@ export function MoviesMade() {
           style={{ willChange: "transform" }}
         >
           {reel.map((movie, i) => (
-            <button
-              type="button"
+            <a
               key={`${movie.title}-${i}`}
+              href={
+                movie.href ??
+                `https://www.imdb.com/find/?q=${encodeURIComponent(movie.title)}`
+              }
+              target="_blank"
+              rel="noopener noreferrer"
               onClick={() => setPopped((prev) => (prev === i ? null : i))}
-              aria-label={movie.title}
-              className={`group relative mr-4 aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-sm shadow-lg shadow-black/30 transition-transform duration-300 ease-out sm:w-48 md:w-56 ${
+              aria-label={`${movie.title} — open film page in a new tab`}
+              className={`group relative mr-4 block aspect-[2/3] w-40 shrink-0 overflow-hidden rounded-sm shadow-lg shadow-black/30 transition-transform duration-300 ease-out sm:w-48 md:w-56 ${
                 popped === i ? "z-10 -translate-y-4 scale-105 shadow-2xl" : ""
               }`}
             >
@@ -107,7 +112,7 @@ export function MoviesMade() {
                 sizes="(max-width: 640px) 40vw, 224px"
                 className="object-cover"
               />
-            </button>
+            </a>
           ))}
         </div>
       </div>
