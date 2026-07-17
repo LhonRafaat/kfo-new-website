@@ -97,7 +97,7 @@ export function LocationDatabase() {
           </AccentLink>
         </div>
 
-        <div className="mt-12 grid grid-cols-2 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4">
+        <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4">
           {columns.map((col, i) => (
             <div
               key={i}

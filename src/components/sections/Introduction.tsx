@@ -12,7 +12,7 @@ export function Introduction() {
           bottoming out at the "Untold Stories" heading below */}
       <ScrollCurve
         variant="intro"
-        className="pointer-events-none absolute left-[-9%] top-[32%] z-0 h-[102%] w-[106%] text-ink/45"
+        className="pointer-events-none absolute left-0 top-[57%] z-0 h-[88%] w-full text-ink/45"
       />
 
       <Container className="relative z-10 py-16">

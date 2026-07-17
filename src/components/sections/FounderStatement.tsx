@@ -57,7 +57,7 @@ export function FounderStatement() {
             <Reveal as="p" delay={80} className="mt-8 font-serif text-2xl">
               Founder&apos;s Statement &amp; Vision
             </Reveal>
-            <blockquote className="mt-5 max-w-xl">
+            <blockquote className="mt-8 max-w-xl">
               <p className="body-lg relative pl-6 leading-relaxed">
                 <span
                   className="absolute left-0 top-0 font-serif text-3xl leading-none text-accent"

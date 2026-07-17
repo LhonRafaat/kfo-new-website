@@ -66,7 +66,7 @@ export function NewsExperts() {
       {/* Flowing line — reveals on scroll and rides over a portion of the image */}
       <ScrollCurve
         variant="news"
-        className="pointer-events-none absolute right-0 top-[26%] z-[15] h-[74%] w-full text-ink/60"
+        className="pointer-events-none absolute left-[-13%] top-[85%] z-[15] h-[57%] w-[116%] text-ink/60"
       />
 
       <Container className="relative z-10 py-16">
@@ -77,13 +77,13 @@ export function NewsExperts() {
           <AccentLink href="/news">Read all news</AccentLink>
         </div>
 
-        <div className="mt-12 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
+        <div className="mt-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* News list + controls */}
           <div className="order-2 lg:order-1">
             <div
               ref={listRef}
               key={page}
-              className="flex flex-col gap-12 overflow-hidden"
+              className="flex flex-col gap-14 overflow-hidden"
             >
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
