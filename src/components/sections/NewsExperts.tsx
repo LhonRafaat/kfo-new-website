@@ -106,9 +106,9 @@ export function NewsExperts() {
                         {item.date}
                       </span>
                       <p
-                        className={`mt-2 inline font-serif text-[24px] leading-[1.14] transition-colors duration-500 ${
+                        className={`mt-2 inline font-serif text-[24px] font-medium leading-[1.14] transition-colors duration-500 ${
                           isActive
-                            ? "text-ink [box-shadow:inset_0_-2px_0_0_#F19352]"
+                            ? "text-ink [box-shadow:inset_0_-2px_0_0_#FF6600]"
                             : "text-ink/40 group-hover:text-ink/70"
                         }`}
                       >
@@ -176,7 +176,7 @@ export function NewsExperts() {
               className="pointer-events-none absolute inset-0 rounded-sm"
               style={{
                 background:
-                  "linear-gradient(90deg, rgba(241,147,82,0.55) 0%, rgba(241,147,82,0.22) 30%, rgba(241,147,82,0) 62%)",
+                  "linear-gradient(90deg, rgba(255,102,0,0.5) 0%, rgba(255,102,0,0.2) 30%, rgba(255,102,0,0) 62%)",
               }}
               aria-hidden
             />

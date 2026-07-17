@@ -43,7 +43,7 @@ export function FounderStatement() {
               <p className="font-serif text-2xl font-bold italic">
                 Bavi Yassin
               </p>
-              <p className="mt-1 font-serif text-2xl">
+              <p className="mt-1 font-serif text-2xl font-medium">
                 Founder, Kurdistan Film Commission
               </p>
             </figcaption>
@@ -54,7 +54,7 @@ export function FounderStatement() {
             <Reveal as="h2" className="display-xl text-ink">
               We have so much more than just the mountains.
             </Reveal>
-            <Reveal as="p" delay={80} className="mt-8 font-serif text-2xl">
+            <Reveal as="p" delay={80} className="mt-8 font-serif text-2xl font-medium">
               Founder&apos;s Statement &amp; Vision
             </Reveal>
             <blockquote className="mt-8 max-w-xl">

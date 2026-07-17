@@ -22,7 +22,7 @@ export function NewsletterForm() {
         onChange={(e) => setEmail(e.target.value)}
         placeholder={sent ? "Thank you for subscribing" : "Join Newsletter"}
         aria-label="Email address"
-        className="w-full bg-transparent py-2 font-sans text-base text-white placeholder:text-white/60 focus:outline-none"
+        className="w-full bg-transparent py-2 font-sans text-xl text-white placeholder:text-white/60 focus:outline-none"
       />
       <button
         type="submit"

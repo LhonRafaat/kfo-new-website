@@ -17,8 +17,8 @@ const config: Config = {
           deep: "#9AA6AC",
         },
         accent: {
-          DEFAULT: "#F19352",
-          soft: "#E9A874",
+          DEFAULT: "#FF6600",
+          soft: "#F19352",
         },
       },
       fontFamily: {

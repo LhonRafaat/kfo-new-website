@@ -76,7 +76,7 @@
 
   /* ---- Accent (italic serif) link with hand-drawn underline ---- */
   .accent-link {
-    @apply relative inline-flex items-center gap-2 font-serif italic capitalize text-ink transition-colors duration-300;
+    @apply relative inline-flex items-center gap-2 font-serif font-medium italic capitalize leading-tight text-ink transition-colors duration-300;
     font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 20px */
     letter-spacing: 0.02em;
   }
