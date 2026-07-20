@@ -22,9 +22,11 @@ export default function LocationsPage() {
         <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
 
         {/* Signature flowing line, threading the headline and bottoming out
-            just above the Locations bar */}
+            just above the Locations bar. It draws itself once on load rather
+            than tracking the scroll — it already sits in the first viewport. */}
         <ScrollCurve
           variant="intro"
+          trigger="load"
           className="pointer-events-none absolute left-0 top-[13.5%] z-0 h-[22%] w-full text-ink/45"
         />
 

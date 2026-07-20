@@ -25,9 +25,15 @@ const CURVES = {
  */
 export function ScrollCurve({
   variant,
+  trigger = "scroll",
+  duration = 2000,
   className = "",
 }: {
   variant: keyof typeof CURVES;
+  /** `scroll` ties the wipe to scroll position; `load` draws it once on mount. */
+  trigger?: "scroll" | "load";
+  /** Draw time in ms — only used by the `load` trigger. */
+  duration?: number;
   className?: string;
 }) {
   const ref = useRef<SVGSVGElement>(null);
@@ -44,6 +50,15 @@ export function ScrollCurve({
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       setClip(0);
       return;
+    }
+
+    if (trigger === "load") {
+      // Wait a frame so the transition has the hidden state to start from.
+      const raf = requestAnimationFrame(() => {
+        el.style.transition = `clip-path ${duration}ms cubic-bezier(0.33, 0, 0.15, 1)`;
+        setClip(0);
+      });
+      return () => cancelAnimationFrame(raf);
     }
 
     let raf = 0;
@@ -69,7 +84,7 @@ export function ScrollCurve({
       window.removeEventListener("resize", onScroll);
       cancelAnimationFrame(raf);
     };
-  }, [reveal]);
+  }, [reveal, trigger, duration]);
 
   return (
     <svg
