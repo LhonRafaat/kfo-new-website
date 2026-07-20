@@ -1,15 +1,18 @@
 "use client";
 
 import Image from "next/image";
-import { useCallback, useEffect, useRef, useState } from "react";
-import { Container } from "@/components/ui/Container";
-import { ArrowLeft, ArrowRight } from "@/components/icons";
+import { useEffect, useRef } from "react";
 import type { LocationEntry } from "@/lib/content";
 
+// Enough copies that the track always overflows the viewport, so the seam
+// never shows: the loop resets after one copy, leaving (COPIES - 1) copies
+// spanning the screen.
+const COPIES = 3;
+
 /**
- * The secondary photo strip below the two hero images. It runs off the right
- * edge of the page and pages one tile at a time — the Figma frame shows it
- * mid-scroll, with the first tile cropped.
+ * Full-bleed photo strip below the two hero images. It scrolls itself
+ * continuously and wraps seamlessly, running off both edges of the page as the
+ * Figma frame shows it.
  */
 export function LocationSlider({
   images,
@@ -17,48 +20,55 @@ export function LocationSlider({
   images: LocationEntry["gallery"];
 }) {
   const trackRef = useRef<HTMLDivElement>(null);
-  const [atStart, setAtStart] = useState(true);
-  const [atEnd, setAtEnd] = useState(false);
-
-  const sync = useCallback(() => {
-    const el = trackRef.current;
-    if (!el) return;
-    setAtStart(el.scrollLeft <= 1);
-    // 1px of slack keeps the end state stable on fractional layouts
-    setAtEnd(el.scrollLeft + el.clientWidth >= el.scrollWidth - 1);
-  }, []);
 
   useEffect(() => {
-    sync();
-    window.addEventListener("resize", sync);
-    return () => window.removeEventListener("resize", sync);
-  }, [sync]);
+    const track = trackRef.current;
+    if (!track) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      // Nothing scrolls itself, so let the reader scroll it — otherwise the
+      // photos past the right edge would be unreachable.
+      track.parentElement?.classList.add("overflow-x-auto", "no-scrollbar");
+      return;
+    }
 
-  const page = (dir: 1 | -1) => {
-    const el = trackRef.current;
-    if (!el) return;
-    const tile = el.firstElementChild as HTMLElement | null;
-    const step = tile ? tile.offsetWidth + 24 : el.clientWidth * 0.8;
-    el.scrollBy({ left: dir * step, behavior: "smooth" });
-  };
+    let offset = 0;
+    let last = performance.now();
+    let raf = 0;
+    const SPEED = 0.45; // px per frame at 60fps
+
+    const tick = (now: number) => {
+      const dt = (now - last) / 16.667;
+      last = now;
+      offset -= SPEED * dt;
+      const copy = track.scrollWidth / COPIES;
+      if (copy > 0 && -offset >= copy) offset += copy;
+      track.style.transform = `translate3d(${offset}px,0,0)`;
+      raf = requestAnimationFrame(tick);
+    };
+
+    raf = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(raf);
+  }, []);
+
+  const reel = Array.from({ length: COPIES }, () => images).flat();
 
   return (
-    <Container className="mt-6">
+    <div className="mt-6 overflow-hidden">
       <div
         ref={trackRef}
-        onScroll={sync}
-        // flex lives on the scroller itself so `firstElementChild` is a tile,
-        // which is what the paging step measures
-        className="no-scrollbar -mr-6 flex snap-x snap-mandatory gap-6 overflow-x-auto sm:-mr-8 lg:-mr-12"
+        className="flex w-max gap-6"
+        style={{ willChange: "transform" }}
       >
-        {images.map((img) => (
+        {reel.map((img, i) => (
           <div
-            key={img.src}
-            className="relative h-60 w-61.25 shrink-0 snap-start overflow-hidden rounded sm:h-75 sm:w-76.5 lg:h-93 lg:w-94.75"
+            key={`${i}-${img.src}`}
+            // only the first pass is exposed; the rest are visual duplicates
+            aria-hidden={i >= images.length}
+            className="relative h-60 w-61.25 shrink-0 overflow-hidden rounded sm:h-75 sm:w-76.5 lg:h-93 lg:w-94.75"
           >
             <Image
               src={img.src}
-              alt={img.alt}
+              alt={i < images.length ? img.alt : ""}
               fill
               sizes="379px"
               className="object-cover"
@@ -66,27 +76,6 @@ export function LocationSlider({
           </div>
         ))}
       </div>
-
-      <div className="mt-6 flex items-center justify-end gap-4">
-        <button
-          type="button"
-          onClick={() => page(-1)}
-          disabled={atStart}
-          aria-label="Previous photos"
-          className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-30"
-        >
-          <ArrowLeft className="h-7 w-7" />
-        </button>
-        <button
-          type="button"
-          onClick={() => page(1)}
-          disabled={atEnd}
-          aria-label="Next photos"
-          className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent disabled:pointer-events-none disabled:opacity-30"
-        >
-          <ArrowRight className="h-7 w-7" />
-        </button>
-      </div>
-    </Container>
+    </div>
   );
 }
