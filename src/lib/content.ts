@@ -30,6 +30,28 @@ export const quickLinks = [
   { label: "Read our", title: "Industry Guide", href: "/industry-guide", featured: false },
 ] as const;
 
+/**
+ * Pins on the Kurdistan map of the location database.
+ * `x`/`y` are percentages of the 900×800 map artboard, taken from the Figma
+ * frame so each dot lands on its city.
+ */
+export type LocationPin = {
+  city: string;
+  count: number;
+  x: number;
+  y: number;
+  /** Shown as one of the three chips beside the "Locations" heading. */
+  primary: boolean;
+};
+
+export const locationPins: LocationPin[] = [
+  { city: "Sulaymaniyah", count: 10, x: 69.67, y: 34.13, primary: true },
+  { city: "Duhok", count: 22, x: 32.33, y: 7.5, primary: true },
+  { city: "Erbil", count: 42, x: 48.11, y: 16.25, primary: true },
+  { city: "Kifri", count: 2, x: 62.78, y: 22.38, primary: false },
+  { city: "Halabjah", count: 4, x: 80.33, y: 48.25, primary: false },
+];
+
 /** Location database masonry gallery. Column & span drive the layout. */
 export type LocationTile = {
   src: string;

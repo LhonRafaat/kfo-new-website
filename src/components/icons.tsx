@@ -57,6 +57,21 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Phosphor CaretRight — the "more filters" chevron, verbatim from Figma. */
+export function CaretRight(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+      {...props}
+    >
+      <path d="M17.0306 12.5306L9.53063 20.0306C9.46095 20.1002 9.37822 20.1555 9.28718 20.1932C9.19613 20.2309 9.09855 20.2503 9.00001 20.2503C8.90146 20.2503 8.80388 20.2309 8.71283 20.1932C8.62179 20.1555 8.53906 20.1002 8.46938 20.0306C8.3997 19.9609 8.34442 19.8781 8.30671 19.7871C8.269 19.6961 8.24959 19.5985 8.24959 19.4999C8.24959 19.4014 8.269 19.3038 8.30671 19.2128C8.34442 19.1217 8.3997 19.039 8.46938 18.9693L15.4397 11.9999L8.46938 5.03055C8.32865 4.88982 8.24959 4.69895 8.24959 4.49993C8.24959 4.30091 8.32865 4.11003 8.46938 3.9693C8.61011 3.82857 8.80098 3.74951 9.00001 3.74951C9.19903 3.74951 9.3899 3.82857 9.53063 3.9693L17.0306 11.4693C17.1004 11.539 17.1557 11.6217 17.1934 11.7127C17.2312 11.8038 17.2506 11.9014 17.2506 11.9999C17.2506 12.0985 17.2312 12.1961 17.1934 12.2871C17.1557 12.3782 17.1004 12.4609 17.0306 12.5306Z" />
+    </svg>
+  );
+}
+
 /* Carousel controls — verbatim Figma geometry: the arrow shafts have a gentle
    bow and the pause bars are subtly curved. */
 export function ArrowRight(props: SVGProps<SVGSVGElement>) {

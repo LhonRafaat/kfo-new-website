@@ -7,7 +7,15 @@ import { Logo } from "@/components/ui/Logo";
 import { CloseIcon, HamburgerIcon } from "@/components/icons";
 import { primaryNav, secondaryNav } from "@/lib/content";
 
-export function Navbar() {
+/**
+ * `overlay` floats the header over a full-bleed hero in white; `solid` sits in
+ * the normal flow on a cream page and inks the lockup instead.
+ */
+export function Navbar({
+  variant = "overlay",
+}: {
+  variant?: "overlay" | "solid";
+}) {
   const [open, setOpen] = useState(false);
 
   // Lock body scroll + close on Escape while the overlay is open.
@@ -25,9 +33,18 @@ export function Navbar() {
 
   return (
     <>
-      {/* Transparent header sitting over the hero */}
-      <header className="absolute inset-x-0 top-0 z-40">
-        <Container className="flex items-center justify-between py-6 text-white">
+      <header
+        className={
+          variant === "overlay"
+            ? "absolute inset-x-0 top-0 z-40" // transparent, over the hero
+            : "relative z-40"
+        }
+      >
+        <Container
+          className={`flex items-center justify-between py-6 ${
+            variant === "overlay" ? "text-white" : "text-ink"
+          }`}
+        >
           <Logo
             wordmarkClassName="hidden h-[18px] w-auto sm:block"
             markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
