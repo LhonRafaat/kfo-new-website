@@ -1,15 +1,19 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
+import { LocationSlider } from "@/components/sections/LocationSlider";
 import type { LocationEntry } from "@/lib/content";
 
 /**
- * Figma lays the gallery out as a 782+378 pair, then a strip of four equal
- * tiles that runs off both edges of the page. Below `lg` the strip becomes a
- * swipeable row rather than a crop, so nothing is unreachable on a phone.
+ * Gallery for a location: the first two images are the hero pair (782+378 in
+ * the Figma), and everything after them feeds the slider underneath.
  */
-export function LocationGallery({ gallery }: { gallery: LocationEntry["gallery"] }) {
-  const [wide, beside, ...strip] = gallery;
+export function LocationGallery({
+  gallery,
+}: {
+  gallery: LocationEntry["gallery"];
+}) {
+  const [wide, beside, ...rest] = gallery;
 
   return (
     <Reveal as="div" className="mt-10">
@@ -37,26 +41,7 @@ export function LocationGallery({ gallery }: { gallery: LocationEntry["gallery"]
         </div>
       </Container>
 
-      <div className="no-scrollbar mt-6 overflow-x-auto">
-        {/* The negative offset reproduces the Figma crop, where the strip
-            starts 153px to the left of the viewport. */}
-        <div className="flex gap-6 lg:-ml-38.25">
-          {strip.map((img) => (
-            <div
-              key={img.src}
-              className="relative h-60 w-61.25 shrink-0 overflow-hidden rounded sm:h-75 sm:w-76.5 lg:h-93 lg:w-94.75"
-            >
-              <Image
-                src={img.src}
-                alt={img.alt}
-                fill
-                sizes="379px"
-                className="object-cover"
-              />
-            </div>
-          ))}
-        </div>
-      </div>
+      {rest.length > 0 && <LocationSlider images={rest} />}
     </Reveal>
   );
 }
