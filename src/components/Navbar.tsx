@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { Logo } from "@/components/ui/Logo";
-import { CloseIcon, HamburgerIcon } from "@/components/icons";
+import { BackArrow, CloseIcon, HamburgerIcon } from "@/components/icons";
 import { primaryNav, secondaryNav } from "@/lib/content";
 
 /**
@@ -13,8 +13,11 @@ import { primaryNav, secondaryNav } from "@/lib/content";
  */
 export function Navbar({
   variant = "overlay",
+  backHref,
 }: {
   variant?: "overlay" | "solid";
+  /** Renders a back arrow to the left of the lockup (location detail pages). */
+  backHref?: string;
 }) {
   const [open, setOpen] = useState(false);
 
@@ -45,10 +48,21 @@ export function Navbar({
             variant === "overlay" ? "text-white" : "text-ink"
           }`}
         >
-          <Logo
-            wordmarkClassName="hidden h-[18px] w-auto sm:block"
-            markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
-          />
+          <div className="flex items-center gap-6">
+            {backHref && (
+              <Link
+                href={backHref}
+                aria-label="Back to the location database"
+                className="transition-transform duration-300 ease-out hover:-translate-x-1"
+              >
+                <BackArrow className="h-6 w-6" />
+              </Link>
+            )}
+            <Logo
+              wordmarkClassName="hidden h-[18px] w-auto sm:block"
+              markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
+            />
+          </div>
           <button
             type="button"
             onClick={() => setOpen(true)}

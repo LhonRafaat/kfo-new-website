@@ -57,6 +57,25 @@ export function CloseIcon(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Long-tailed back arrow used in the location detail header. */
+export function BackArrow(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+      {...props}
+    >
+      <path d="M20.2498 10.4999C16.0831 11.4999 3.74976 11.9999 3.74976 11.9999M10.2498 18.9999L3.74976 11.9999L10.2498 4.99994" />
+    </svg>
+  );
+}
+
 /** Phosphor CaretRight — the "more filters" chevron, verbatim from Figma. */
 export function CaretRight(props: SVGProps<SVGSVGElement>) {
   return (

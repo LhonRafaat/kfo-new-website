@@ -52,6 +52,47 @@ export const locationPins: LocationPin[] = [
   { city: "Halabjah", count: 4, x: 80.33, y: 48.25, primary: false },
 ];
 
+/**
+ * A single entry in the location database, rendered at /locations/[slug].
+ * `gallery` is ordered as the Figma lays it out: [0] is the wide hero tile,
+ * [1] sits beside it, and [2..5] form the bleeding strip underneath.
+ */
+export type LocationEntry = {
+  slug: string;
+  category: string;
+  title: string;
+  summary: string;
+  city: string;
+  cityBlurb: string;
+  /** Pin position as a percentage of the 644×572 region-map artboard. */
+  pin: { x: number; y: number };
+  mapsUrl: string;
+  gallery: { src: string; alt: string }[];
+};
+
+export const locations: LocationEntry[] = [
+  {
+    slug: "bazyan",
+    category: "Archeological Sites",
+    title: "Archaeological remains in Bazyan",
+    summary:
+      "The archaeological remains of Bazyan, an ancient Christian heritage, are estimated to date back to the 6th century.",
+    city: "As Sulaymaniyah",
+    cityBlurb:
+      "Sulaymaniyah, a vibrant city in the Kurdistan Region of Iraq, is known for its rich cultural heritage and stunning landscapes.",
+    pin: { x: 64.9, y: 25.2 },
+    mapsUrl: "https://www.google.com/maps/search/?api=1&query=Bazyan+Kurdistan",
+    gallery: [
+      { src: "/images/loc-bazyan-1.jpg", alt: "Stone archway standing in the Bazyan ruins" },
+      { src: "/images/loc-bazyan-2.jpg", alt: "Arched wall of the Bazyan site against the hillside" },
+      { src: "/images/loc-bazyan-3.jpg", alt: "Excavated stone chambers at Bazyan" },
+      { src: "/images/loc-bazyan-4.jpg", alt: "Vaulted interior passage of the Bazyan remains" },
+      { src: "/images/loc-bazyan-5.jpg", alt: "Foundations of the Bazyan settlement seen from above" },
+      { src: "/images/loc-bazyan-6.jpg", alt: "Bazyan ruins with the mountain range behind" },
+    ],
+  },
+];
+
 /** Location database masonry gallery. Column & span drive the layout. */
 export type LocationTile = {
   src: string;
