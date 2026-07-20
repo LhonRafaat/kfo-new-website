@@ -73,14 +73,14 @@ export const movies: Movie[] = [
  *  Same image for every item for now. */
 export const news = [
   { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news.jpg" },
-  { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/news.jpg" },
-  { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/news.jpg" },
-  { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/news.jpg" },
-  { date: "21, Oct 2025", title: "International Producers Scout the Erbil Citadel for an Upcoming Feature", href: "/news/erbil-citadel-scout", image: "/images/news.jpg" },
-  { date: "14, Oct 2025", title: "New Co-Production Treaty Opens Doors for Kurdish Filmmakers", href: "/news/co-production-treaty", image: "/images/news.jpg" },
-  { date: "6, Oct 2025", title: "Duhok International Film Festival Announces its 2026 Programme", href: "/news/duhok-festival-2026", image: "/images/news.jpg" },
-  { date: "29, Sep 2025", title: "Location Database Expands with 200 New Verified Filming Sites", href: "/news/database-expansion", image: "/images/news.jpg" },
-  { date: "22, Sep 2025", title: "Masterclass Series Brings Cannes Mentors to Slemani", href: "/news/cannes-masterclass", image: "/images/news.jpg" },
+  { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/loc-2.jpg" },
+  { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/loc-3.jpg" },
+  { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/loc-4.jpg" },
+  { date: "21, Oct 2025", title: "International Producers Scout the Erbil Citadel for an Upcoming Feature", href: "/news/erbil-citadel-scout", image: "/images/loc-5.jpg" },
+  { date: "14, Oct 2025", title: "New Co-Production Treaty Opens Doors for Kurdish Filmmakers", href: "/news/co-production-treaty", image: "/images/loc-6.jpg" },
+  { date: "6, Oct 2025", title: "Duhok International Film Festival Announces its 2026 Programme", href: "/news/duhok-festival-2026", image: "/images/loc-7.jpg" },
+  { date: "29, Sep 2025", title: "Location Database Expands with 200 New Verified Filming Sites", href: "/news/database-expansion", image: "/images/loc-8.jpg" },
+  { date: "22, Sep 2025", title: "Masterclass Series Brings Cannes Mentors to Slemani", href: "/news/cannes-masterclass", image: "/images/loc-bazyan.jpg" },
 ] as const;
 
 /** Footer link columns. */

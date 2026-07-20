@@ -23,8 +23,11 @@ export function LogoMark(props: SVGProps<SVGSVGElement>) {
 
 export function HamburgerIcon(props: SVGProps<SVGSVGElement>) {
   return (
+    // preserveAspectRatio="none" lets the caller widen the box on hover so the
+    // bars stretch horizontally without getting any thicker.
     <svg
       viewBox="0 0 24 10"
+      preserveAspectRatio="none"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       aria-hidden

@@ -11,7 +11,8 @@ export function MoviesMade() {
   const trackRef = useRef<HTMLDivElement>(null);
   const [popped, setPopped] = useState<number | null>(null);
 
-  // Continuous marquee that eases up a little with scroll speed.
+  // Continuous marquee: travels left while the page scrolls down and reverses
+  // to the right when it scrolls up, easing up a little with scroll speed.
   useEffect(() => {
     const track = trackRef.current;
     if (!track) return;
@@ -21,6 +22,7 @@ export function MoviesMade() {
     if (reduce) return;
 
     let offset = 0;
+    let dir = -1; // -1 = drifting left (scrolling down), 1 = right (up)
     let boost = 0;
     let lastY = window.scrollY;
     let last = performance.now();
@@ -28,17 +30,24 @@ export function MoviesMade() {
     const BASE = 0.5; // px per frame at 60fps
 
     const onScroll = () => {
-      const dy = Math.abs(window.scrollY - lastY);
+      const dy = window.scrollY - lastY;
       lastY = window.scrollY;
-      boost = Math.min(boost + dy * 0.12, 10); // gentle, short-lived nudge
+      if (dy > 0) dir = -1;
+      else if (dy < 0) dir = 1;
+      boost = Math.min(boost + Math.abs(dy) * 0.12, 10); // short-lived nudge
     };
 
     const tick = (now: number) => {
       const dt = (now - last) / 16.667;
       last = now;
-      offset -= (BASE + boost) * dt;
+      offset += dir * (BASE + boost) * dt;
+      // Keep the offset inside one copy of the reel so the loop is seamless in
+      // both directions.
       const half = track.scrollWidth / 2;
-      if (half > 0 && -offset >= half) offset += half;
+      if (half > 0) {
+        if (offset <= -half) offset += half;
+        else if (offset >= 0) offset -= half;
+      }
       track.style.transform = `translate3d(${offset}px,0,0)`;
       boost *= 0.9; // ease back to base speed quickly
       raf = requestAnimationFrame(tick);

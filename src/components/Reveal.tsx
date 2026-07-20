@@ -2,13 +2,11 @@
 
 import {
   createElement,
-  useEffect,
-  useRef,
-  useState,
   type CSSProperties,
   type ElementType,
   type ReactNode,
 } from "react";
+import { useInView } from "@/lib/useInView";
 
 /**
  * Slides its content up + fades it in the first time it scrolls into view.
@@ -25,28 +23,10 @@ export function Reveal({
   className?: string;
   children: ReactNode;
 }) {
-  const ref = useRef<HTMLElement>(null);
-  const [inView, setInView] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setInView(true);
-      return;
-    }
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setInView(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.12, rootMargin: "0px 0px -6% 0px" },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  const [ref, inView] = useInView<HTMLElement>({
+    threshold: 0.12,
+    rootMargin: "0px 0px -6% 0px",
+  });
 
   return createElement(
     as,

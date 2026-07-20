@@ -37,9 +37,9 @@ export function Navbar() {
             onClick={() => setOpen(true)}
             aria-label="Open menu"
             aria-expanded={open}
-            className="group flex h-11 w-11 items-center justify-center rounded-full transition-colors duration-300 hover:bg-white/10"
+            className="group flex h-11 w-11 items-center justify-center"
           >
-            <HamburgerIcon className="h-[13px] w-8 transition-transform duration-300 group-hover:scale-110" />
+            <HamburgerIcon className="h-[13px] w-8 transition-[width] duration-300 ease-out group-hover:w-11" />
           </button>
         </Container>
       </header>

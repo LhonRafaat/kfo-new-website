@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState, type CSSProperties } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
@@ -10,6 +10,7 @@ import { Parallax } from "@/components/Parallax";
 import { Reveal } from "@/components/Reveal";
 import { ScrollCurve } from "@/components/ScrollCurve";
 import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from "@/components/icons";
+import { useInView } from "@/lib/useInView";
 import { news } from "@/lib/content";
 
 const ROTATE_MS = 5000;
@@ -19,8 +20,10 @@ const pages = Math.ceil(news.length / PAGE_SIZE);
 export function NewsExperts() {
   const [index, setIndex] = useState(0); // highlighted article across the whole pool
   const [playing, setPlaying] = useState(true);
-  const [revealed, setRevealed] = useState(false);
-  const listRef = useRef<HTMLDivElement>(null);
+  // The ref lives on a wrapper that never remounts — the inner list is keyed by
+  // page, and hanging the observer off that node meant a page flip could leave
+  // the titles stuck at opacity 0.
+  const [listRef, revealed] = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const page = Math.floor(index / PAGE_SIZE);
   const activeInPage = index % PAGE_SIZE;
@@ -34,23 +37,6 @@ export function NewsExperts() {
     );
     return () => clearInterval(id);
   }, [playing]);
-
-  // Kick off the slide-up the first time the list scrolls into view.
-  useEffect(() => {
-    const el = listRef.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([e]) => {
-        if (e.isIntersecting) {
-          setRevealed(true);
-          io.disconnect();
-        }
-      },
-      { threshold: 0.2 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
 
   // Arrows page through the pool — three brand-new articles each click.
   const goPage = (dir: 1 | -1) =>
@@ -80,11 +66,8 @@ export function NewsExperts() {
         <div className="mt-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
           {/* News list + controls */}
           <div className="order-2 lg:order-1">
-            <div
-              ref={listRef}
-              key={page}
-              className="flex flex-col gap-8 overflow-hidden"
-            >
+            <div ref={listRef} className="overflow-hidden">
+              <div key={page} className="flex flex-col gap-8">
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
                 return (
@@ -116,8 +99,9 @@ export function NewsExperts() {
                       </p>
                     </Link>
                   </div>
-                );
-              })}
+                  );
+                })}
+              </div>
             </div>
 
             <div className="mt-20 flex items-center gap-4">
