@@ -16,40 +16,47 @@ export const metadata: Metadata = {
 export default function LocationsPage() {
   return (
     <>
-      {/* Texture + curve are confined to the hero, matching the Figma's
-          832px-tall texture rectangle — the filter bar and row list below
-          sit on plain cream. That rectangle is named "Grunge Floral Texture 1"
-          in Figma but its actual image fill is the same folded-paper asset as
-          the homepage founder section, not the floral texture — confirmed by
-          rendering the fill's imageRef directly. It also sits behind the
-          Header in Figma's own layer order, so the Navbar lives inside this
-          wrapper too — otherwise the texture stops short and leaves a seam
-          under the navbar. */}
-      {/* isolate: standard practice alongside mix-blend-mode so it can never
-          reach past this section, even if content here changes later. */}
-      <div className="relative isolate overflow-hidden bg-cream">
-        <TextureOverlay
-          src="/images/texture-paper-founder.webp"
-          opacity={0.24}
-          blend="multiply"
-        />
+      {/* One wrapper for the whole page body: it owns the cream background and
+          clips the decorative curve's horizontal bleed. `isolate` lets the
+          curve sit at -z-10 (behind both sections' content) while staying
+          above this wrapper's own background. */}
+      <div className="relative isolate overflow-x-clip bg-cream">
+        {/* Textured hero. The texture rectangle is named "Grunge Floral
+            Texture 1" in Figma but its actual image fill is the same
+            folded-paper asset as the homepage founder section — confirmed by
+            rendering the fill's imageRef directly. It sits behind the Header
+            in Figma's layer order, so the Navbar lives inside this wrapper
+            too. The inner `isolate` fences the texture's mix-blend-mode. */}
+        <div className="relative isolate overflow-hidden">
+          <TextureOverlay
+            src="/images/texture-paper-founder.webp"
+            opacity={0.24}
+            blend="multiply"
+          />
 
-        {/* Signature flowing line threading the headline. It draws itself
-            once on load rather than tracking the scroll — it already sits
-            in the first viewport. */}
-        <ScrollCurve
-          variant="intro"
-          trigger="load"
-          className="pointer-events-none absolute left-0 top-[10%] z-0 h-[55%] w-full text-ink/45"
-        />
+          <Navbar variant="solid" />
+          <LocationsIntro />
+        </div>
 
-        <Navbar variant="solid" />
-        <LocationsIntro />
+        {/* Signature flowing line. Figma places it at y 670→1249 on the
+            1280-wide frame: its top starts 162px above the hero's bottom edge
+            and it sweeps down across the Locations bar, bottoming out behind
+            the refine panel and the first row. Anchored to this zero-height
+            div at the hero/list boundary and sized in vw to keep the Figma
+            proportions (1686×579 on a 1280 frame, bleeding 198px left).
+            It draws itself once on load — it starts in the first viewport. */}
+        <div aria-hidden className="relative -z-10">
+          <ScrollCurve
+            variant="intro"
+            trigger="load"
+            className="pointer-events-none absolute left-[-15.5vw] top-[-12.7vw] h-[45.2vw] w-[131.7vw] text-ink/45"
+          />
+        </div>
+
+        <main className="relative">
+          <LocationsList />
+        </main>
       </div>
-
-      <main className="relative bg-cream">
-        <LocationsList />
-      </main>
       <Footer />
     </>
   );

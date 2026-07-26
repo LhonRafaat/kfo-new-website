@@ -87,7 +87,7 @@ export function LocationsList() {
   const activeCount = cities.size + types.size + (query ? 1 : 0);
 
   return (
-    <Container className="relative z-10 pb-24 pt-16 md:pb-32 md:pt-20">
+    <Container className="relative z-10 pb-24 pt-16 md:pb-32">
       <Reveal
         as="div"
         className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
@@ -108,7 +108,7 @@ export function LocationsList() {
                 className={`font-sans text-base font-semibold uppercase transition-colors duration-300 ${
                   isOn
                     ? "text-accent [box-shadow:inset_0_-2px_0_0_currentColor]"
-                    : "text-espresso hover:text-accent"
+                    : "text-espresso/80 hover:text-accent"
                 }`}
               >
                 {city}
@@ -121,7 +121,7 @@ export function LocationsList() {
             onClick={() => setPanelOpen((v) => !v)}
             aria-expanded={panelOpen}
             aria-controls="locations-refine-panel"
-            className="flex items-center gap-2 font-sans text-base font-semibold uppercase text-espresso transition-colors duration-300 hover:text-accent"
+            className="flex items-center gap-2 font-sans text-base font-semibold uppercase text-espresso/80 transition-colors duration-300 hover:text-accent"
           >
             More Filters
             {activeCount > 0 && (
@@ -177,7 +177,7 @@ export function LocationsList() {
                           onClick={() => toggleSet(setTypes, type)}
                           aria-pressed={isOn}
                           className={`font-sans text-sm font-semibold uppercase transition-colors duration-300 ${
-                            isOn ? "text-accent" : "text-espresso hover:text-accent"
+                            isOn ? "text-accent" : "text-espresso/80 hover:text-accent"
                           }`}
                         >
                           {type}
@@ -201,7 +201,7 @@ export function LocationsList() {
                         onClick={() => toggleSet(setCities, city)}
                         aria-pressed={isOn}
                         className={`font-sans text-sm font-semibold uppercase transition-colors duration-300 ${
-                          isOn ? "text-accent" : "text-espresso hover:text-accent"
+                          isOn ? "text-accent" : "text-espresso/80 hover:text-accent"
                         }`}
                       >
                         {city}
@@ -223,7 +223,10 @@ export function LocationsList() {
         </div>
       </Reveal>
 
-      <div className="mt-16 flex flex-col gap-16 md:mt-20 md:gap-20">
+      {/* Figma's row list is dense: 24px between rows (auto-layout itemSpacing),
+          40px below the filter bar. Mobile keeps a larger gap so stacked rows
+          stay visually separate from their own internal spacing. */}
+      <div className="mt-10 flex flex-col gap-10 md:gap-6">
         {filtered.length === 0 ? (
           <p className="body-lg py-12 text-center text-ink/70">
             No locations match your filters yet — try clearing a few.
@@ -239,7 +242,8 @@ export function LocationsList() {
 function Field({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-col gap-1">
-      <p className="font-sans text-xl font-normal text-ink">{label}</p>
+      {/* Labels sit at 64% opacity in the Figma; values are full ink. */}
+      <p className="font-sans text-xl font-normal text-ink/65">{label}</p>
       <p className="font-sans text-xl font-semibold text-ink">{value}</p>
     </div>
   );

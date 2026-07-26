@@ -139,7 +139,9 @@ export const locationDbRows: LocationDbRow[] = [
     image: "/images/loc-db-red-prison-museum.jpg",
     imageAlt: "Tank displayed outside the Red Prison Museum's cell block",
     variant: "expanded",
-    watermark: 1,
+    // Figma uses the variant-2 highlight here (same as Kifri) — verified by
+    // the highlight vector's geometry, not the (unreliable) layer name.
+    watermark: 2,
   },
   {
     title: "Tuni Baba",
@@ -190,7 +192,7 @@ export const locationDbRows: LocationDbRow[] = [
     variant: "compact",
   },
   {
-    title: "Akre's castle",
+    title: "Akre’s castle",
     citySuffix: "Akre",
     type: "Archeological Site",
     image: "/images/loc-db-akre-castle.jpg",

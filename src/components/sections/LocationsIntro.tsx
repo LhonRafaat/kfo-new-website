@@ -27,7 +27,9 @@ const heroPinPositions: Record<string, { x: number; y: number }> = {
  */
 export function LocationsIntro() {
   return (
-    <Container className="relative z-10 pt-16 md:pt-24">
+    // pb: Figma's textured hero runs ~140px below the map before the plain
+    // cream of the list section starts.
+    <Container className="relative z-10 pb-16 pt-16 md:pb-36 md:pt-24">
       <div className="grid grid-cols-1 items-center gap-12 lg:grid-cols-[531fr_610fr] lg:gap-10">
         <div>
           <Reveal as="div">
@@ -88,6 +90,8 @@ function PinMap() {
         return (
           <span
             key={pin.city}
+            // Decorative: the map's alt text already carries this information.
+            aria-hidden
             style={{ left: `${pos.x}%`, top: `${pos.y}%` }}
             className="absolute -translate-x-1/2 -translate-y-1/2"
           >
