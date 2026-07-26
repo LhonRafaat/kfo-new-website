@@ -93,6 +93,120 @@ export const locations: LocationEntry[] = [
   },
 ];
 
+/**
+ * A row in the location database list at /locations (Figma "Location DB - V2",
+ * node 338:191). `variant` picks the card layout: "expanded" shows all four
+ * fields plus the region-silhouette watermark behind the text column;
+ * "compact" is the shorter three-column row used for the last few entries.
+ * `citySuffix` is reproduced verbatim from the Figma copy — some rows read
+ * "As Sulaymaniyah", others just the city name, kept as authored rather than
+ * normalised, since it's the dev-mode source text.
+ */
+export type LocationDbRow = {
+  title: string;
+  citySuffix: string;
+  type: string;
+  area?: string;
+  lastActiveDate?: string;
+  image: string;
+  imageAlt: string;
+  variant: "expanded" | "compact";
+  /** Which of the two decorative region-silhouette watermarks (if any) sits behind the text. */
+  watermark?: 1 | 2;
+  /** Links through to a full /locations/[slug] page when one exists. */
+  slug?: string;
+};
+
+export const locationDbRows: LocationDbRow[] = [
+  {
+    title: "Archaeological remains in Bazyan",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-bazyan.jpg",
+    imageAlt: "Stone archway standing in the Bazyan ruins",
+    variant: "expanded",
+    watermark: 1,
+    slug: "bazyan",
+  },
+  {
+    title: "Red Prison Museum",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-red-prison-museum.jpg",
+    imageAlt: "Tank displayed outside the Red Prison Museum's cell block",
+    variant: "expanded",
+    watermark: 1,
+  },
+  {
+    title: "Tuni Baba",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-tuni-baba.jpg",
+    imageAlt: "Steep canyon walls at Tuni Baba with a shallow stream below",
+    variant: "expanded",
+    watermark: 1,
+  },
+  {
+    title: "A home in Kifri",
+    citySuffix: "Kifri",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-home-in-kifri.jpg",
+    imageAlt: "Courtyard home shaded by palm trees in Kifri",
+    variant: "expanded",
+    watermark: 2,
+  },
+  {
+    title: "Abandoned Prison",
+    citySuffix: "Kifri",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-abandoned-prison.jpg",
+    imageAlt: "Rows of wire fencing in the abandoned Kifri prison yard",
+    variant: "expanded",
+  },
+  {
+    title: "Abandoned tobacco factory",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    image: "/images/loc-db-tobacco-factory.jpg",
+    imageAlt: "Steel roof trusses inside the abandoned tobacco factory",
+    variant: "compact",
+  },
+  {
+    title: "Ahmed Awa waterfall",
+    citySuffix: "Halabja",
+    type: "Archeological Site",
+    image: "/images/loc-db-ahmed-awa-waterfall.jpg",
+    imageAlt: "Ahmed Awa waterfall flowing between mossy boulders",
+    variant: "compact",
+  },
+  {
+    title: "Akre's castle",
+    citySuffix: "Akre",
+    type: "Archeological Site",
+    image: "/images/loc-db-akre-castle.jpg",
+    imageAlt: "Terraced hillside buildings beneath Akre's old citadel",
+    variant: "compact",
+  },
+  {
+    title: "Alqosh",
+    citySuffix: "Erbil",
+    type: "Archeological Site",
+    image: "/images/loc-db-alqosh.jpg",
+    imageAlt: "Stone terraces climbing the hillside near Alqosh",
+    variant: "compact",
+  },
+];
+
 /** Location database masonry gallery. Column & span drive the layout. */
 export type LocationTile = {
   src: string;

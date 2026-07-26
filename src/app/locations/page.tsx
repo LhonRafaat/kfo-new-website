@@ -4,7 +4,7 @@ import { Footer } from "@/components/Footer";
 import { TextureOverlay } from "@/components/ui/TextureOverlay";
 import { ScrollCurve } from "@/components/ScrollCurve";
 import { LocationsIntro } from "@/components/sections/LocationsIntro";
-import { LocationsMap } from "@/components/sections/LocationsMap";
+import { LocationsList } from "@/components/sections/LocationsList";
 
 export const metadata: Metadata = {
   title: "Location Database",
@@ -16,26 +16,28 @@ export const metadata: Metadata = {
 export default function LocationsPage() {
   return (
     <>
-      {/* The texture and the curve wrap the page body only — in the Figma the
-          footer is painted over both. */}
-      <div className="relative overflow-hidden bg-cream">
-        <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
+      <Navbar variant="solid" />
+      <main className="relative bg-cream">
+        {/* Texture + curve are confined to the hero, matching the Figma's
+            832px-tall floral-texture rectangle — the filter bar and row list
+            below sit on plain cream. */}
+        <div className="relative overflow-hidden">
+          <TextureOverlay src="/images/floral-texture.webp" opacity={0.48} />
 
-        {/* Signature flowing line, threading the headline and bottoming out
-            just above the Locations bar. It draws itself once on load rather
-            than tracking the scroll — it already sits in the first viewport. */}
-        <ScrollCurve
-          variant="intro"
-          trigger="load"
-          className="pointer-events-none absolute left-0 top-[13.5%] z-0 h-[22%] w-full text-ink/45"
-        />
+          {/* Signature flowing line threading the headline. It draws itself
+              once on load rather than tracking the scroll — it already sits
+              in the first viewport. */}
+          <ScrollCurve
+            variant="intro"
+            trigger="load"
+            className="pointer-events-none absolute left-0 top-[10%] z-0 h-[55%] w-full text-ink/45"
+          />
 
-        <Navbar variant="solid" />
-        <main className="relative">
           <LocationsIntro />
-          <LocationsMap />
-        </main>
-      </div>
+        </div>
+
+        <LocationsList />
+      </main>
       <Footer />
     </>
   );
