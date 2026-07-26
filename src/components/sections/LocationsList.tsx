@@ -90,7 +90,7 @@ export function LocationsList() {
     <Container className="relative z-10 pb-24 pt-16 md:pb-32 md:pt-20">
       <Reveal
         as="div"
-        className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
+        className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
         <h2 className="font-serif text-[32px] font-medium leading-tight text-ink">
           Locations
