@@ -1,28 +1,66 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState, type CSSProperties } from "react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { CarouselArrow } from "@/components/icons";
 import { movies } from "@/lib/content";
 
+const SLIDE_MS = 700;
+const N = movies.length;
+
+/** Three copies of the reel so it can travel in either direction without ever
+ *  running out of posters. The index lives in the middle copy; once it drifts
+ *  into an outer one it snaps back by a copy-length with the transition off,
+ *  which is invisible because the poster under it is the same film. */
+const reel = [...movies, ...movies, ...movies];
+
 /**
  * "Movies made in Kurdistan" (Figma "Movies Variant 3", 317:674): a poster
- * strip that bleeds off both edges. The active poster sits in the second slot
- * — in colour, taller, captioned — while the rest use the halftone B&W
- * artwork. The arrows slide the strip one poster at a time; the active slot
- * stays put and the reel moves through it.
+ * strip that bleeds off both edges, looping endlessly. The active poster holds
+ * the second slot — taller and captioned — while the reel slides through it.
  *
  * Geometry is proportional to the 1280px design frame: slide 212px (16.56vw),
- * gap 23px (1.78vw), active slot at x=149px (11.64vw), inactive posters
- * dropped 78px (6.1vw) so the active one reads raised.
+ * gap 23px (1.78vw), active slot at x=149px (11.64vw), strip 359px (28.05vw).
+ * Every poster is absolutely positioned inside that fixed-height strip, so
+ * resizing the active one can never reflow the sections below it.
  */
 export function MoviesMade() {
-  const [active, setActive] = useState(1); // Bekas, per the Figma
+  const [index, setIndex] = useState(N + 1); // Bekas, per the Figma
+  const [animate, setAnimate] = useState(true);
 
-  const step = (dir: 1 | -1) =>
-    setActive((a) => (a + dir + movies.length) % movies.length);
+  const step = (dir: 1 | -1) => {
+    setAnimate(true);
+    setIndex((i) => i + dir);
+  };
+
+  useEffect(() => {
+    // Drifted out of the middle copy — wait for the slide to land, then jump
+    // back a copy-length with animation off.
+    if (index >= 2 * N || index < N) {
+      const id = setTimeout(() => {
+        setAnimate(false);
+        setIndex((i) => (i >= 2 * N ? i - N : i + N));
+      }, SLIDE_MS);
+      return () => clearTimeout(id);
+    }
+    // Re-arm the transition a frame after that silent jump has painted.
+    if (!animate) {
+      let inner = 0;
+      const outer = requestAnimationFrame(() => {
+        inner = requestAnimationFrame(() => setAnimate(true));
+      });
+      return () => {
+        cancelAnimationFrame(outer);
+        cancelAnimationFrame(inner);
+      };
+    }
+  }, [index, animate]);
+
+  const ease = animate
+    ? "transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+    : "transition-none";
 
   return (
     <section className="relative overflow-hidden">
@@ -43,19 +81,25 @@ export function MoviesMade() {
       </Container>
 
       <Reveal className="relative z-10 mt-12 pb-12">
-        {/* Poster reel — full-bleed, slides so the active poster holds slot 2 */}
+        {/* Fixed-height strip — poster sizes animate inside it, never below it */}
         <div
-          className="flex w-max items-start transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-          style={{
-            gap: "clamp(12px, 1.78vw, 23px)",
-            transform: `translateX(calc(11.64vw - ${active} * (clamp(140px, 16.56vw, 212px) + clamp(12px, 1.78vw, 23px))))`,
-          }}
+          className={`flex h-[clamp(237px,28.05vw,359px)] w-max ${ease}`}
+          style={
+            {
+              "--slide": "clamp(140px, 16.56vw, 212px)",
+              "--gap": "clamp(12px, 1.78vw, 23px)",
+              gap: "var(--gap)",
+              transform:
+                "translateX(calc(11.64vw - var(--i) * (var(--slide) + var(--gap))))",
+              "--i": index,
+            } as CSSProperties
+          }
         >
-          {movies.map((movie, i) => {
-            const isActive = i === active;
+          {reel.map((movie, i) => {
+            const isActive = i === index;
             return (
               <a
-                key={movie.title}
+                key={i}
                 href={
                   movie.href ??
                   `https://www.imdb.com/find/?q=${encodeURIComponent(movie.title)}`
@@ -64,40 +108,27 @@ export function MoviesMade() {
                 rel="noopener noreferrer"
                 aria-label={`${movie.title} — open film page in a new tab`}
                 aria-current={isActive}
-                className="group block w-[clamp(140px,16.56vw,212px)] shrink-0"
+                aria-hidden={i < N || i >= 2 * N}
+                tabIndex={i < N || i >= 2 * N ? -1 : 0}
+                className="relative block h-full w-[var(--slide)] shrink-0"
               >
                 <div
-                  className={`relative w-full overflow-hidden rounded transition-[margin,height] duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none ${
-                    isActive
-                      ? "mt-0 aspect-[212/322]"
-                      : "mt-[clamp(44px,6.1vw,78px)] aspect-[212/281]"
-                  }`}
+                  className={`absolute inset-x-0 overflow-hidden rounded ${ease}`}
+                  style={{
+                    height: isActive ? "89.69%" : "78.27%",
+                    bottom: isActive ? "10.31%" : "0%",
+                  }}
                 >
-                  {/* Colour + halftone stacked; opacity crossfades on activation */}
                   <Image
                     src={movie.src}
                     alt={`${movie.title} — film poster`}
                     fill
                     sizes="(max-width: 640px) 40vw, 212px"
-                    className={`object-cover transition-opacity duration-500 ${
-                      isActive ? "opacity-100" : movie.bw ? "opacity-0" : "opacity-100 grayscale contrast-125"
-                    }`}
+                    className="object-cover"
                   />
-                  {movie.bw && (
-                    <Image
-                      src={movie.bw}
-                      alt=""
-                      aria-hidden
-                      fill
-                      sizes="(max-width: 640px) 40vw, 212px"
-                      className={`object-cover transition-opacity duration-500 ${
-                        isActive ? "opacity-0" : "opacity-100"
-                      }`}
-                    />
-                  )}
                 </div>
                 <p
-                  className={`mt-2.5 font-sans text-lg font-bold leading-[1.5] text-ink transition-opacity duration-500 ${
+                  className={`absolute inset-x-0 bottom-0 font-sans text-lg font-bold leading-[1.5] text-ink ${ease} ${
                     isActive ? "opacity-100" : "opacity-0"
                   }`}
                 >

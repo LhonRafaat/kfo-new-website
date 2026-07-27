@@ -220,40 +220,40 @@ export const locationDbRows: LocationDbRow[] = [
 export type ShowcaseTile = {
   src: string;
   alt: string;
+  /** Shown in the overlay while this tile is the highlighted one. */
+  title: string;
   /** Flex-grow weights straight from the Figma tile heights (234px / 320px). */
   tall: boolean;
-  overlay?: { title: string; cta: string };
 };
+
+/** Label on the overlay pill — one CTA, it follows the highlighted tile. */
+export const showcaseCta = "Get access to all database";
 
 export const locationShowcase: ShowcaseTile[][] = [
   [
-    { src: "/images/loc-home-1.jpg", alt: "Bazyan archaeological remains", tall: false, overlay: { title: "Bazyan Remains", cta: "Get access to all database" } },
-    { src: "/images/loc-home-5.jpg", alt: "Village houses beneath snow-capped mountains", tall: true },
+    { src: "/images/loc-home-1.jpg", alt: "Bazyan archaeological remains", title: "Bazyan Remains", tall: false },
+    { src: "/images/loc-home-5.jpg", alt: "Village houses beneath snow-capped mountains", title: "Halgurd Peaks", tall: true },
   ],
   [
-    { src: "/images/loc-home-2.jpg", alt: "Brick university building in Kurdistan", tall: true },
-    { src: "/images/loc-home-6.jpg", alt: "Lake at sunset among the hills", tall: false },
+    { src: "/images/loc-home-2.jpg", alt: "Brick university building in Kurdistan", title: "Sulaimani University", tall: true },
+    { src: "/images/loc-home-6.jpg", alt: "Lake at sunset among the hills", title: "Dukan Lake", tall: false },
   ],
   [
-    { src: "/images/loc-home-3.jpg", alt: "Narrow limestone canyon", tall: false },
-    { src: "/images/loc-home-7.jpg", alt: "Snowy house glowing at night", tall: true },
+    { src: "/images/loc-home-3.jpg", alt: "Narrow limestone canyon", title: "Gali Ali Beg", tall: false },
+    { src: "/images/loc-home-7.jpg", alt: "Snowy house glowing at night", title: "Winter Village", tall: true },
   ],
   [
-    { src: "/images/loc-home-4.jpg", alt: "City overlook across the plains", tall: true },
-    { src: "/images/loc-home-8.jpg", alt: "Green valley meeting the water", tall: false },
+    { src: "/images/loc-home-4.jpg", alt: "City overlook across the plains", title: "Erbil Overlook", tall: true },
+    { src: "/images/loc-home-8.jpg", alt: "Green valley meeting the water", title: "Rawanduz Valley", tall: false },
   ],
 ];
 
-/** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel): the active
- *  poster renders in colour, taller, with its caption; the rest use the
- *  halftone black-and-white artwork exported from the Figma effect (`bw`) or,
- *  when a movie has no halftone export, a CSS grayscale of the colour poster.
+/** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel). Every poster
+ *  renders in full colour; the active one is taller and carries its caption.
  *  `href` is the external page opened (new tab) when a poster is clicked;
  *  leave it unset to fall back to an IMDb title search. */
 export type Movie = {
   src: string;
-  /** Halftone black-and-white poster (Figma custom effect, pre-rendered). */
-  bw?: string;
   title: string;
   /** Caption under the active poster — “Bekas (2017)” per the Figma. */
   caption: string;
@@ -261,14 +261,14 @@ export type Movie = {
 };
 
 export const movies: Movie[] = [
-  { src: "/images/poster-1.jpg", bw: "/images/poster-bw-1.png", title: "Før Snøen Faller", caption: "Før Snøen Faller" },
-  { src: "/images/poster-2.jpg", bw: "/images/poster-bw-2.png", title: "Bekas", caption: "Bekas (2017)" },
-  { src: "/images/poster-3.jpg", bw: "/images/poster-bw-3.png", title: "L'Hirondelle", caption: "L'Hirondelle" },
-  { src: "/images/poster-4.jpg", bw: "/images/poster-bw-4.png", title: "Das Milan Protokoll", caption: "Das Milan Protokoll" },
-  { src: "/images/poster-5.jpg", bw: "/images/poster-bw-5.png", title: "A Noiva", caption: "A Noiva" },
-  { src: "/images/poster-6.jpg", bw: "/images/poster-bw-6.png", title: "09", caption: "09" },
-  { src: "/images/poster-7.jpg", bw: "/images/poster-bw-7.png", title: "Der Junge Siyar", caption: "Der Junge Siyar" },
-  { src: "/images/poster-8.jpg", bw: "/images/poster-bw-8.png", title: "Baghdad Messi", caption: "Baghdad Messi" },
+  { src: "/images/poster-1.jpg", title: "Før Snøen Faller", caption: "Før Snøen Faller" },
+  { src: "/images/poster-2.jpg", title: "Bekas", caption: "Bekas (2017)" },
+  { src: "/images/poster-3.jpg", title: "L'Hirondelle", caption: "L'Hirondelle" },
+  { src: "/images/poster-4.jpg", title: "Das Milan Protokoll", caption: "Das Milan Protokoll" },
+  { src: "/images/poster-5.jpg", title: "A Noiva", caption: "A Noiva" },
+  { src: "/images/poster-6.jpg", title: "09", caption: "09" },
+  { src: "/images/poster-7.jpg", title: "Der Junge Siyar", caption: "Der Junge Siyar" },
+  { src: "/images/poster-8.jpg", title: "Baghdad Messi", caption: "Baghdad Messi" },
 ];
 
 /** News from experts pool — shown three at a time; the arrows page through it.

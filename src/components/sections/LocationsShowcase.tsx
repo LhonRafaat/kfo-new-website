@@ -1,66 +1,76 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { Reveal } from "@/components/Reveal";
-import { locationShowcase, type ShowcaseTile } from "@/lib/content";
+import {
+  locationShowcase,
+  showcaseCta,
+  type ShowcaseTile,
+} from "@/lib/content";
 
 /**
  * "A Land of Untold Stories" mosaic (Figma "Location DB Variant 3", 317:631):
- * four columns of two staggered tiles. The Bazyan tile is grayscale with a
- * permanent gradient + title + CTA pill, exactly like the Figma; colour eases
- * back in on hover. Column height is viewport-capped so the whole section
- * always fits within 100vh.
+ * four columns of two staggered tiles. One tile at a time carries the Figma's
+ * treatment — grayscale, dark gradient, title and CTA pill — and it follows
+ * the pointer, falling back to the Bazyan tile (the Figma's resting state)
+ * when nothing is hovered. Column height is viewport-capped so the whole
+ * section always fits within 100vh.
  */
-function Tile({ tile }: { tile: ShowcaseTile }) {
-  const inner = (
-    <>
+function Tile({
+  tile,
+  active,
+  onActivate,
+}: {
+  tile: ShowcaseTile;
+  active: boolean;
+  onActivate: () => void;
+}) {
+  return (
+    <Link
+      href="/locations"
+      aria-label={`${tile.title} — ${showcaseCta}`}
+      onMouseEnter={onActivate}
+      onFocus={onActivate}
+      className="group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10"
+      style={{ flexGrow: tile.tall ? 320 : 234 }}
+    >
       <Image
         src={tile.src}
         alt={tile.alt}
         fill
         sizes="(max-width: 768px) 48vw, 25vw"
-        className={`object-cover ${
-          tile.overlay
-            ? "grayscale transition-[filter] duration-500 group-hover:grayscale-0"
-            : ""
+        className={`object-cover transition-[filter] duration-500 ${
+          active ? "grayscale" : "grayscale-0"
         }`}
       />
-      {tile.overlay && (
-        <div
-          className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 text-center text-white"
-          style={{
-            background:
-              "linear-gradient(180deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0.8) 100%)",
-          }}
-        >
-          <h3 className="font-serif text-[1.375rem] font-medium italic leading-[1.14]">
-            {tile.overlay.title}
-          </h3>
-          <span className="rounded-full bg-white px-3 py-2 font-sans text-base font-semibold leading-[1.375] text-ink transition-colors duration-300 group-hover:bg-cream">
-            {tile.overlay.cta}
-          </span>
-        </div>
-      )}
-    </>
-  );
-
-  const className =
-    "group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10";
-  const style = { flexGrow: tile.tall ? 320 : 234 };
-
-  return tile.overlay ? (
-    <Link href="/locations" aria-label={`${tile.overlay.title} — ${tile.overlay.cta}`} className={className} style={style}>
-      {inner}
+      <div
+        className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 text-center text-white transition-opacity duration-500 ${
+          active ? "opacity-100" : "opacity-0"
+        }`}
+        style={{
+          background:
+            "linear-gradient(180deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0.8) 100%)",
+        }}
+      >
+        <h3 className="font-serif text-[1.375rem] font-medium italic leading-[1.14]">
+          {tile.title}
+        </h3>
+        <span className="rounded-full bg-white px-3 py-2 font-sans text-base font-semibold leading-[1.375] text-ink">
+          {showcaseCta}
+        </span>
+      </div>
     </Link>
-  ) : (
-    <div className={className} style={style}>
-      {inner}
-    </div>
   );
 }
 
 export function LocationsShowcase() {
+  // Index into the flattened column-major grid; 0 is Bazyan, the Figma default.
+  const [active, setActive] = useState(0);
+
   return (
     <section className="relative">
       <Container className="relative z-10 py-12">
@@ -80,16 +90,27 @@ export function LocationsShowcase() {
           </AccentLink>
         </div>
 
-        <div className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4">
-          {locationShowcase.map((col, i) => (
+        <div
+          className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4"
+          onMouseLeave={() => setActive(0)}
+        >
+          {locationShowcase.map((col, c) => (
             <Reveal
-              key={i}
-              delay={i * 90}
+              key={c}
+              delay={c * 90}
               className="flex h-[min(58vw,calc(100svh-390px))] min-h-[320px] flex-col gap-3 md:h-[min(46vw,calc(100svh-330px))] md:max-h-[571px] md:gap-[17px]"
             >
-              {col.map((tile) => (
-                <Tile key={tile.src} tile={tile} />
-              ))}
+              {col.map((tile, r) => {
+                const index = c * 2 + r;
+                return (
+                  <Tile
+                    key={tile.src}
+                    tile={tile}
+                    active={index === active}
+                    onActivate={() => setActive(index)}
+                  />
+                );
+              })}
             </Reveal>
           ))}
         </div>
