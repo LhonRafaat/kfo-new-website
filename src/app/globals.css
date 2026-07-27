@@ -156,6 +156,48 @@
     @apply scale-x-100;
   }
 
+  /* ---- Folded-paper burn (testimonial card) ----
+     Figma composites the paper scan with "Plus darker" — linear burn:
+         result = max(0, Cs + Cb - 1)
+     CSS's own `plus-darker` is Safari-only, so this rebuilds it from the
+     identity  linearburn(Cb, Cs) = 1 - ( (1-Cb) + (1-Cs) ):  render the card
+     inverted, ADD the inverted paper (`plus-lighter`), then invert back.
+     `plus-lighter` clamps at 1, which becomes the `max(0, …)` clamp once the
+     outer invert flips it — so even the clipping matches.
+
+     Layer opacity stays on the paper: `plus-lighter` adds a premultiplied
+     source, so `opacity: .6` yields Cb' + 0.6·Cs' — which the outer invert
+     turns into Cb + 0.6·(Cs − 1), algebraically identical to Figma compositing
+     a 60% linear-burn layer.
+
+     Order matters: a `filter` composites its whole subtree *before* it applies,
+     so `.burn-scope` has to be a SIBLING of the paper, not its parent —
+     otherwise the paper blends against un-inverted pixels. Which is also why
+     the card's copy lives outside `.burn-restore` entirely: anything inside it
+     would either be burned or come out colour-inverted.
+
+     One deliberate deviation: `plus-lighter` clamps the *sum* at 1, so where
+     Cs + Cb < 1 this bottoms out at 0 while Figma holds 0.4·Cb. That only bites
+     below ~18% luminance, i.e. the portrait's deepest shadows, at up to
+     ~18/255 — invisible against near-black.
+
+     Plain `multiply` is the fallback where `plus-lighter` is missing. It reads
+     lighter and flattens the crease (~8/255 off on the slate, ~15 on the photo's
+     shadows), but it degrades gracefully rather than breaking. */
+  .burn-layer {
+    mix-blend-mode: multiply;
+  }
+  @supports (mix-blend-mode: plus-lighter) {
+    .burn-scope,
+    .burn-restore,
+    .burn-layer {
+      filter: invert(1);
+    }
+    .burn-layer {
+      mix-blend-mode: plus-lighter;
+    }
+  }
+
   /* ---- Footer links: hover weights the label instead of underlining it.
      The hidden bold copy in ::after reserves the wider bold measure up front,
      so nothing around the link shifts when it thickens. Needs `data-label`

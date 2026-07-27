@@ -7,24 +7,53 @@ import { Reveal } from "@/components/Reveal";
  * Founder testimonial card (Figma 513:62): a rounded slate panel — B&W
  * portrait filling the left half with the name overlaid at its base, the
  * statement column on the right. The folded-paper scan lies over the whole
- * card (Figma LINEAR_BURN @ 60% ≈ CSS multiply) with the text above it.
+ * card — Figma node 513:74, "Plus darker" (linear burn) at 60%, rebuilt by the
+ * .burn-* sandwich in globals.css.
+ *
+ * The portrait sits in an absolutely-positioned background stack rather than in
+ * the grid, because the burn has to blend against the slate and the photo but
+ * NOT the copy (Figma paints both text frames above it). The grid above it
+ * keeps a matching spacer column, so the layout is unchanged.
  */
 export function Testimonial() {
   return (
     <section className="relative">
       <Container className="relative z-10">
-        <Reveal className="relative isolate overflow-hidden rounded-2xl bg-slate">
-          <div className="grid grid-cols-1 md:grid-cols-2">
-            {/* Portrait — bleeds below the card's crop, name pinned bottom-left */}
+        <Reveal className="relative isolate overflow-hidden rounded-2xl">
+          {/* ---- Background stack: slate + portrait, burned by the paper ---- */}
+          <div className="burn-restore absolute inset-0 isolate">
+            <div className="burn-scope absolute inset-0 bg-slate">
+              {/* Mirrors the spacer column below: full-width top band on mobile,
+                  left half on md+. */}
+              <div className="absolute inset-x-0 top-0 h-[320px] md:inset-y-0 md:left-0 md:h-auto md:w-1/2">
+                <Image
+                  src="/images/founder-bw.jpg"
+                  alt="Bavi Yassin, Founder of the Kurdistan Film Commission"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover object-top"
+                />
+              </div>
+            </div>
+            {/* Figma crops a tall slice out of the paper scan (imageTransform on
+                node 513:74) and turns it 90° counter-clockwise, so a single
+                crease runs down the middle of the card. This asset is that exact
+                crop, stretched to the card the way Figma's fill does. */}
+            <div
+              className="burn-layer absolute inset-0 opacity-60"
+              style={{
+                backgroundImage: "url(/images/texture-paper-testimonial.webp)",
+                backgroundSize: "100% 100%",
+              }}
+              aria-hidden
+            />
+          </div>
+
+          {/* ---- Copy, above the burn ---- */}
+          <div className="relative z-10 grid grid-cols-1 md:grid-cols-2">
+            {/* Spacer holding the portrait's footprint, with the name overlaid */}
             <div className="relative min-h-[320px] md:min-h-[448px]">
-              <Image
-                src="/images/founder-bw.jpg"
-                alt="Bavi Yassin, Founder of the Kurdistan Film Commission"
-                fill
-                sizes="(max-width: 768px) 100vw, 50vw"
-                className="object-cover object-top"
-              />
-              <div className="absolute bottom-8 left-12 z-20 text-white md:bottom-16 md:left-12">
+              <div className="absolute bottom-8 left-12 text-white md:bottom-16 md:left-12">
                 <p className="font-serif text-[1.375rem] font-bold italic leading-normal">
                   Bavi Yassin
                 </p>
@@ -35,7 +64,7 @@ export function Testimonial() {
             </div>
 
             {/* Statement */}
-            <div className="relative z-20 flex flex-col gap-6 px-6 py-10 md:px-16 md:py-16">
+            <div className="flex flex-col gap-6 px-6 py-10 md:px-16 md:py-16">
               <Reveal as="h2" className="heading-section text-ink">
                 We have so much more
                 <br />
@@ -63,17 +92,6 @@ export function Testimonial() {
               </div>
             </div>
           </div>
-
-          {/* Folded-paper burn across the whole card, above the imagery,
-              below the text columns (both are z-20) */}
-          <div
-            className="pointer-events-none absolute inset-0 z-10 opacity-60 mix-blend-multiply"
-            style={{
-              backgroundImage: "url(/images/texture-paper-founder.webp)",
-              backgroundSize: "100% 100%",
-            }}
-            aria-hidden
-          />
         </Reveal>
       </Container>
     </section>
