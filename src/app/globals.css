@@ -5,6 +5,21 @@
   :root {
     --cream: #eae3db;
     --ink: #2a1b1d;
+
+    /* ---- Motion tokens ----
+       Every fade on the site pulls its timing from here so the page reads as
+       one system rather than a dozen hand-tuned durations.
+
+       `--fade-*` is the entrance/crossfade speed: scroll reveals, the underline
+       draw-in, the news photo swap. Long and heavily eased-out, so movement
+       decelerates into place instead of stopping dead.
+
+       `--fade-*-interactive` is for anything chasing the cursor (hover states,
+       the showcase's follow-the-tile treatment). It shares the easing curve but
+       stays quick — at the entrance duration a hover visibly lags the pointer. */
+    --fade-duration: 1100ms;
+    --fade-duration-interactive: 400ms;
+    --fade-ease: cubic-bezier(0.22, 1, 0.36, 1);
   }
 
   html {
@@ -114,7 +129,7 @@
   .underline-wave {
     @apply mt-1 block h-3 w-full text-accent;
     clip-path: inset(0 100% 0 0);
-    transition: clip-path 0.7s ease-out;
+    transition: clip-path var(--fade-duration) var(--fade-ease);
   }
   .accent-link.is-visible .underline-wave {
     clip-path: inset(0 0 0 0);
@@ -139,6 +154,22 @@
   }
   .link-underline:hover::after {
     @apply scale-x-100;
+  }
+
+  /* ---- Footer links: hover weights the label instead of underlining it.
+     The hidden bold copy in ::after reserves the wider bold measure up front,
+     so nothing around the link shifts when it thickens. Needs `data-label`
+     set to the link's text. ---- */
+  .link-bold {
+    @apply relative inline-block transition-[font-weight] duration-200 ease-out;
+  }
+  .link-bold::after {
+    content: attr(data-label);
+    @apply pointer-events-none block h-0 overflow-hidden font-bold;
+    visibility: hidden;
+  }
+  .link-bold:hover {
+    @apply font-bold;
   }
 }
 
@@ -169,9 +200,12 @@
 .reveal {
   opacity: 0;
   transform: translateY(30px);
+  /* One curve for both properties — they used to run on different easings
+     (ease-out vs. the spring-ish curve), so the fade and the slide drifted
+     apart mid-flight and the arrival read as abrupt. */
   transition:
-    opacity 0.8s ease-out,
-    transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity var(--fade-duration) var(--fade-ease),
+    transform var(--fade-duration) var(--fade-ease);
   transition-delay: var(--reveal-delay, 0ms);
 }
 .reveal.is-in {
@@ -191,8 +225,15 @@
   }
 }
 .news-rise {
-  animation: news-rise 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: news-rise var(--fade-duration) var(--fade-ease) both;
   animation-delay: var(--rise-delay, 0ms);
+}
+
+/* ---- Crossfade between stacked items (news photo, dimmed headlines) ----
+   A component class rather than Tailwind's `transition-opacity duration-*`, so
+   these swaps can't drift away from the reveal timing. */
+.crossfade {
+  transition: opacity var(--fade-duration) var(--fade-ease);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -206,6 +247,9 @@
   }
   .underline-wave {
     clip-path: inset(0 0 0 0);
+    transition: none;
+  }
+  .crossfade {
     transition: none;
   }
 }

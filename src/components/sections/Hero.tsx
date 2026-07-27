@@ -65,7 +65,8 @@ export function Hero() {
               <span className="font-sans text-base uppercase leading-[1.375] text-white">
                 {item.label}
               </span>
-              <span className="mt-2 font-serif text-[1.375rem] font-medium italic leading-[1.14] transition-colors duration-300 group-hover:text-accent-soft">
+              {/* Title colour is fixed per Figma — only the underline reacts to hover */}
+              <span className="mt-2 font-serif text-[1.375rem] font-medium italic leading-[1.14]">
                 {item.title}
               </span>
               <Underline

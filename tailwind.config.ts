@@ -28,7 +28,10 @@ const config: Config = {
         sans: ["var(--font-sans)", "system-ui", "-apple-system", "sans-serif"],
       },
       maxWidth: {
-        content: "1200px",
+        // Figma lays the page out on a 1280 frame with 48px gutters, so the
+        // content column measures 1184px. Keeping the cap at the frame width
+        // lets `lg:px-12` produce that column exactly.
+        content: "1280px",
       },
       letterSpacing: {
         label: "0.02em",
@@ -49,7 +52,9 @@ const config: Config = {
         },
       },
       animation: {
-        "fade-in": "fade-in 0.7s ease-out both",
+        // Pulls the same motion tokens as `.reveal` (see globals.css) so an
+        // `animate-fade-in` added later can't drift off-system.
+        "fade-in": "fade-in var(--fade-duration) var(--fade-ease) both",
         "menu-in": "menu-in 0.4s ease-out both",
       },
     },

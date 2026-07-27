@@ -1,8 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { type ReactNode } from "react";
 import { ArrowRight, Underline } from "@/components/icons";
+import { useInView } from "@/lib/useInView";
 
 /**
  * Italic-serif call-to-action with the signature orange underline used across
@@ -23,26 +24,9 @@ export function AccentLink({
   /** Controls the underline's length/thickness, e.g. "w-32" or "w-full". */
   underlineClassName?: string;
 }) {
-  const ref = useRef<HTMLAnchorElement>(null);
-  const [visible, setVisible] = useState(false);
-
-  useEffect(() => {
-    const el = ref.current;
-    if (!el) return;
-    const io = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setVisible(true);
-          io.disconnect();
-        }
-      },
-      // Low threshold so the line starts drawing as soon as the link shows up,
-      // not only once it's 70% visible (which read as "animating late").
-      { threshold: 0.15 },
-    );
-    io.observe(el);
-    return () => io.disconnect();
-  }, []);
+  // Same observer and trigger point as every other reveal on the page, so the
+  // underline draws in step with the copy above it instead of on its own clock.
+  const [ref, visible] = useInView<HTMLAnchorElement>();
 
   return (
     <Link

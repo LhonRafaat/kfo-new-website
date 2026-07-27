@@ -39,7 +39,8 @@ export function Footer() {
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="link-underline font-sans text-base leading-[1.375] text-white"
+                      data-label={item.label}
+                      className="link-bold font-sans text-base leading-[1.375] text-white"
                     >
                       {item.label}
                     </Link>
@@ -71,7 +72,11 @@ export function Footer() {
           </div>
           <div className="flex flex-wrap items-center gap-[22px] font-sans text-base leading-6 tracking-[0.02em] text-white">
             <span>© 2026 Kurdistan Film Commission</span>
-            <Link href="/privacy-policy" className="link-underline">
+            <Link
+              href="/privacy-policy"
+              data-label="Privacy Policy"
+              className="link-bold"
+            >
               Privacy Policy
             </Link>
           </div>

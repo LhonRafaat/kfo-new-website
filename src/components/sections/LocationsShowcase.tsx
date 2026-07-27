@@ -43,12 +43,14 @@ function Tile({
         alt={tile.alt}
         fill
         sizes="(max-width: 768px) 48vw, 25vw"
-        className={`object-cover transition-[filter] duration-500 ${
+        /* Follows the cursor, so it runs on the interactive token, not the
+           slower entrance one — it shares the easing curve either way. */
+        className={`object-cover transition-[filter] duration-(--fade-duration-interactive) ease-(--fade-ease) ${
           active ? "grayscale" : "grayscale-0"
         }`}
       />
       <div
-        className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 text-center text-white transition-opacity duration-500 ${
+        className={`absolute inset-0 flex flex-col items-center justify-center gap-4 p-4 text-center text-white transition-opacity duration-(--fade-duration-interactive) ease-(--fade-ease) ${
           active ? "opacity-100" : "opacity-0"
         }`}
         style={{

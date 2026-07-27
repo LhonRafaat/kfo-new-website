@@ -70,7 +70,7 @@ export function NewsExperts() {
                     <Link
                       href={item.href}
                       onMouseEnter={() => setIndex(page * PAGE_SIZE + i)}
-                      className={`group block transition-opacity duration-500 ${
+                      className={`crossfade group block ${
                         isActive ? "opacity-100" : "opacity-[0.56]"
                       }`}
                     >
@@ -83,6 +83,7 @@ export function NewsExperts() {
                     </Link>
                     {/* Wavy accent rule under the active headline, drawn inside the row gap */}
                     <Underline
+                      strokeWidth={1.5} /* Figma node 317:803 */
                       className={`pointer-events-none !absolute -bottom-[15px] left-0 !mt-0 !h-[5px] !w-3/4 ${
                         isActive ? "" : "!opacity-0"
                       }`}
@@ -135,7 +136,7 @@ export function NewsExperts() {
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 90vw, 48vw"
-                  className={`object-cover transition-opacity duration-700 ease-out ${
+                  className={`crossfade object-cover ${
                     i === activeInPage ? "opacity-100" : "opacity-0"
                   }`}
                 />

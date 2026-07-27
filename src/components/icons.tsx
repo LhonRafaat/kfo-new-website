@@ -169,8 +169,9 @@ export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
    class defaults it to accent, and a `text-*` utility overrides it. */
 export function Underline({
   className = "",
+  strokeWidth,
   ...props
-}: SVGProps<SVGSVGElement>) {
+}: SVGProps<SVGSVGElement> & { strokeWidth?: number }) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -184,7 +185,11 @@ export function Underline({
       <path
         d="M0 5.55005C43.9423 5.55005 85.3846 -1.07425 115 0.926624"
         stroke="#FF6600"
-        strokeWidth="1.10035"
+        strokeWidth={strokeWidth ?? 1.10035}
+        // `preserveAspectRatio="none"` squashes the box hard vertically, which
+        // would thin the stroke well below its Figma weight. Pinning it to the
+        // screen keeps the given width in real pixels.
+        vectorEffect={strokeWidth ? "non-scaling-stroke" : undefined}
       />
     </svg>
   );

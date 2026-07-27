@@ -13,7 +13,7 @@ export const primaryNav = [
   { index: "03", label: "Services", href: "/services" },
   { index: "04", label: "Locations", href: "/locations" },
   { index: "05", label: "Production", href: "/production" },
-  { index: "06", label: "Film Fund", href: "/film-fund" },
+  { index: "06", label: "Kurdistan Film Fund", href: "/film-fund" },
 ] as const;
 
 export const secondaryNav = [
@@ -26,10 +26,30 @@ export const secondaryNav = [
  *  `featured` shows the drawn accent underline permanently; the rest draw it
  *  on hover. Order matches the Figma left→right. */
 export const quickLinks = [
-  { label: "Apply for the", title: "Film Fund", href: "/film-fund", featured: true },
-  { label: "View", title: "Location Database", href: "/locations", featured: false },
-  { label: "Find movies", title: "Made in Kurdistan", href: "/movies", featured: false },
-  { label: "Read our", title: "Industry Guide", href: "/industry-guide", featured: false },
+  {
+    label: "Apply for the",
+    title: "Kurdistan Film Fund",
+    href: "/film-fund",
+    featured: true,
+  },
+  {
+    label: "View",
+    title: "Location Database",
+    href: "/locations",
+    featured: false,
+  },
+  {
+    label: "Find movies",
+    title: "Made in Kurdistan",
+    href: "/movies",
+    featured: false,
+  },
+  {
+    label: "Read our",
+    title: "Industry Guide",
+    href: "/industry-guide",
+    featured: false,
+  },
 ] as const;
 
 /**
@@ -85,12 +105,30 @@ export const locations: LocationEntry[] = [
     pin: { x: 64.9, y: 25.2 },
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Bazyan+Kurdistan",
     gallery: [
-      { src: "/images/loc-bazyan-1.jpg", alt: "Stone archway standing in the Bazyan ruins" },
-      { src: "/images/loc-bazyan-2.jpg", alt: "Arched wall of the Bazyan site against the hillside" },
-      { src: "/images/loc-bazyan-3.jpg", alt: "Excavated stone chambers at Bazyan" },
-      { src: "/images/loc-bazyan-4.jpg", alt: "Vaulted interior passage of the Bazyan remains" },
-      { src: "/images/loc-bazyan-5.jpg", alt: "Foundations of the Bazyan settlement seen from above" },
-      { src: "/images/loc-bazyan-6.jpg", alt: "Bazyan ruins with the mountain range behind" },
+      {
+        src: "/images/loc-bazyan-1.jpg",
+        alt: "Stone archway standing in the Bazyan ruins",
+      },
+      {
+        src: "/images/loc-bazyan-2.jpg",
+        alt: "Arched wall of the Bazyan site against the hillside",
+      },
+      {
+        src: "/images/loc-bazyan-3.jpg",
+        alt: "Excavated stone chambers at Bazyan",
+      },
+      {
+        src: "/images/loc-bazyan-4.jpg",
+        alt: "Vaulted interior passage of the Bazyan remains",
+      },
+      {
+        src: "/images/loc-bazyan-5.jpg",
+        alt: "Foundations of the Bazyan settlement seen from above",
+      },
+      {
+        src: "/images/loc-bazyan-6.jpg",
+        alt: "Bazyan ruins with the mountain range behind",
+      },
     ],
   },
 ];
@@ -231,20 +269,60 @@ export const showcaseCta = "Get access to all database";
 
 export const locationShowcase: ShowcaseTile[][] = [
   [
-    { src: "/images/loc-home-1.jpg", alt: "Bazyan archaeological remains", title: "Bazyan Remains", tall: false },
-    { src: "/images/loc-home-5.jpg", alt: "Village houses beneath snow-capped mountains", title: "Halgurd Peaks", tall: true },
+    {
+      src: "/images/loc-home-1.jpg",
+      alt: "Bazyan archaeological remains",
+      title: "Bazyan Remains",
+      tall: false,
+    },
+    {
+      src: "/images/loc-home-5.jpg",
+      alt: "Village houses beneath snow-capped mountains",
+      title: "Halgurd Peaks",
+      tall: true,
+    },
   ],
   [
-    { src: "/images/loc-home-2.jpg", alt: "Brick university building in Kurdistan", title: "Sulaimani University", tall: true },
-    { src: "/images/loc-home-6.jpg", alt: "Lake at sunset among the hills", title: "Dukan Lake", tall: false },
+    {
+      src: "/images/loc-home-2.jpg",
+      alt: "Brick university building in Kurdistan",
+      title: "Sulaimani University",
+      tall: true,
+    },
+    {
+      src: "/images/loc-home-6.jpg",
+      alt: "Lake at sunset among the hills",
+      title: "Dukan Lake",
+      tall: false,
+    },
   ],
   [
-    { src: "/images/loc-home-3.jpg", alt: "Narrow limestone canyon", title: "Gali Ali Beg", tall: false },
-    { src: "/images/loc-home-7.jpg", alt: "Snowy house glowing at night", title: "Winter Village", tall: true },
+    {
+      src: "/images/loc-home-3.jpg",
+      alt: "Narrow limestone canyon",
+      title: "Gali Ali Beg",
+      tall: false,
+    },
+    {
+      src: "/images/loc-home-7.jpg",
+      alt: "Snowy house glowing at night",
+      title: "Winter Village",
+      tall: true,
+    },
   ],
   [
-    { src: "/images/loc-home-4.jpg", alt: "City overlook across the plains", title: "Erbil Overlook", tall: true },
-    { src: "/images/loc-home-8.jpg", alt: "Green valley meeting the water", title: "Rawanduz Valley", tall: false },
+    {
+      src: "/images/loc-home-4.jpg",
+      alt: "City overlook across the plains",
+      title: "Erbil Overlook",
+      tall: true,
+    },
+    {
+      src: "/images/loc-home-8.jpg",
+      alt: "Green valley meeting the water",
+      title: "Rawanduz Valley",
+      tall: false,
+    },
   ],
 ];
 
@@ -261,28 +339,97 @@ export type Movie = {
 };
 
 export const movies: Movie[] = [
-  { src: "/images/poster-1.jpg", title: "Før Snøen Faller", caption: "Før Snøen Faller" },
+  {
+    src: "/images/poster-1.jpg",
+    title: "Før Snøen Faller",
+    caption: "Før Snøen Faller",
+  },
   { src: "/images/poster-2.jpg", title: "Bekas", caption: "Bekas (2017)" },
-  { src: "/images/poster-3.jpg", title: "L'Hirondelle", caption: "L'Hirondelle" },
-  { src: "/images/poster-4.jpg", title: "Das Milan Protokoll", caption: "Das Milan Protokoll" },
+  {
+    src: "/images/poster-3.jpg",
+    title: "L'Hirondelle",
+    caption: "L'Hirondelle",
+  },
+  {
+    src: "/images/poster-4.jpg",
+    title: "Das Milan Protokoll",
+    caption: "Das Milan Protokoll",
+  },
   { src: "/images/poster-5.jpg", title: "A Noiva", caption: "A Noiva" },
   { src: "/images/poster-6.jpg", title: "09", caption: "09" },
-  { src: "/images/poster-7.jpg", title: "Der Junge Siyar", caption: "Der Junge Siyar" },
-  { src: "/images/poster-8.jpg", title: "Baghdad Messi", caption: "Baghdad Messi" },
+  {
+    src: "/images/poster-7.jpg",
+    title: "Der Junge Siyar",
+    caption: "Der Junge Siyar",
+  },
+  {
+    src: "/images/poster-8.jpg",
+    title: "Baghdad Messi",
+    caption: "Baghdad Messi",
+  },
 ];
 
 /** News from experts pool — shown three at a time; the arrows page through it.
  *  Same image for every item for now. */
 export const news = [
-  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news-home.jpg" },
-  { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/loc-2.jpg" },
-  { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/loc-3.jpg" },
-  { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/loc-4.jpg" },
-  { date: "21, Oct 2025", title: "International Producers Scout the Erbil Citadel for an Upcoming Feature", href: "/news/erbil-citadel-scout", image: "/images/loc-5.jpg" },
-  { date: "14, Oct 2025", title: "New Co-Production Treaty Opens Doors for Kurdish Filmmakers", href: "/news/co-production-treaty", image: "/images/loc-6.jpg" },
-  { date: "6, Oct 2025", title: "Duhok International Film Festival Announces its 2026 Programme", href: "/news/duhok-festival-2026", image: "/images/loc-7.jpg" },
-  { date: "29, Sep 2025", title: "Location Database Expands with 200 New Verified Filming Sites", href: "/news/database-expansion", image: "/images/loc-8.jpg" },
-  { date: "22, Sep 2025", title: "Masterclass Series Brings Cannes Mentors to Slemani", href: "/news/cannes-masterclass", image: "/images/loc-bazyan.jpg" },
+  {
+    date: "3, Nov 2025",
+    title:
+      "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan",
+    href: "/news/lmgi-location-tour",
+    image: "/images/news-home.jpg",
+  },
+  {
+    date: "3, Nov 2025",
+    title:
+      "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani",
+    href: "/news/film-workshop-slemani",
+    image: "/images/loc-2.jpg",
+  },
+  {
+    date: "3, Nov 2025",
+    title:
+      "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU",
+    href: "/news/kurdsat-mou",
+    image: "/images/loc-3.jpg",
+  },
+  {
+    date: "28, Oct 2025",
+    title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund",
+    href: "/news/2026-film-fund",
+    image: "/images/loc-4.jpg",
+  },
+  {
+    date: "21, Oct 2025",
+    title:
+      "International Producers Scout the Erbil Citadel for an Upcoming Feature",
+    href: "/news/erbil-citadel-scout",
+    image: "/images/loc-5.jpg",
+  },
+  {
+    date: "14, Oct 2025",
+    title: "New Co-Production Treaty Opens Doors for Kurdish Filmmakers",
+    href: "/news/co-production-treaty",
+    image: "/images/loc-6.jpg",
+  },
+  {
+    date: "6, Oct 2025",
+    title: "Duhok International Film Festival Announces its 2026 Programme",
+    href: "/news/duhok-festival-2026",
+    image: "/images/loc-7.jpg",
+  },
+  {
+    date: "29, Sep 2025",
+    title: "Location Database Expands with 200 New Verified Filming Sites",
+    href: "/news/database-expansion",
+    image: "/images/loc-8.jpg",
+  },
+  {
+    date: "22, Sep 2025",
+    title: "Masterclass Series Brings Cannes Mentors to Slemani",
+    href: "/news/cannes-masterclass",
+    image: "/images/loc-bazyan.jpg",
+  },
 ] as const;
 
 /** Footer link columns. */
@@ -303,6 +450,14 @@ export const footerColumns = [
 
 export const socials = [
   { label: "YouTube", href: "https://youtube.com", icon: "youtube" as const },
-  { label: "LinkedIn", href: "https://linkedin.com", icon: "linkedin" as const },
-  { label: "Instagram", href: "https://instagram.com", icon: "instagram" as const },
+  {
+    label: "LinkedIn",
+    href: "https://linkedin.com",
+    icon: "linkedin" as const,
+  },
+  {
+    label: "Instagram",
+    href: "https://instagram.com",
+    icon: "instagram" as const,
+  },
 ];

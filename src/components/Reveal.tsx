@@ -23,12 +23,8 @@ export function Reveal({
   className?: string;
   children: ReactNode;
 }) {
-  // Fires as soon as the element's edge arrives in the viewport — no negative
-  // rootMargin, so the fade starts right on arrival rather than a beat later.
-  const [ref, inView] = useInView<HTMLElement>({
-    threshold: 0.05,
-    rootMargin: "0px",
-  });
+  // Trigger point is the shared REVEAL_TRIGGER default — see useInView.
+  const [ref, inView] = useInView<HTMLElement>();
 
   return createElement(
     as,
