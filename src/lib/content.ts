@@ -22,10 +22,12 @@ export const secondaryNav = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
-/** Quick links directly beneath the hero. */
+/** Quick links pinned to the bottom band of the hero (Figma 551:2728).
+ *  `featured` shows the drawn accent underline permanently; the rest draw it
+ *  on hover. Order matches the Figma left→right. */
 export const quickLinks = [
-  { label: "View", title: "Location Database", href: "/locations", featured: false },
   { label: "Apply for the", title: "Film Fund", href: "/film-fund", featured: true },
+  { label: "View", title: "Location Database", href: "/locations", featured: false },
   { label: "Find movies", title: "Made in Kurdistan", href: "/movies", featured: false },
   { label: "Read our", title: "Industry Guide", href: "/industry-guide", featured: false },
 ] as const;
@@ -93,49 +95,186 @@ export const locations: LocationEntry[] = [
   },
 ];
 
-/** Location database masonry gallery. Column & span drive the layout. */
-export type LocationTile = {
-  src: string;
-  alt: string;
-  tall: boolean;
-  overlay?: { title: string; subtitle: string };
+/**
+ * A row in the location database list at /locations (Figma "Location DB - V2",
+ * node 338:191). `variant` picks the card layout: "expanded" shows all four
+ * fields plus the region-silhouette watermark behind the text column;
+ * "compact" is the shorter three-column row used for the last few entries.
+ * `citySuffix` is reproduced verbatim from the Figma copy — some rows read
+ * "As Sulaymaniyah", others just the city name, kept as authored rather than
+ * normalised, since it's the dev-mode source text.
+ */
+export type LocationDbRow = {
+  title: string;
+  citySuffix: string;
+  type: string;
+  area?: string;
+  lastActiveDate?: string;
+  image: string;
+  imageAlt: string;
+  variant: "expanded" | "compact";
+  /** Which of the two decorative region-silhouette watermarks (if any) sits behind the text. */
+  watermark?: 1 | 2;
+  /** Links through to a full /locations/[slug] page when one exists. */
+  slug?: string;
 };
 
-export const locationTiles: LocationTile[] = [
-  { src: "/images/loc-bazyan.jpg", alt: "Bazyan archaeological remains", tall: false, overlay: { title: "Bazyan Remains", subtitle: "Description." } },
-  { src: "/images/loc-2.jpg", alt: "Brick university building in Kurdistan", tall: true, overlay: { title: "Sulaimani University", subtitle: "Description." } },
-  { src: "/images/loc-3.jpg", alt: "Narrow limestone canyon", tall: false, overlay: { title: "Gali Ali Beg", subtitle: "Description." } },
-  { src: "/images/loc-4.jpg", alt: "City overlook across the plains", tall: true, overlay: { title: "Erbil Overlook", subtitle: "Description." } },
-  { src: "/images/loc-5.jpg", alt: "Snow-capped mountain range", tall: true, overlay: { title: "Halgurd Peaks", subtitle: "Description." } },
-  { src: "/images/loc-6.jpg", alt: "Lake at sunset among the hills", tall: false, overlay: { title: "Dukan Lake", subtitle: "Description." } },
-  { src: "/images/loc-7.jpg", alt: "Snowy house glowing at night", tall: true, overlay: { title: "Winter Village", subtitle: "Description." } },
-  { src: "/images/loc-8.jpg", alt: "Green valley meeting the water", tall: false, overlay: { title: "Rawanduz Valley", subtitle: "Description." } },
+export const locationDbRows: LocationDbRow[] = [
+  {
+    title: "Archaeological remains in Bazyan",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-bazyan.jpg",
+    imageAlt: "Stone archway standing in the Bazyan ruins",
+    variant: "expanded",
+    watermark: 1,
+    slug: "bazyan",
+  },
+  {
+    title: "Red Prison Museum",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-red-prison-museum.jpg",
+    imageAlt: "Tank displayed outside the Red Prison Museum's cell block",
+    variant: "expanded",
+    // Figma uses the variant-2 highlight here (same as Kifri) — verified by
+    // the highlight vector's geometry, not the (unreliable) layer name.
+    watermark: 2,
+  },
+  {
+    title: "Tuni Baba",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-tuni-baba.jpg",
+    imageAlt: "Steep canyon walls at Tuni Baba with a shallow stream below",
+    variant: "expanded",
+    watermark: 1,
+  },
+  {
+    title: "A home in Kifri",
+    citySuffix: "Kifri",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-home-in-kifri.jpg",
+    imageAlt: "Courtyard home shaded by palm trees in Kifri",
+    variant: "expanded",
+    watermark: 2,
+  },
+  {
+    title: "Abandoned Prison",
+    citySuffix: "Kifri",
+    type: "Archeological Site",
+    area: "400 m²",
+    lastActiveDate: "1922",
+    image: "/images/loc-db-abandoned-prison.jpg",
+    imageAlt: "Rows of wire fencing in the abandoned Kifri prison yard",
+    variant: "expanded",
+  },
+  {
+    title: "Abandoned tobacco factory",
+    citySuffix: "As Sulaymaniyah",
+    type: "Archeological Site",
+    image: "/images/loc-db-tobacco-factory.jpg",
+    imageAlt: "Steel roof trusses inside the abandoned tobacco factory",
+    variant: "compact",
+  },
+  {
+    title: "Ahmed Awa waterfall",
+    citySuffix: "Halabja",
+    type: "Archeological Site",
+    image: "/images/loc-db-ahmed-awa-waterfall.jpg",
+    imageAlt: "Ahmed Awa waterfall flowing between mossy boulders",
+    variant: "compact",
+  },
+  {
+    title: "Akre’s castle",
+    citySuffix: "Akre",
+    type: "Archeological Site",
+    image: "/images/loc-db-akre-castle.jpg",
+    imageAlt: "Terraced hillside buildings beneath Akre's old citadel",
+    variant: "compact",
+  },
+  {
+    title: "Alqosh",
+    citySuffix: "Erbil",
+    type: "Archeological Site",
+    image: "/images/loc-db-alqosh.jpg",
+    imageAlt: "Stone terraces climbing the hillside near Alqosh",
+    variant: "compact",
+  },
 ];
 
-/** Movies shot in Kurdistan (poster carousel). `featured` sits raised, per Figma.
- *  `href` is the external page opened (new tab) when a poster is clicked; leave
- *  it unset to fall back to an IMDb title search. */
+/**
+ * Homepage location mosaic (Figma "Location DB Variant 3", 317:640): four
+ * columns of two tiles each, alternating short/tall so the rows stagger.
+ * Ordered column-by-column, top-to-bottom — exactly the Figma placement.
+ * Only the Bazyan tile carries the grayscale treatment + overlay CTA.
+ */
+export type ShowcaseTile = {
+  src: string;
+  alt: string;
+  /** Shown in the overlay while this tile is the highlighted one. */
+  title: string;
+  /** Flex-grow weights straight from the Figma tile heights (234px / 320px). */
+  tall: boolean;
+};
+
+/** Label on the overlay pill — one CTA, it follows the highlighted tile. */
+export const showcaseCta = "Get access to all database";
+
+export const locationShowcase: ShowcaseTile[][] = [
+  [
+    { src: "/images/loc-home-1.jpg", alt: "Bazyan archaeological remains", title: "Bazyan Remains", tall: false },
+    { src: "/images/loc-home-5.jpg", alt: "Village houses beneath snow-capped mountains", title: "Halgurd Peaks", tall: true },
+  ],
+  [
+    { src: "/images/loc-home-2.jpg", alt: "Brick university building in Kurdistan", title: "Sulaimani University", tall: true },
+    { src: "/images/loc-home-6.jpg", alt: "Lake at sunset among the hills", title: "Dukan Lake", tall: false },
+  ],
+  [
+    { src: "/images/loc-home-3.jpg", alt: "Narrow limestone canyon", title: "Gali Ali Beg", tall: false },
+    { src: "/images/loc-home-7.jpg", alt: "Snowy house glowing at night", title: "Winter Village", tall: true },
+  ],
+  [
+    { src: "/images/loc-home-4.jpg", alt: "City overlook across the plains", title: "Erbil Overlook", tall: true },
+    { src: "/images/loc-home-8.jpg", alt: "Green valley meeting the water", title: "Rawanduz Valley", tall: false },
+  ],
+];
+
+/** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel). Every poster
+ *  renders in full colour; the active one is taller and carries its caption.
+ *  `href` is the external page opened (new tab) when a poster is clicked;
+ *  leave it unset to fall back to an IMDb title search. */
 export type Movie = {
   src: string;
   title: string;
-  featured: boolean;
+  /** Caption under the active poster — “Bekas (2017)” per the Figma. */
+  caption: string;
   href?: string;
 };
 
 export const movies: Movie[] = [
-  { src: "/images/poster-1.jpg", title: "Før Snøen Faller", featured: false },
-  { src: "/images/poster-2.jpg", title: "Bekas", featured: true },
-  { src: "/images/poster-3.jpg", title: "L'Hirondelle", featured: false },
-  { src: "/images/poster-4.jpg", title: "Das Milan Protokoll", featured: false },
-  { src: "/images/poster-5.jpg", title: "A Noiva", featured: false },
-  { src: "/images/poster-6.jpg", title: "09", featured: false },
-  { src: "/images/poster-7.jpg", title: "Der Junge Siyar", featured: false },
+  { src: "/images/poster-1.jpg", title: "Før Snøen Faller", caption: "Før Snøen Faller" },
+  { src: "/images/poster-2.jpg", title: "Bekas", caption: "Bekas (2017)" },
+  { src: "/images/poster-3.jpg", title: "L'Hirondelle", caption: "L'Hirondelle" },
+  { src: "/images/poster-4.jpg", title: "Das Milan Protokoll", caption: "Das Milan Protokoll" },
+  { src: "/images/poster-5.jpg", title: "A Noiva", caption: "A Noiva" },
+  { src: "/images/poster-6.jpg", title: "09", caption: "09" },
+  { src: "/images/poster-7.jpg", title: "Der Junge Siyar", caption: "Der Junge Siyar" },
+  { src: "/images/poster-8.jpg", title: "Baghdad Messi", caption: "Baghdad Messi" },
 ];
 
 /** News from experts pool — shown three at a time; the arrows page through it.
  *  Same image for every item for now. */
 export const news = [
-  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news.jpg" },
+  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news-home.jpg" },
   { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/loc-2.jpg" },
   { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/loc-3.jpg" },
   { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/loc-4.jpg" },

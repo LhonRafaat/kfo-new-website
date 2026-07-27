@@ -2,28 +2,32 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState, type CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
-import { TextureOverlay } from "@/components/ui/TextureOverlay";
-import { Parallax } from "@/components/Parallax";
 import { Reveal } from "@/components/Reveal";
-import { ScrollCurve } from "@/components/ScrollCurve";
-import { ArrowLeft, ArrowRight, PauseIcon, PlayIcon } from "@/components/icons";
-import { useInView } from "@/lib/useInView";
+import {
+  ArrowDownSmall,
+  ArrowUpSmall,
+  PauseSmall,
+  PlayIcon,
+  Underline,
+} from "@/components/icons";
 import { news } from "@/lib/content";
 
 const ROTATE_MS = 5000;
 const PAGE_SIZE = 3;
 const pages = Math.ceil(news.length / PAGE_SIZE);
 
+/**
+ * "News from Experts" (Figma "Highlights Section", 317:789): three headlines —
+ * the active one at full ink with the wavy accent underline drawn beneath it,
+ * the others dimmed to 56% — with pause/prev/next controls pinned to the
+ * bottom of the column and the feature photo crossfading on the right.
+ */
 export function NewsExperts() {
-  const [index, setIndex] = useState(0); // highlighted article across the whole pool
+  const [index, setIndex] = useState(0); // highlighted article across the pool
   const [playing, setPlaying] = useState(true);
-  // The ref lives on a wrapper that never remounts — the inner list is keyed by
-  // page, and hanging the observer off that node meant a page flip could leave
-  // the titles stuck at opacity 0.
-  const [listRef, revealed] = useInView<HTMLDivElement>({ threshold: 0.2 });
 
   const page = Math.floor(index / PAGE_SIZE);
   const activeInPage = index % PAGE_SIZE;
@@ -42,120 +46,102 @@ export function NewsExperts() {
   const goPage = (dir: 1 | -1) =>
     setIndex(((page + dir + pages) % pages) * PAGE_SIZE);
 
-  return (
-    <section className="relative overflow-hidden bg-cream">
-      <TextureOverlay
-        src="/images/texture-paper-news.webp"
-        opacity={0.35}
-        blend="multiply"
-      />
-      {/* Flowing line — reveals on scroll and rides over a portion of the image */}
-      <ScrollCurve
-        variant="news"
-        className="pointer-events-none absolute left-[-13%] top-[85%] z-[15] h-[57%] w-[116%] text-ink/60"
-      />
+  const controlClass =
+    "flex h-8 w-8 items-center justify-center border-b-[0.57px] border-ink pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent";
 
-      <Container className="relative z-10 py-16">
-        <div className="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
-          <Reveal as="h2" className="display-lg text-ink">
-            News from Experts
+  return (
+    <section className="relative">
+      <Container className="relative z-10 py-12">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+          <Reveal as="h2" className="heading-section text-ink">
+            News from <em className="italic">Experts</em>
           </Reveal>
           <AccentLink href="/news">Read all news</AccentLink>
         </div>
 
-        <div className="mt-10 grid grid-cols-1 items-center gap-12 lg:grid-cols-2 lg:gap-16">
-          {/* News list + controls */}
-          <div className="order-2 lg:order-1">
-            <div ref={listRef} className="overflow-hidden">
-              <div key={page} className="flex flex-col gap-8">
+        <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
+          {/* Headlines + controls — stretched to the image's height */}
+          <div className="order-2 flex flex-col md:order-1">
+            <div key={page} className="flex flex-col gap-8 md:mt-[6.5rem]">
               {visible.map((item, i) => {
                 const isActive = i === activeInPage;
                 return (
-                  <div
-                    key={i}
-                    className={revealed ? "news-rise" : "opacity-0"}
-                    style={
-                      {
-                        ["--rise-delay" as string]: `${i * 110}ms`,
-                      } as CSSProperties
-                    }
-                  >
+                  <div key={i} className="relative">
                     <Link
                       href={item.href}
                       onMouseEnter={() => setIndex(page * PAGE_SIZE + i)}
-                      className="group block"
+                      className={`group block transition-opacity duration-500 ${
+                        isActive ? "opacity-100" : "opacity-[0.56]"
+                      }`}
                     >
-                      <span className="font-sans text-[18px] leading-[1.5] text-ink/60">
+                      <span className="font-sans text-base leading-6 tracking-[0.02em] text-ink">
                         {item.date}
                       </span>
-                      <p
-                        className={`mt-2 inline font-serif text-[24px] font-medium leading-[1.14] transition-colors duration-500 ${
-                          isActive
-                            ? "text-ink [box-shadow:inset_0_-2px_0_0_#FF6600]"
-                            : "text-ink/40 group-hover:text-ink/70"
-                        }`}
-                      >
+                      <p className="mt-1 max-w-[435px] font-serif text-[1.375rem] font-medium leading-[1.14] tracking-[0.02em] text-ink group-hover:text-espresso">
                         {item.title}
                       </p>
                     </Link>
+                    {/* Wavy accent rule under the active headline, drawn inside the row gap */}
+                    <Underline
+                      className={`pointer-events-none !absolute -bottom-[15px] left-0 !mt-0 !h-[5px] !w-3/4 ${
+                        isActive ? "" : "!opacity-0"
+                      }`}
+                      style={{ clipPath: isActive ? "inset(0 0 0 0)" : undefined }}
+                    />
                   </div>
-                  );
-                })}
-              </div>
+                );
+              })}
             </div>
 
-            <div className="mt-20 flex items-center gap-4">
+            <div className="mt-12 flex items-center gap-[9px] md:mt-auto">
               <button
                 type="button"
                 onClick={() => setPlaying((p) => !p)}
                 aria-label={playing ? "Pause" : "Play"}
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+                className={controlClass}
               >
                 {playing ? (
-                  <PauseIcon className="h-7 w-7" />
+                  <PauseSmall className="h-3.5 w-3.5" />
                 ) : (
-                  <PlayIcon className="h-7 w-7" />
+                  <PlayIcon className="h-3.5 w-3.5" />
                 )}
               </button>
               <button
                 type="button"
                 onClick={() => goPage(-1)}
                 aria-label="Previous articles"
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+                className={controlClass}
               >
-                <ArrowLeft className="h-7 w-7 rotate-90" />
+                <ArrowUpSmall className="h-3.5 w-3.5" />
               </button>
               <button
                 type="button"
                 onClick={() => goPage(1)}
                 aria-label="Next articles"
-                className="border-b border-ink/40 pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent"
+                className={controlClass}
               >
-                <ArrowRight className="h-7 w-7 rotate-90" />
+                <ArrowDownSmall className="h-3.5 w-3.5" />
               </button>
             </div>
           </div>
 
           {/* Feature image — crossfades to the highlighted item's image */}
-          <div className="relative order-1 lg:order-2">
-            <Parallax
-              speed={0.15}
-              className="relative aspect-[11/10] w-full rounded-2xl bg-ink/10"
-            >
+          <Reveal className="order-1 md:order-2">
+            <div className="relative aspect-[572/515] w-full overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
               {visible.map((item, i) => (
                 <Image
                   key={`${page}-${i}`}
                   src={item.image}
                   alt={item.title}
                   fill
-                  sizes="(max-width: 1024px) 90vw, 45vw"
+                  sizes="(max-width: 768px) 90vw, 48vw"
                   className={`object-cover transition-opacity duration-700 ease-out ${
                     i === activeInPage ? "opacity-100" : "opacity-0"
                   }`}
                 />
               ))}
-            </Parallax>
-          </div>
+            </div>
+          </Reveal>
         </div>
       </Container>
     </section>

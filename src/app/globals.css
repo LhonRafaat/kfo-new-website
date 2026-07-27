@@ -55,6 +55,20 @@
     line-height: 1.14;
   }
 
+  /* ---- Homepage V2 type scale (Figma 317:622 revision — compact) ---- */
+  /* Hero page title — 76px/87 Flecha Regular at the 1280 design width. */
+  .display-title {
+    @apply font-serif font-normal;
+    font-size: clamp(2.5rem, 5.95vw, 4.75rem); /* 76px */
+    line-height: 1.145;
+  }
+  /* Section heading — 32px/36 Flecha Medium. */
+  .heading-section {
+    @apply font-serif font-medium;
+    font-size: clamp(1.625rem, 1.3rem + 1.3vw, 2rem); /* 32px */
+    line-height: 1.125;
+  }
+
   /* ---- Eyebrow / label ---- */
   .eyebrow {
     @apply font-sans font-semibold uppercase text-espresso;
@@ -66,12 +80,25 @@
     font-size: 1.125rem; /* 18px */
     letter-spacing: 0;
   }
+  /* Homepage V2 eyebrow — 16px/22 Cadiz SemiBold, 0.32px tracking. */
+  .eyebrow-sm {
+    @apply font-sans font-semibold uppercase text-espresso;
+    font-size: 1rem;
+    line-height: 1.375;
+    letter-spacing: 0.02em;
+  }
 
   /* ---- Body copy ---- */
   .body-lg {
     @apply font-sans text-ink/90;
     font-size: clamp(1.0625rem, 1rem + 0.3vw, 1.25rem); /* 20px */
     line-height: 1.4;
+  }
+  /* Homepage V2 body — 16px/22 Cadiz Book. */
+  .body-md {
+    @apply font-sans text-ink;
+    font-size: 1rem;
+    line-height: 1.375;
   }
 
   /* ---- Accent (italic serif) link with hand-drawn underline ---- */
@@ -120,6 +147,13 @@
     background-image: url("/images/floral-texture.webp");
     background-size: cover;
     background-position: center;
+  }
+  /* Homepage V2 background — Figma tiles this paper scan at 0.64 scale
+     (4096px source × 0.64 ≈ 2619px on screen), composited at 40% over cream. */
+  .texture-tile {
+    background-image: url("/images/texture-paper-tile.webp");
+    background-repeat: repeat;
+    background-size: 2619px auto;
   }
   /* thin custom scrollbar for horizontal carousels */
   .no-scrollbar::-webkit-scrollbar {

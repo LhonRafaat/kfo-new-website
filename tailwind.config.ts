@@ -16,6 +16,8 @@ const config: Config = {
           DEFAULT: "#ADB8BD",
           deep: "#9AA6AC",
         },
+        // Refine-search dropdown on the location database list (Figma 338:516).
+        panel: "#D9CFC5",
         accent: {
           DEFAULT: "#FF6600",
           soft: "#F19352",

@@ -91,6 +91,21 @@ export function CaretRight(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Phosphor MagnifyingGlass — the location-database search field, verbatim from Figma. */
+export function MagnifyingGlassIcon(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 20 20"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+      {...props}
+    >
+      <path d="M17.9422 17.0578L14.0304 13.1469C15.1642 11.7857 15.7296 10.0398 15.6089 8.27244C15.4882 6.50506 14.6908 4.85223 13.3826 3.65779C12.0743 2.46334 10.3559 1.81926 8.58489 1.85951C6.81385 1.89976 5.1265 2.62125 3.87386 3.87389C2.62122 5.12653 1.89973 6.81388 1.85948 8.58492C1.81923 10.356 2.46331 12.0744 3.65776 13.3826C4.8522 14.6909 6.50503 15.4883 8.27241 15.6089C10.0398 15.7296 11.7857 15.1642 13.1468 14.0305L17.0578 17.9422C17.1158 18.0003 17.1848 18.0463 17.2607 18.0777C17.3365 18.1092 17.4178 18.1253 17.5 18.1253C17.5821 18.1253 17.6634 18.1092 17.7393 18.0777C17.8151 18.0463 17.8841 18.0003 17.9422 17.9422C18.0002 17.8841 18.0463 17.8152 18.0777 17.7393C18.1091 17.6634 18.1253 17.5821 18.1253 17.5C18.1253 17.4179 18.1091 17.3366 18.0777 17.2607C18.0463 17.1848 18.0002 17.1159 17.9422 17.0578ZM3.12496 8.75C3.12496 7.63748 3.45487 6.54994 4.07295 5.62491C4.69103 4.69989 5.56954 3.97892 6.59737 3.55317C7.62521 3.12743 8.75621 3.01604 9.84735 3.23308C10.9385 3.45012 11.9408 3.98585 12.7274 4.77252C13.5141 5.55919 14.0498 6.56147 14.2669 7.65261C14.4839 8.74376 14.3725 9.87476 13.9468 10.9026C13.521 11.9304 12.8001 12.8089 11.875 13.427C10.95 14.0451 9.86248 14.375 8.74997 14.375C7.25863 14.3733 5.82885 13.7802 4.77432 12.7256C3.71978 11.6711 3.12662 10.2413 3.12496 8.75Z" />
+    </svg>
+  );
+}
+
 /* Carousel controls — verbatim Figma geometry: the arrow shafts have a gentle
    bow and the pause bars are subtly curved. */
 export function ArrowRight(props: SVGProps<SVGSVGElement>) {
@@ -171,6 +186,82 @@ export function Underline({
         stroke="#FF6600"
         strokeWidth="1.10035"
       />
+    </svg>
+  );
+}
+
+/* Homepage V2 carousel arrow (Figma 519:256 "ArrowRight", 22×19 in a 32px
+   frame) — same long-tailed, gently-bowed shaft as the newsletter arrow. */
+export function CarouselArrow({
+  direction = "right",
+  className = "",
+  ...props
+}: SVGProps<SVGSVGElement> & { direction?: "left" | "right" }) {
+  return (
+    <svg
+      viewBox="0 0 19 17"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={`${direction === "left" ? "-scale-x-100" : ""} ${className}`}
+      {...props}
+    >
+      <path d="M1.25023 9.74987C5.41684 8.74989 17.75 8.24989 17.75 8.24989M11.2501 1.24998L17.75 8.24989L11.2501 15.2498" />
+    </svg>
+  );
+}
+
+/* Homepage V2 news pagination glyphs (Figma 317:812) — straight 14px marks
+   inside 32px underlined buttons: two pause bars and short up/down arrows. */
+export function PauseSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.71}
+      strokeLinecap="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M4.57 2v10M10.28 2v10" />
+    </svg>
+  );
+}
+
+export function ArrowUpSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.43}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M7 11.5V2.5M3 6.5l4-4 4 4" />
+    </svg>
+  );
+}
+
+export function ArrowDownSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.43}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M7 2.5v9M3 7.5l4 4 4-4" />
     </svg>
   );
 }
