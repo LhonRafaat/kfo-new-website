@@ -1,11 +1,10 @@
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { Hero } from "@/components/sections/Hero";
-import { QuickLinks } from "@/components/sections/QuickLinks";
 import { Introduction } from "@/components/sections/Introduction";
-import { LocationDatabase } from "@/components/sections/LocationDatabase";
+import { LocationsShowcase } from "@/components/sections/LocationsShowcase";
 import { MoviesMade } from "@/components/sections/MoviesMade";
-import { FounderStatement } from "@/components/sections/FounderStatement";
+import { Testimonial } from "@/components/sections/Testimonial";
 import { NewsExperts } from "@/components/sections/NewsExperts";
 
 const jsonLd = {
@@ -32,13 +31,18 @@ export default function HomePage() {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
       <Navbar />
-      <main>
+      {/* The V2 frame lays a tiled paper scan at 40% over cream behind every
+          section — sections stay transparent so it shows through. */}
+      <main className="relative isolate overflow-x-clip bg-cream">
+        <div
+          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-40"
+          aria-hidden
+        />
         <Hero />
-        <QuickLinks />
         <Introduction />
-        <LocationDatabase />
+        <LocationsShowcase />
         <MoviesMade />
-        <FounderStatement />
+        <Testimonial />
         <NewsExperts />
       </main>
       <Footer />

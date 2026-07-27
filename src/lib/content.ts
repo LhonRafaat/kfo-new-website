@@ -22,10 +22,12 @@ export const secondaryNav = [
   { label: "Contact", href: "/contact" },
 ] as const;
 
-/** Quick links directly beneath the hero. */
+/** Quick links pinned to the bottom band of the hero (Figma 551:2728).
+ *  `featured` shows the drawn accent underline permanently; the rest draw it
+ *  on hover. Order matches the Figma left→right. */
 export const quickLinks = [
-  { label: "View", title: "Location Database", href: "/locations", featured: false },
   { label: "Apply for the", title: "Film Fund", href: "/film-fund", featured: true },
+  { label: "View", title: "Location Database", href: "/locations", featured: false },
   { label: "Find movies", title: "Made in Kurdistan", href: "/movies", featured: false },
   { label: "Read our", title: "Industry Guide", href: "/industry-guide", featured: false },
 ] as const;
@@ -209,49 +211,70 @@ export const locationDbRows: LocationDbRow[] = [
   },
 ];
 
-/** Location database masonry gallery. Column & span drive the layout. */
-export type LocationTile = {
+/**
+ * Homepage location mosaic (Figma "Location DB Variant 3", 317:640): four
+ * columns of two tiles each, alternating short/tall so the rows stagger.
+ * Ordered column-by-column, top-to-bottom — exactly the Figma placement.
+ * Only the Bazyan tile carries the grayscale treatment + overlay CTA.
+ */
+export type ShowcaseTile = {
   src: string;
   alt: string;
+  /** Flex-grow weights straight from the Figma tile heights (234px / 320px). */
   tall: boolean;
-  overlay?: { title: string; subtitle: string };
+  overlay?: { title: string; cta: string };
 };
 
-export const locationTiles: LocationTile[] = [
-  { src: "/images/loc-bazyan.jpg", alt: "Bazyan archaeological remains", tall: false, overlay: { title: "Bazyan Remains", subtitle: "Description." } },
-  { src: "/images/loc-2.jpg", alt: "Brick university building in Kurdistan", tall: true, overlay: { title: "Sulaimani University", subtitle: "Description." } },
-  { src: "/images/loc-3.jpg", alt: "Narrow limestone canyon", tall: false, overlay: { title: "Gali Ali Beg", subtitle: "Description." } },
-  { src: "/images/loc-4.jpg", alt: "City overlook across the plains", tall: true, overlay: { title: "Erbil Overlook", subtitle: "Description." } },
-  { src: "/images/loc-5.jpg", alt: "Snow-capped mountain range", tall: true, overlay: { title: "Halgurd Peaks", subtitle: "Description." } },
-  { src: "/images/loc-6.jpg", alt: "Lake at sunset among the hills", tall: false, overlay: { title: "Dukan Lake", subtitle: "Description." } },
-  { src: "/images/loc-7.jpg", alt: "Snowy house glowing at night", tall: true, overlay: { title: "Winter Village", subtitle: "Description." } },
-  { src: "/images/loc-8.jpg", alt: "Green valley meeting the water", tall: false, overlay: { title: "Rawanduz Valley", subtitle: "Description." } },
+export const locationShowcase: ShowcaseTile[][] = [
+  [
+    { src: "/images/loc-home-1.jpg", alt: "Bazyan archaeological remains", tall: false, overlay: { title: "Bazyan Remains", cta: "Get access to all database" } },
+    { src: "/images/loc-home-5.jpg", alt: "Village houses beneath snow-capped mountains", tall: true },
+  ],
+  [
+    { src: "/images/loc-home-2.jpg", alt: "Brick university building in Kurdistan", tall: true },
+    { src: "/images/loc-home-6.jpg", alt: "Lake at sunset among the hills", tall: false },
+  ],
+  [
+    { src: "/images/loc-home-3.jpg", alt: "Narrow limestone canyon", tall: false },
+    { src: "/images/loc-home-7.jpg", alt: "Snowy house glowing at night", tall: true },
+  ],
+  [
+    { src: "/images/loc-home-4.jpg", alt: "City overlook across the plains", tall: true },
+    { src: "/images/loc-home-8.jpg", alt: "Green valley meeting the water", tall: false },
+  ],
 ];
 
-/** Movies shot in Kurdistan (poster carousel). `featured` sits raised, per Figma.
- *  `href` is the external page opened (new tab) when a poster is clicked; leave
- *  it unset to fall back to an IMDb title search. */
+/** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel): the active
+ *  poster renders in colour, taller, with its caption; the rest use the
+ *  halftone black-and-white artwork exported from the Figma effect (`bw`) or,
+ *  when a movie has no halftone export, a CSS grayscale of the colour poster.
+ *  `href` is the external page opened (new tab) when a poster is clicked;
+ *  leave it unset to fall back to an IMDb title search. */
 export type Movie = {
   src: string;
+  /** Halftone black-and-white poster (Figma custom effect, pre-rendered). */
+  bw?: string;
   title: string;
-  featured: boolean;
+  /** Caption under the active poster — “Bekas (2017)” per the Figma. */
+  caption: string;
   href?: string;
 };
 
 export const movies: Movie[] = [
-  { src: "/images/poster-1.jpg", title: "Før Snøen Faller", featured: false },
-  { src: "/images/poster-2.jpg", title: "Bekas", featured: true },
-  { src: "/images/poster-3.jpg", title: "L'Hirondelle", featured: false },
-  { src: "/images/poster-4.jpg", title: "Das Milan Protokoll", featured: false },
-  { src: "/images/poster-5.jpg", title: "A Noiva", featured: false },
-  { src: "/images/poster-6.jpg", title: "09", featured: false },
-  { src: "/images/poster-7.jpg", title: "Der Junge Siyar", featured: false },
+  { src: "/images/poster-1.jpg", bw: "/images/poster-bw-1.png", title: "Før Snøen Faller", caption: "Før Snøen Faller" },
+  { src: "/images/poster-2.jpg", bw: "/images/poster-bw-2.png", title: "Bekas", caption: "Bekas (2017)" },
+  { src: "/images/poster-3.jpg", bw: "/images/poster-bw-3.png", title: "L'Hirondelle", caption: "L'Hirondelle" },
+  { src: "/images/poster-4.jpg", bw: "/images/poster-bw-4.png", title: "Das Milan Protokoll", caption: "Das Milan Protokoll" },
+  { src: "/images/poster-5.jpg", bw: "/images/poster-bw-5.png", title: "A Noiva", caption: "A Noiva" },
+  { src: "/images/poster-6.jpg", bw: "/images/poster-bw-6.png", title: "09", caption: "09" },
+  { src: "/images/poster-7.jpg", bw: "/images/poster-bw-7.png", title: "Der Junge Siyar", caption: "Der Junge Siyar" },
+  { src: "/images/poster-8.jpg", bw: "/images/poster-bw-8.png", title: "Baghdad Messi", caption: "Baghdad Messi" },
 ];
 
 /** News from experts pool — shown three at a time; the arrows page through it.
  *  Same image for every item for now. */
 export const news = [
-  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news.jpg" },
+  { date: "3, Nov 2025", title: "LMGI Representatives Complete Location Familiarisation Tour in Kurdistan", href: "/news/lmgi-location-tour", image: "/images/news-home.jpg" },
   { date: "3, Nov 2025", title: "Three Day Film Workshop with Klaudia Śmieja Rostworowska in Slemani", href: "/news/film-workshop-slemani", image: "/images/loc-2.jpg" },
   { date: "3, Nov 2025", title: "Kurdsat broadcasting Corporation and the Kurdistan Film commission sign a MoU", href: "/news/kurdsat-mou", image: "/images/loc-3.jpg" },
   { date: "28, Oct 2025", title: "Kurdistan Film Commission Launches the 2026 Regional Film Fund", href: "/news/2026-film-fund", image: "/images/loc-4.jpg" },

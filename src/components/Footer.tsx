@@ -11,34 +11,35 @@ const socialIcons = {
   instagram: InstagramIcon,
 } as const;
 
+/** Footer (Figma "Footer VB", 529:1561) — compact sans links, pill newsletter. */
 export function Footer() {
   return (
     <footer className="bg-espresso text-white">
       <Container className="py-12">
-        <div className="grid grid-cols-1 gap-12 lg:grid-cols-[1.2fr_1fr]">
+        <div className="flex flex-col justify-between gap-12 lg:flex-row">
           {/* Brand + newsletter */}
-          <div className="max-w-md">
-            <Logo
-              wordmarkClassName="h-[14px] w-auto sm:h-[18px]"
-              markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[48px]"
-            />
-            <p className="mt-6 font-sans text-xl leading-relaxed text-white/80">
-              {site.description}
-            </p>
-            <div className="mt-8">
-              <NewsletterForm />
+          <div className="flex max-w-[401px] flex-col gap-10">
+            <div className="flex flex-col gap-4">
+              <Logo
+                wordmarkClassName="h-[14px] w-auto sm:h-[17px]"
+                markClassName="h-[22px] w-[42px] sm:h-[25px] sm:w-[50px]"
+              />
+              <p className="font-sans text-base leading-6 tracking-[0.02em] text-white">
+                {site.description}
+              </p>
             </div>
+            <NewsletterForm />
           </div>
 
           {/* Link columns */}
-          <nav className="grid grid-cols-2 gap-8 sm:gap-12 lg:justify-items-end">
+          <nav className="flex gap-16 lg:gap-24">
             {footerColumns.map((column, i) => (
-              <ul key={i} className="flex flex-col gap-4">
+              <ul key={i} className="flex min-w-[134px] flex-col gap-4">
                 {column.map((item) => (
                   <li key={item.label}>
                     <Link
                       href={item.href}
-                      className="link-underline font-serif text-[26px] font-medium italic leading-[1.14] text-white/90 hover:text-white"
+                      className="link-underline font-sans text-base leading-[1.375] text-white"
                     >
                       {item.label}
                     </Link>
@@ -50,8 +51,8 @@ export function Footer() {
         </div>
 
         {/* Socials + legal */}
-        <div className="mt-16 flex flex-col items-center gap-6 border-t border-white/10 pt-10">
-          <div className="flex items-center gap-6">
+        <div className="mt-20 flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+          <div className="flex items-center gap-[22px]">
             {socials.map((social) => {
               const Icon = socialIcons[social.icon];
               return (
@@ -61,19 +62,16 @@ export function Footer() {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={social.label}
-                  className="text-white/80 transition-colors duration-300 hover:text-white"
+                  className="text-white transition-colors duration-300 hover:text-accent-soft"
                 >
-                  <Icon className="h-5 w-5" />
+                  <Icon className="h-6 w-6" />
                 </a>
               );
             })}
           </div>
-          <div className="flex flex-wrap items-center justify-center gap-x-8 gap-y-2 text-center font-sans text-xl text-white/70">
+          <div className="flex flex-wrap items-center gap-[22px] font-sans text-base leading-6 tracking-[0.02em] text-white">
             <span>© 2026 Kurdistan Film Commission</span>
-            <Link
-              href="/privacy-policy"
-              className="link-underline hover:text-white"
-            >
+            <Link href="/privacy-policy" className="link-underline">
               Privacy Policy
             </Link>
           </div>

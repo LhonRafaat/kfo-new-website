@@ -36,7 +36,9 @@ export function AccentLink({
           io.disconnect();
         }
       },
-      { threshold: 0.7 },
+      // Low threshold so the line starts drawing as soon as the link shows up,
+      // not only once it's 70% visible (which read as "animating late").
+      { threshold: 0.15 },
     );
     io.observe(el);
     return () => io.disconnect();

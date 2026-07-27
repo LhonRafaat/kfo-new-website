@@ -190,6 +190,82 @@ export function Underline({
   );
 }
 
+/* Homepage V2 carousel arrow (Figma 519:256 "ArrowRight", 22×19 in a 32px
+   frame) — same long-tailed, gently-bowed shaft as the newsletter arrow. */
+export function CarouselArrow({
+  direction = "right",
+  className = "",
+  ...props
+}: SVGProps<SVGSVGElement> & { direction?: "left" | "right" }) {
+  return (
+    <svg
+      viewBox="0 0 19 17"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2.5}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      className={`${direction === "left" ? "-scale-x-100" : ""} ${className}`}
+      {...props}
+    >
+      <path d="M1.25023 9.74987C5.41684 8.74989 17.75 8.24989 17.75 8.24989M11.2501 1.24998L17.75 8.24989L11.2501 15.2498" />
+    </svg>
+  );
+}
+
+/* Homepage V2 news pagination glyphs (Figma 317:812) — straight 14px marks
+   inside 32px underlined buttons: two pause bars and short up/down arrows. */
+export function PauseSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.71}
+      strokeLinecap="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M4.57 2v10M10.28 2v10" />
+    </svg>
+  );
+}
+
+export function ArrowUpSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.43}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M7 11.5V2.5M3 6.5l4-4 4 4" />
+    </svg>
+  );
+}
+
+export function ArrowDownSmall(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 14 14"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.43}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden
+      {...props}
+    >
+      <path d="M7 2.5v9M3 7.5l4 4 4-4" />
+    </svg>
+  );
+}
+
 export function PauseIcon(props: SVGProps<SVGSVGElement>) {
   return (
     <svg
