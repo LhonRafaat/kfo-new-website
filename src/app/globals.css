@@ -255,6 +255,19 @@
   transform: translateY(0);
 }
 
+/* ---- Page-title squiggle: draws itself in with its Reveal ----
+   Same gesture as the accent links' underline, but the mark here is decorative
+   rather than part of a link, so it hangs off the Reveal's `is-in` instead of
+   a hover/`.accent-link` state. Deliberately scoped to this opt-in class: a
+   bare `.reveal .underline-wave` rule would also fire the homepage hero's
+   quick-link underlines, which are supposed to wait for hover. */
+.reveal-underline .underline-wave {
+  clip-path: inset(0 100% 0 0);
+}
+.reveal-underline.is-in .underline-wave {
+  clip-path: inset(0 0 0 0);
+}
+
 /* ---- News item: rises from fully below to its place ---- */
 @keyframes news-rise {
   from {
@@ -278,6 +291,40 @@
   transition: opacity var(--fade-duration) var(--fade-ease);
 }
 
+/* ---- Disclosure rows (the services accordion) ----
+   Component classes for the same reason as `.crossfade`: opening a row is a
+   pointer-speed interaction, so it pulls `--fade-duration-interactive` and the
+   shared easing rather than an ad-hoc Tailwind `duration-*`, which would drift
+   from the rest of the site's hover/active states.
+
+   The panel animates `grid-template-rows` 0fr → 1fr — the one way to transition
+   to a content-derived height without hard-coding a max-height per row. The
+   inner wrapper needs `overflow-hidden` for the closed state to actually clip. */
+.disclosure-title {
+  transition: color var(--fade-duration-interactive) var(--fade-ease);
+}
+/* `rotate`/`translate` rather than `transform`: Tailwind v4's `rotate-90` and
+   `translate-x-*` compile to the standalone transform properties, so a
+   `transition: transform` here would never fire. */
+.disclosure-caret {
+  transition:
+    rotate var(--fade-duration-interactive) var(--fade-ease),
+    translate var(--fade-duration-interactive) var(--fade-ease),
+    opacity var(--fade-duration-interactive) var(--fade-ease);
+}
+.disclosure-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition:
+    grid-template-rows var(--fade-duration-interactive) var(--fade-ease),
+    opacity var(--fade-duration-interactive) var(--fade-ease);
+}
+.disclosure-panel.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .reveal {
     opacity: 1;
@@ -287,11 +334,17 @@
   .news-rise {
     animation: none;
   }
-  .underline-wave {
+  .underline-wave,
+  .reveal-underline .underline-wave {
     clip-path: inset(0 0 0 0);
     transition: none;
   }
   .crossfade {
+    transition: none;
+  }
+  .disclosure-title,
+  .disclosure-caret,
+  .disclosure-panel {
     transition: none;
   }
 }

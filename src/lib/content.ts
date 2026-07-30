@@ -326,6 +326,159 @@ export const locationShowcase: ShowcaseTile[][] = [
   ],
 ];
 
+/* ---------------------------------------------------------------------------
+   /services — Figma "Services Page - V1" (364:439)
+   ------------------------------------------------------------------------- */
+
+/** Hero band of the services page (Figma 537:1955 + 537:1952). */
+export const servicesHero = {
+  title: "Services",
+  lead: "KFO Slemani is the ultimate destination for all your production requirements. We provide a variety of services for both national and international productions.",
+  aside:
+    "If you have any specific requirements for your project or would like to visit Kurdistan, feel free to contact us. We can create a custom plan for you that suits your needs.",
+} as const;
+
+export type ServiceItem = { title: string; body: string };
+
+export type ServiceCategorySlug = "facilities" | "logistics";
+
+export type ServiceCategory = {
+  slug: ServiceCategorySlug;
+  heading: string;
+  intro: string;
+  /**
+   * Figma runs the Facilities intro across the full content column above both
+   * columns ("above"); Logistics keeps it in the text column beside the photo.
+   */
+  introPlacement: "above" | "beside";
+  imageSide: "left" | "right";
+  image: { src: string; alt: string; width: number; height: number };
+  /** The row the Figma shows expanded when the page loads. */
+  defaultOpen: number;
+  items: ServiceItem[];
+};
+
+/**
+ * The two service categories and their disclosure rows.
+ *
+ * COPY NOTE: the Figma only authors a paragraph for the one row it shows open
+ * in each column — "Linguistic Coach" (539:1975) and "Production management"
+ * (539:2045), and the latter is a copy-paste of the former in the source file.
+ * Every other body below is placeholder copy written from the commission's own
+ * material (the About page's mission/vision text and its AFCI listing) so the
+ * accordion is complete; swap them for client copy when it lands.
+ */
+export const serviceCategories: ServiceCategory[] = [
+  {
+    slug: "facilities",
+    heading: "Facilities",
+    introPlacement: "above",
+    imageSide: "right",
+    intro:
+      "We facilitate international and national productions as we collaborate closely with official entities, such as ministries, governmental institutions, and private security companies, to ensure seamless logistics services, acquire film permits and necessary administrative authorisations, obtain security clearance, and ensure the safety of the international and national crew during production.",
+    image: {
+      src: "/images/services-facilities.jpg",
+      alt: "Two speakers in conversation at a Kurdistan Film Commission panel",
+      width: 635,
+      height: 415,
+    },
+    defaultOpen: 3,
+    items: [
+      {
+        title: "Consultation",
+        body: "From your first questions to the final wrap, we advise on everything a production needs on the ground — cultural consultation, costume and design references, and guidance through every logistical stage of the shoot.",
+      },
+      {
+        title: "Education and Training",
+        body: "Our top priority is to involve the local film community. We have partnered with film schools, organisations, and institutions in Sulaymaniyah and abroad to organise intensive educational courses, workshops, and more.",
+      },
+      {
+        title: "Cast & Talent",
+        body: "We assist with casting and recruiting local cast, extras, and background talent, drawing on a network that reaches both professional performers and the communities you are filming in.",
+      },
+      {
+        // Verbatim from the Figma (539:1975) — the row the design shows open.
+        title: "Linguistic Coach",
+        body: "We have in-house language experts available if you need assistance with casting and extras, especially if your project involves various ethnicities, religions, and dialects.",
+      },
+      {
+        title: "Financial Guidance",
+        body: "We walk you through what a shoot in the region costs, the support available to you, and how to apply to the Kurdistan Film Fund.",
+      },
+      {
+        title: "Film Culture",
+        body: "Kurdistan's festivals, archives, and film community are part of what you are filming in. We connect visiting productions to the people and the history behind the locations.",
+      },
+      {
+        title: "Local Partners",
+        body: "We introduce you to vetted local production companies, service providers, and suppliers, so your project is carried by people who already know the ground.",
+      },
+    ],
+  },
+  {
+    slug: "logistics",
+    heading: "Logistics",
+    introPlacement: "beside",
+    imageSide: "left",
+    intro:
+      "We facilitate international and national productions as we collaborate closely with official entities, such as ministries, governmental institutions, and private security companies.",
+    image: {
+      src: "/images/services-logistics.jpg",
+      alt: "Cloud breaking over a sunlit mountain ridge in Kurdistan",
+      width: 612,
+      height: 636,
+    },
+    defaultOpen: 3,
+    items: [
+      {
+        title: "Permits & Regulations",
+        body: "We work directly with ministries and governmental institutions to acquire film permits, the necessary administrative authorisations, and security clearance for your production.",
+      },
+      {
+        title: "Rules and Regulations",
+        body: "We brief you on what filming in the Kurdistan Region asks of you — from customs clearance for technical equipment to the rules that apply on each individual location.",
+      },
+      {
+        title: "Locations",
+        body: "We offer the largest location database in the Kurdistan Region, and we scout, arrange access, and clear the permissions for every site you shoot.",
+      },
+      {
+        // The Figma repeats the Linguistic Coach paragraph here (539:2045) —
+        // a copy-paste in the source file rather than authored copy.
+        title: "Production management",
+        body: "We coordinate the running of your shoot on the ground: scheduling, crew calls, equipment and suppliers, and the paperwork that keeps each shooting day moving.",
+      },
+      {
+        title: "Safety",
+        body: "The region is known for its safety and security. We coordinate with local authorities and private security companies to keep international and national crew safe throughout production.",
+      },
+      {
+        title: "Hospitality",
+        body: "We arrange accommodation and catering for your team between shooting days, from hotels in Slemani to basecamps at remote locations.",
+      },
+      {
+        title: "Transportation",
+        body: "We organise transport for crew, cast, and equipment — airport pickups, unit moves, and access to locations well off the main roads.",
+      },
+      {
+        title: "Local Crew",
+        body: "We help you hire experienced local crew across every department, and connect you to the professionals listed in our Industry Guide.",
+      },
+    ],
+  },
+];
+
+/** The "Coming soon" production card at the foot of /services (Figma 539:2130). */
+export const servicesComingSoon = {
+  eyebrow: "Coming soon",
+  title: "Production",
+  body: "We are actively working on developing our production section.",
+  image: {
+    src: "/images/services-production.jpg",
+    alt: "",
+  },
+} as const;
+
 /** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel). Every poster
  *  renders in full colour; the active one is taller and carries its caption.
  *  `href` is the external page opened (new tab) when a poster is clicked;
