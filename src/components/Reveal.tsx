@@ -17,11 +17,14 @@ export function Reveal({
   delay = 0,
   className = "",
   children,
+  ...rest
 }: {
   as?: ElementType;
   delay?: number;
   className?: string;
   children: ReactNode;
+  /** Anything else (aria-*, role, id …) lands on the rendered element. */
+  [prop: string]: unknown;
 }) {
   // Trigger point is the shared REVEAL_TRIGGER default — see useInView.
   const [ref, inView] = useInView<HTMLElement>();
@@ -29,6 +32,7 @@ export function Reveal({
   return createElement(
     as,
     {
+      ...rest,
       ref,
       className: `reveal ${inView ? "is-in" : ""} ${className}`,
       style: { "--reveal-delay": `${delay}ms` } as CSSProperties,

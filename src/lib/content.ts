@@ -76,8 +76,9 @@ export const locationPins: LocationPin[] = [
 
 /**
  * A single entry in the location database, rendered at /locations/[slug].
- * `gallery` is ordered as the Figma lays it out: [0] is the wide hero tile,
- * [1] sits beside it, and [2..5] form the bleeding strip underneath.
+ * `gallery` is ordered as the Figma lays it out (338:1043): [0] is the hero
+ * tile beside the summary, [1] the full-width band under it, and [2…] feed the
+ * three-up slider below the body copy.
  */
 export type LocationEntry = {
   slug: string;
@@ -86,11 +87,15 @@ export type LocationEntry = {
   summary: string;
   city: string;
   cityBlurb: string;
-  /** Pin position as a percentage of the 644×572 region-map artboard. */
+  /** Pin position as a percentage of the Kurdistan silhouette's artboard. */
   pin: { x: number; y: number };
   mapsUrl: string;
   gallery: { src: string; alt: string }[];
 };
+
+/** Standing paragraph under the gallery on every location page (338:1043). */
+export const locationProductionBlurb =
+  "We facilitate international and national productions as we collaborate closely with official entities, such as ministries, governmental institutions, and private security companies, to ensure seamless logistics services, acquire film permits and necessary administrative authorisations, obtain security clearance, and ensure the safety of the international and national crew during production.";
 
 export const locations: LocationEntry[] = [
   {
@@ -102,7 +107,7 @@ export const locations: LocationEntry[] = [
     city: "As Sulaymaniyah",
     cityBlurb:
       "Sulaymaniyah, a vibrant city in the Kurdistan Region of Iraq, is known for its rich cultural heritage and stunning landscapes.",
-    pin: { x: 64.9, y: 25.2 },
+    pin: { x: 64.9, y: 23.9 },
     mapsUrl: "https://www.google.com/maps/search/?api=1&query=Bazyan+Kurdistan",
     gallery: [
       {
@@ -135,12 +140,12 @@ export const locations: LocationEntry[] = [
 
 /**
  * A row in the location database list at /locations (Figma "Location DB - V2",
- * node 338:191). `variant` picks the card layout: "expanded" shows all four
- * fields plus the region-silhouette watermark behind the text column;
- * "compact" is the shorter three-column row used for the last few entries.
- * `citySuffix` is reproduced verbatim from the Figma copy — some rows read
- * "As Sulaymaniyah", others just the city name, kept as authored rather than
- * normalised, since it's the dev-mode source text.
+ * node 522:314) — each one renders as a full-width photo card with its details
+ * laid over the image. `citySuffix` is reproduced verbatim from the Figma copy
+ * — some rows read "As Sulaymaniyah", others just the city name, kept as
+ * authored rather than normalised, since it's the dev-mode source text.
+ * `area`/`lastActiveDate` are only known for the first five entries; the card
+ * drops the field rather than inventing a figure.
  */
 export type LocationDbRow = {
   title: string;
@@ -150,12 +155,12 @@ export type LocationDbRow = {
   lastActiveDate?: string;
   image: string;
   imageAlt: string;
-  variant: "expanded" | "compact";
-  /** Which of the two decorative region-silhouette watermarks (if any) sits behind the text. */
-  watermark?: 1 | 2;
   /** Links through to a full /locations/[slug] page when one exists. */
   slug?: string;
 };
+
+/** Rows shown per page of the database list, matching the Figma's five cards. */
+export const locationsPerPage = 5;
 
 export const locationDbRows: LocationDbRow[] = [
   {
@@ -166,8 +171,6 @@ export const locationDbRows: LocationDbRow[] = [
     lastActiveDate: "1922",
     image: "/images/loc-db-bazyan.jpg",
     imageAlt: "Stone archway standing in the Bazyan ruins",
-    variant: "expanded",
-    watermark: 1,
     slug: "bazyan",
   },
   {
@@ -178,10 +181,6 @@ export const locationDbRows: LocationDbRow[] = [
     lastActiveDate: "1922",
     image: "/images/loc-db-red-prison-museum.jpg",
     imageAlt: "Tank displayed outside the Red Prison Museum's cell block",
-    variant: "expanded",
-    // Figma uses the variant-2 highlight here (same as Kifri) — verified by
-    // the highlight vector's geometry, not the (unreliable) layer name.
-    watermark: 2,
   },
   {
     title: "Tuni Baba",
@@ -191,8 +190,6 @@ export const locationDbRows: LocationDbRow[] = [
     lastActiveDate: "1922",
     image: "/images/loc-db-tuni-baba.jpg",
     imageAlt: "Steep canyon walls at Tuni Baba with a shallow stream below",
-    variant: "expanded",
-    watermark: 1,
   },
   {
     title: "A home in Kifri",
@@ -202,8 +199,6 @@ export const locationDbRows: LocationDbRow[] = [
     lastActiveDate: "1922",
     image: "/images/loc-db-home-in-kifri.jpg",
     imageAlt: "Courtyard home shaded by palm trees in Kifri",
-    variant: "expanded",
-    watermark: 2,
   },
   {
     title: "Abandoned Prison",
@@ -213,7 +208,6 @@ export const locationDbRows: LocationDbRow[] = [
     lastActiveDate: "1922",
     image: "/images/loc-db-abandoned-prison.jpg",
     imageAlt: "Rows of wire fencing in the abandoned Kifri prison yard",
-    variant: "expanded",
   },
   {
     title: "Abandoned tobacco factory",
@@ -221,7 +215,6 @@ export const locationDbRows: LocationDbRow[] = [
     type: "Archeological Site",
     image: "/images/loc-db-tobacco-factory.jpg",
     imageAlt: "Steel roof trusses inside the abandoned tobacco factory",
-    variant: "compact",
   },
   {
     title: "Ahmed Awa waterfall",
@@ -229,7 +222,6 @@ export const locationDbRows: LocationDbRow[] = [
     type: "Archeological Site",
     image: "/images/loc-db-ahmed-awa-waterfall.jpg",
     imageAlt: "Ahmed Awa waterfall flowing between mossy boulders",
-    variant: "compact",
   },
   {
     title: "Akre’s castle",
@@ -237,7 +229,6 @@ export const locationDbRows: LocationDbRow[] = [
     type: "Archeological Site",
     image: "/images/loc-db-akre-castle.jpg",
     imageAlt: "Terraced hillside buildings beneath Akre's old citadel",
-    variant: "compact",
   },
   {
     title: "Alqosh",
@@ -245,7 +236,6 @@ export const locationDbRows: LocationDbRow[] = [
     type: "Archeological Site",
     image: "/images/loc-db-alqosh.jpg",
     imageAlt: "Stone terraces climbing the hillside near Alqosh",
-    variant: "compact",
   },
 ];
 

@@ -91,6 +91,24 @@ export function CaretRight(props: SVGProps<SVGSVGElement>) {
   );
 }
 
+/** Ellipsis between distant page numbers in the database pager (Figma 529:1376):
+ *  three 2px dots spanning 15px of a 24px box. */
+export function DotsThree(props: SVGProps<SVGSVGElement>) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      xmlns="http://www.w3.org/2000/svg"
+      aria-hidden
+      {...props}
+    >
+      <circle cx="6" cy="12" r="1" />
+      <circle cx="12" cy="12" r="1" />
+      <circle cx="18" cy="12" r="1" />
+    </svg>
+  );
+}
+
 /** Phosphor MagnifyingGlass — the location-database search field, verbatim from Figma. */
 export function MagnifyingGlassIcon(props: SVGProps<SVGSVGElement>) {
   return (
