@@ -479,47 +479,37 @@ export const servicesComingSoon = {
   },
 } as const;
 
-/** Movies shot in Kurdistan (Figma "Movies Variant 3" carousel). Every poster
- *  renders in full colour; the active one is taller and carries its caption.
+/** Movies shot in Kurdistan (Figma 636:63 carousel). Every poster renders in
+ *  full colour at the same size, with its title and release year underneath.
  *  `href` is the external page opened (new tab) when a poster is clicked;
  *  leave it unset to fall back to an IMDb title search. */
 export type Movie = {
   src: string;
   title: string;
-  /** Caption under the active poster — “Bekas (2017)” per the Figma. */
-  caption: string;
+  /** Release year, shown under the title. TODO: the four the Figma names carry
+   *  its years verbatim; the rest are awaiting confirmed dates from the client
+   *  and render without a year line until then. */
+  year?: string;
   href?: string;
 };
 
 export const movies: Movie[] = [
-  {
-    src: "/images/poster-1.jpg",
-    title: "Før Snøen Faller",
-    caption: "Før Snøen Faller",
-  },
-  { src: "/images/poster-2.jpg", title: "Bekas", caption: "Bekas (2017)" },
+  { src: "/images/poster-1.jpg", title: "Før Snøen Faller" },
+  { src: "/images/poster-2.jpg", title: "Bekas", year: "2020" },
   {
     src: "/images/poster-3.jpg",
-    title: "L'Hirondelle",
-    caption: "L'Hirondelle",
+    title: "L’Hirondelle Die Schwalbe",
+    year: "2020",
   },
   {
     src: "/images/poster-4.jpg",
     title: "Das Milan Protokoll",
-    caption: "Das Milan Protokoll",
+    year: "2011",
   },
-  { src: "/images/poster-5.jpg", title: "A Noiva", caption: "A Noiva" },
-  { src: "/images/poster-6.jpg", title: "09", caption: "09" },
-  {
-    src: "/images/poster-7.jpg",
-    title: "Der Junge Siyar",
-    caption: "Der Junge Siyar",
-  },
-  {
-    src: "/images/poster-8.jpg",
-    title: "Baghdad Messi",
-    caption: "Baghdad Messi",
-  },
+  { src: "/images/poster-5.jpg", title: "A Noiva" },
+  { src: "/images/poster-6.jpg", title: "09" },
+  { src: "/images/poster-7.jpg", title: "Der Junge Siyar" },
+  { src: "/images/poster-8.jpg", title: "Baghdad Messi", year: "2011" },
 ];
 
 /** News from experts pool — shown three at a time; the arrows page through it.

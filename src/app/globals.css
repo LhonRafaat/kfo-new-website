@@ -144,6 +144,30 @@
     @apply translate-x-1;
   }
 
+  /* ---- Carousel arrow (movies slider, Figma 636:58) ----
+     A 32px arrow box over the same accent underline the links use. Figma draws
+     the pair with one arrow at 24% and the other at full ink with its underline
+     showing — the two states of one control, so the arrows rest dim and light
+     up (underline drawing in) on hover or keyboard focus. */
+  .carousel-arrow {
+    @apply flex w-[33px] flex-col items-center text-ink opacity-[0.24];
+    transition: opacity var(--fade-duration-interactive) var(--fade-ease);
+  }
+  .carousel-arrow > :first-child {
+    @apply my-[6.5px];
+  }
+  .carousel-arrow .underline-wave {
+    transition: clip-path var(--fade-duration-interactive) var(--fade-ease);
+  }
+  .carousel-arrow:hover,
+  .carousel-arrow:focus-visible {
+    @apply opacity-100;
+  }
+  .carousel-arrow:hover .underline-wave,
+  .carousel-arrow:focus-visible .underline-wave {
+    clip-path: inset(0 0 0 0);
+  }
+
   /* ---- Simple hover-grow underline for nav / footer links ---- */
   .link-underline {
     @apply relative inline-block transition-colors duration-300;
@@ -337,6 +361,12 @@
   .underline-wave,
   .reveal-underline .underline-wave {
     clip-path: inset(0 0 0 0);
+    transition: none;
+  }
+  /* The carousel arrows' underline is a hover state, not an entrance: keep it
+     hidden at rest here too, it just appears instead of drawing. */
+  .carousel-arrow .underline-wave {
+    clip-path: inset(0 100% 0 0);
     transition: none;
   }
   .crossfade {

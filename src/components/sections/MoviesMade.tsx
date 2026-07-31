@@ -1,14 +1,23 @@
 "use client";
 
 import Image from "next/image";
-import { useEffect, useState, type CSSProperties } from "react";
+import {
+  useEffect,
+  useRef,
+  useState,
+  type CSSProperties,
+  type KeyboardEvent,
+  type PointerEvent,
+} from "react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
-import { CarouselArrow } from "@/components/icons";
+import { CarouselArrow, Underline } from "@/components/icons";
 import { movies } from "@/lib/content";
 
 const SLIDE_MS = 700;
 const N = movies.length;
+/** Horizontal travel (px) that counts as a swipe rather than a tap. */
+const SWIPE_PX = 40;
 
 /** Three copies of the reel so it can travel in either direction without ever
  *  running out of posters. The index lives in the middle copy; once it drifts
@@ -17,18 +26,21 @@ const N = movies.length;
 const reel = [...movies, ...movies, ...movies];
 
 /**
- * "Movies made in Kurdistan" (Figma "Movies Variant 3", 317:674): a poster
- * strip that bleeds off both edges, looping endlessly. The active poster holds
- * the second slot — taller and captioned — while the reel slides through it.
+ * "Movies made in Kurdistan" (Figma: heading 317:677, arrows 636:58, strip
+ * 636:63, captions 636:68–636:87). A row of equal-sized posters that pages one
+ * film at a time and loops endlessly — no autoplay, since the design gives this
+ * slider no pause control (unlike the news pagination below it).
  *
- * Geometry is proportional to the 1280px design frame: slide 212px (16.56vw),
- * gap 23px (1.78vw), active slot at x=149px (11.64vw), strip 359px (28.05vw).
- * Every poster is absolutely positioned inside that fixed-height strip, so
- * resizing the active one can never reflow the sections below it.
+ * Geometry from the 1280 frame / 1184 content column: five 218×281 posters
+ * (r16) with a 24px gutter, each captioned 17px underneath with its title
+ * (Flecha M 500, 22/25) and year (Cadiz 16/24). Widths are fractions of the
+ * container rather than fixed pixels, so the same layout drops to four, three
+ * and two across as the viewport narrows.
  */
 export function MoviesMade() {
-  const [index, setIndex] = useState(N + 1); // Bekas, per the Figma
+  const [index, setIndex] = useState(N); // first real poster of the middle copy
   const [animate, setAnimate] = useState(true);
+  const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const step = (dir: 1 | -1) => {
     setAnimate(true);
@@ -58,107 +70,141 @@ export function MoviesMade() {
     }
   }, [index, animate]);
 
+  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
+    if (e.pointerType === "mouse") return; // mouse pages with the arrows
+    swipeStart.current = { x: e.clientX, y: e.clientY };
+  };
+
+  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
+    const from = swipeStart.current;
+    swipeStart.current = null;
+    if (!from) return;
+    const dx = e.clientX - from.x;
+    // Ignore anything that reads as a vertical scroll rather than a swipe.
+    if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(e.clientY - from.y))
+      return;
+    step(dx < 0 ? 1 : -1);
+  };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
+    if (e.key === "ArrowRight") step(1);
+    else if (e.key === "ArrowLeft") step(-1);
+    else return;
+    e.preventDefault();
+  };
+
   const ease = animate
-    ? "transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+    ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
     : "transition-none";
 
   return (
-    <section className="relative overflow-hidden">
-      <Container className="relative z-10 pt-12">
-        <div className="flex flex-col gap-4 md:flex-row md:items-start md:justify-between">
+    <section
+      className="relative"
+      aria-roledescription="carousel"
+      aria-label="Movies made in Kurdistan"
+    >
+      <Container className="relative z-10 pb-20 pt-10">
+        <div className="flex items-center justify-between gap-6">
           <Reveal as="h2" className="heading-section text-ink">
             Movies made <em className="font-normal italic">in Kurdistan</em>
           </Reveal>
-          <Reveal
-            as="p"
-            delay={100}
-            className="max-w-[374px] font-sans text-base leading-6 tracking-[0.02em] text-ink"
-          >
-            Here are some of the movies that were shot in different regions of
-            Kurdistan.
+
+          {/* 32px arrows, right-aligned with the content column. They rest at
+              24% ink and light up with the accent underline on hover/focus. */}
+          <Reveal delay={100} className="flex shrink-0 gap-[26px]">
+            <button
+              type="button"
+              onClick={() => step(-1)}
+              aria-label="Previous movies"
+              className="carousel-arrow"
+            >
+              <CarouselArrow direction="left" className="h-[19px] w-[22px]" />
+              <Underline
+                className="mt-2 h-[3px] w-[33px]"
+                strokeWidth={1.1003}
+              />
+            </button>
+            <button
+              type="button"
+              onClick={() => step(1)}
+              aria-label="Next movies"
+              className="carousel-arrow"
+            >
+              <CarouselArrow className="h-[19px] w-[22px]" />
+              <Underline
+                className="mt-2 h-[3px] w-[33px]"
+                strokeWidth={1.1003}
+              />
+            </button>
           </Reveal>
         </div>
-      </Container>
 
-      <Reveal className="relative z-10 mt-12 pb-12">
-        {/* Fixed-height strip — poster sizes animate inside it, never below it */}
-        <div
-          className={`flex h-[clamp(237px,28.05vw,359px)] w-max ${ease}`}
-          style={
-            {
-              "--slide": "clamp(140px, 16.56vw, 212px)",
-              "--gap": "clamp(12px, 1.78vw, 23px)",
-              gap: "var(--gap)",
-              transform:
-                "translateX(calc(11.64vw - var(--i) * (var(--slide) + var(--gap))))",
-              "--i": index,
-            } as CSSProperties
-          }
+        <Reveal
+          className="mt-8 overflow-hidden [--gap:0.75rem] [--per:2] sm:[--gap:1rem] sm:[--per:3] lg:[--gap:1.5rem] lg:[--per:4] xl:[--per:5]"
+          delay={150}
         >
-          {reel.map((movie, i) => {
-            const isActive = i === index;
-            return (
-              <a
-                key={i}
-                href={
-                  movie.href ??
-                  `https://www.imdb.com/find/?q=${encodeURIComponent(movie.title)}`
-                }
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label={`${movie.title} — open film page in a new tab`}
-                aria-current={isActive}
-                aria-hidden={i < N || i >= 2 * N}
-                tabIndex={i < N || i >= 2 * N ? -1 : 0}
-                className="relative block h-full w-[var(--slide)] shrink-0"
-              >
-                <div
-                  className={`absolute inset-x-0 overflow-hidden rounded ${ease}`}
-                  style={{
-                    height: isActive ? "89.69%" : "78.27%",
-                    bottom: isActive ? "10.31%" : "0%",
-                  }}
-                >
-                  <Image
-                    src={movie.src}
-                    alt={`${movie.title} — film poster`}
-                    fill
-                    sizes="(max-width: 640px) 40vw, 212px"
-                    className="object-cover"
-                  />
-                </div>
-                <p
-                  className={`absolute inset-x-0 bottom-0 font-sans text-lg font-bold leading-[1.5] text-ink ${ease} ${
-                    isActive ? "opacity-100" : "opacity-0"
-                  }`}
-                >
-                  {movie.caption}
-                </p>
-              </a>
-            );
-          })}
-        </div>
-
-        {/* Edge arrows, level with the top of the active poster */}
-        <Container className="pointer-events-none absolute inset-x-0 top-6 z-20 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => step(-1)}
-            aria-label="Previous movie"
-            className="pointer-events-auto flex h-8 w-8 items-center justify-center text-ink transition-colors duration-300 hover:text-accent"
+          <div
+            role="group"
+            tabIndex={0}
+            onPointerDown={onPointerDown}
+            onPointerUp={onPointerUp}
+            onPointerCancel={() => (swipeStart.current = null)}
+            onKeyDown={onKeyDown}
+            aria-label="Film posters — use the arrow keys to page through"
+            className={`flex w-full touch-pan-y outline-offset-8 ${ease}`}
+            style={
+              {
+                "--i": index,
+                // A slide plus its gutter is (100% + gap) / per — the same
+                // figure the transform steps by, so a step lands exactly one
+                // poster along whatever the current per-view is.
+                "--slide-w":
+                  "calc((100% - (var(--per) - 1) * var(--gap)) / var(--per))",
+                gap: "var(--gap)",
+                transform:
+                  "translateX(calc(-1 * var(--i) * (100% + var(--gap)) / var(--per)))",
+              } as CSSProperties
+            }
           >
-            <CarouselArrow direction="left" className="h-[19px] w-[22px]" />
-          </button>
-          <button
-            type="button"
-            onClick={() => step(1)}
-            aria-label="Next movie"
-            className="pointer-events-auto flex h-8 w-8 items-center justify-center text-ink transition-colors duration-300 hover:text-accent"
-          >
-            <CarouselArrow className="h-[19px] w-[22px]" />
-          </button>
-        </Container>
-      </Reveal>
+            {reel.map((movie, i) => {
+              const clone = i < N || i >= 2 * N;
+              return (
+                <a
+                  key={i}
+                  href={
+                    movie.href ??
+                    `https://www.imdb.com/find/?q=${encodeURIComponent(movie.title)}`
+                  }
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`${movie.title} — open film page in a new tab`}
+                  aria-hidden={clone}
+                  tabIndex={clone ? -1 : 0}
+                  className="block w-[var(--slide-w)] shrink-0"
+                >
+                  <div className="relative aspect-[218/281] overflow-hidden rounded-2xl">
+                    <Image
+                      src={movie.src}
+                      alt={`${movie.title} — film poster`}
+                      fill
+                      sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
+                      className="object-cover"
+                    />
+                  </div>
+                  <h3 className="mt-[17px] font-serif text-xl font-medium leading-[1.139] text-ink xl:text-[1.375rem]">
+                    {movie.title}
+                  </h3>
+                  {/* Kept in flow even when the year is unknown, so every
+                      caption block reserves the same height. */}
+                  <p className="mt-0.5 min-h-6 font-sans text-base leading-6 tracking-[0.02em] text-ink">
+                    {movie.year}
+                  </p>
+                </a>
+              );
+            })}
+          </div>
+        </Reveal>
+      </Container>
     </section>
   );
 }
