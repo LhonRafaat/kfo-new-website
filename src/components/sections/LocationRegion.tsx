@@ -19,7 +19,10 @@ export function LocationRegion({
 }: Pick<LocationEntry, "city" | "cityBlurb" | "pin" | "mapsUrl">) {
   return (
     <Container className="relative z-10 mt-16">
-      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[434fr_311fr_439fr]">
+      {/* No column gap at lg: the Figma's three columns tile the 1184 content
+          width exactly (434 + 311 + 439) and the map bleeds out of the middle
+          one over its neighbours. */}
+      <div className="grid grid-cols-1 items-start gap-10 lg:grid-cols-[434fr_311fr_439fr] lg:gap-0">
         <Reveal as="div">
           <Eyebrow>Location</Eyebrow>
           <h2 className="heading-section mt-4 text-ink">{city}</h2>

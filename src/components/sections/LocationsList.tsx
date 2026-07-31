@@ -107,7 +107,7 @@ export function LocationsList() {
   const activeCount = cities.size + types.size + (query ? 1 : 0);
 
   return (
-    <Container className="relative z-10 pb-18 pt-0">
+    <Container className="relative z-10 pb-12 pt-0">
       <Reveal
         as="div"
         className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
@@ -334,7 +334,7 @@ function LocationCard({ row }: { row: LocationDbRow }) {
       <div className="relative flex h-full flex-col justify-center p-6 text-white md:p-12">
         <div className="flex max-w-120 flex-col gap-2.5">
           <div className="flex flex-col gap-1">
-            <h3 className="font-serif text-[1.375rem] font-medium leading-[1.139]">
+            <h3 className="font-serif italic text-[1.375rem] font-medium leading-[1.139]">
               {row.title}
             </h3>
             <p className="font-sans text-base leading-[1.4]">
