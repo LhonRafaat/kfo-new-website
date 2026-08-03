@@ -360,6 +360,26 @@
     translate var(--fade-duration-interactive) var(--fade-ease),
     opacity var(--fade-duration-interactive) var(--fade-ease);
 }
+/* ---- Contact form fields (Figma 508:1225 / 508:1231) ----
+   The frame gives each field a label and a hairline with no room for typed
+   text between them, so the label *is* the placeholder and the hairline is the
+   field's only border. Focus moves that border to the accent. */
+.field-rule {
+  /* `block` matters: an inline-block field leaves descender space inside its
+     wrapper, which drifts every field below it off the frame's grid. */
+  @apply block w-full border-b border-ink/16 bg-transparent font-sans text-base font-semibold tracking-label text-ink;
+  line-height: 1.4; /* 22.4px, the frame's label leading */
+  border-radius: 0;
+  transition: border-color var(--fade-duration-interactive) var(--fade-ease);
+}
+.field-rule::placeholder {
+  color: color-mix(in srgb, var(--ink) 64%, transparent);
+}
+.field-rule:focus {
+  outline: none;
+  border-bottom-color: var(--color-accent, #ff6600);
+}
+
 .disclosure-panel {
   display: grid;
   grid-template-rows: 0fr;

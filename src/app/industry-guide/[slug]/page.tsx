@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AgencyDetail } from "@/components/sections/AgencyDetail";
-import { industryAgencies, industryProfiles } from "@/lib/content";
+import { industryAgencies, industryAgencyProfile } from "@/lib/content";
 
 type Params = { params: Promise<{ slug: string }> };
 
@@ -16,10 +16,9 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const agency = industryAgencies.find((a) => a.slug === slug);
   if (!agency) return {};
 
-  const profile = industryProfiles[agency.website];
   return {
-    title: profile.displayName,
-    description: profile.blurb,
+    title: industryAgencyProfile.displayName,
+    description: industryAgencyProfile.blurb,
     alternates: { canonical: `/industry-guide/${slug}` },
   };
 }
@@ -41,7 +40,7 @@ export default async function AgencyPage({ params }: Params) {
 
         <Navbar variant="solid" />
         <main className="relative">
-          <AgencyDetail agency={agency} />
+          <AgencyDetail photo={agency.image} photoAlt={agency.imageAlt} />
         </main>
       </div>
       <Footer />

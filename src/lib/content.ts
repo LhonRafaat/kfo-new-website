@@ -516,51 +516,32 @@ export type IndustryAgency = {
 };
 
 /**
- * Detail-page copy for a listing (Figma "Agency Opened", 507:906), keyed by the
- * listing's `website` — the mock reuses two brands across its nine cards, and
- * the detail frame is authored for one of them.
+ * Detail-page copy for a listing (Figma "Agency Opened", 507:906).
  *
- * COPY NOTE — only `baluagency.com` is real design copy (verbatim from the
- * frame, contact details included). `admedia.agency` is written by me from the
- * only thing the Figma says about that brand, its domain and logo: the blurb is
- * placeholder and its phone/address are deliberately **absent** rather than
- * invented, so the contact table drops those rows the way the location cards
- * drop an unknown area. Replace both when client data lands.
+ * COPY NOTE — the Figma authors exactly one detail page, for Ballu Agency, and
+ * every listing opens onto it verbatim: same name, mark, blurb, category,
+ * domain and contact details. That is deliberate, not an oversight to fill in —
+ * the directory's nine cards are placeholders too. Swap this for per-listing
+ * records when the real dataset lands.
  */
-export type IndustryAgencyProfile = {
+export const industryAgencyProfile = {
   /** Trading name, shown as the detail page's title. The directory cards keep
    *  the Figma's "Agency Name" placeholder; this is the real one. */
-  displayName: string;
+  displayName: "Ballu Agency",
   /** Logo mark centred in the black card at the top of the detail page. */
-  mark: string;
-  blurb: string;
-  email: string;
-  phone?: string;
+  mark: "/images/industry-agency-mark-ballu.png",
+  category: "Post Production",
+  website: "baluagency.com",
+  blurb:
+    "BALLU Company is a service-based company for media production and advertising that is based in Iraq. BALLU works locally and internationally with high-quality and inclusive services including data insight, research, and production.",
+  email: "info@baluagency.com",
+  phone: "+964 771 585 5535",
   /** One entry per rendered line, right-aligned like the Figma. */
-  address?: string[];
-};
-
-export const industryProfiles: Record<string, IndustryAgencyProfile> = {
-  "baluagency.com": {
-    displayName: "Ballu Agency",
-    mark: "/images/industry-agency-mark-ballu.png",
-    blurb:
-      "BALLU Company is a service-based company for media production and advertising that is based in Iraq. BALLU works locally and internationally with high-quality and inclusive services including data insight, research, and production.",
-    email: "info@baluagency.com",
-    phone: "+964 771 585 5535",
-    address: [
-      "Hera business center, Floor 3, Office F2",
-      "24 46001 Sulaymaniyah Iraq",
-    ],
-  },
-  "admedia.agency": {
-    displayName: "AD Media Agency",
-    mark: "/images/industry-agency-mark-admedia.png",
-    blurb:
-      "AD Media Agency is a Slemani-based creative and production studio working across advertising, branded content and post-production. It supports national and international productions filming in the Kurdistan Region.",
-    email: "info@admedia.agency",
-  },
-};
+  address: [
+    "Hera business center, Floor 3, Office F2",
+    "24 46001 Sulaymaniyah Iraq",
+  ],
+} as const;
 
 /** Closing line under the contact table (Figma 507:956). */
 export const industryAgencyContactLine =
@@ -667,6 +648,31 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
 ];
+
+/* ---------------------------------------------------------------------------
+   /contact — Figma "Contact Us" (508:1077)
+   ------------------------------------------------------------------------- */
+
+export const contactPage = {
+  heading: "Let's work together!",
+  intro:
+    "We are currently developing each of our departments. Meanwhile, please send us a letter if interested.",
+  image: {
+    src: "/images/contact-valley.jpg",
+    alt: "Snow-capped ridge above a wooded river valley in the Kurdistan Region",
+  },
+  form: {
+    name: "Name",
+    email: "E-mail",
+    message: "Tell us what you can help with",
+    submit: "Submit Message",
+  },
+  /** Commission's own details, verbatim from the frame's table (541:2415). */
+  email: "info@kfo.krd",
+  phone: "+964 772 139 2923",
+  address:
+    "Hera Business Center Midya Street, Floor 3, Office 30-31 As Sulaymaniyah, 46001 Iraq",
+} as const;
 
 /** Movies shot in Kurdistan (Figma 636:63 carousel). Every poster renders in
  *  full colour at the same size, with its title and release year underneath.
