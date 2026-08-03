@@ -39,9 +39,10 @@ export const quickLinks = [
     featured: false,
   },
   {
+    // There is no movies page — the reel lives further down this same page.
     label: "Find movies",
     title: "Made in Kurdistan",
-    href: "/movies",
+    href: "#movies-made-in-kurdistan",
     featured: false,
   },
   {

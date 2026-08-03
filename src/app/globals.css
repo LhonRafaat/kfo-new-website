@@ -39,6 +39,30 @@
     background: var(--ink);
     color: var(--cream);
   }
+
+  /* Anything clickable gets the hand cursor. Tailwind v4's Preflight dropped
+     the `button { cursor: pointer }` rule v3 shipped, which left every button
+     on the site (menu toggle, carousel arrows, filter chips, pager, newsletter
+     submit) on the default arrow while real links kept the hand. */
+  a[href],
+  button,
+  summary,
+  label[for],
+  [role="button"],
+  [role="tab"],
+  input[type="button"],
+  input[type="submit"],
+  input[type="reset"],
+  input[type="checkbox"],
+  input[type="radio"] {
+    cursor: pointer;
+  }
+
+  /* …except when it can't be clicked. */
+  button:disabled,
+  [aria-disabled="true"] {
+    cursor: default;
+  }
 }
 
 @layer components {

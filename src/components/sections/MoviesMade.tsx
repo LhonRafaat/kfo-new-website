@@ -99,7 +99,9 @@ export function MoviesMade() {
 
   return (
     <section
-      className="relative"
+      // Target of the hero's "Find movies / Made in Kurdistan" quick link.
+      id="movies-made-in-kurdistan"
+      className="relative scroll-mt-6"
       aria-roledescription="carousel"
       aria-label="Movies made in Kurdistan"
     >
