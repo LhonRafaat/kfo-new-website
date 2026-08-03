@@ -376,8 +376,8 @@
   color: color-mix(in srgb, var(--ink) 64%, transparent);
 }
 .field-rule:focus {
+  @apply border-accent;
   outline: none;
-  border-bottom-color: var(--color-accent, #ff6600);
 }
 
 .disclosure-panel {

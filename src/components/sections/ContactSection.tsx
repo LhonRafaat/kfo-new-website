@@ -44,7 +44,9 @@ export function ContactSection() {
             </p>
           </Reveal>
 
-          <Reveal delay={120} className="mt-12">
+          {/* `reveal-underline` opts the submit rule into drawing itself in
+              with the form, the same gesture as the services page title. */}
+          <Reveal delay={120} className="reveal-underline mt-12">
             <ContactForm />
           </Reveal>
         </div>

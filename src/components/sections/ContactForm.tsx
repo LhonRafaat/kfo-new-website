@@ -58,7 +58,9 @@ export function ContactForm() {
       </div>
 
       <div className="flex flex-col items-start gap-2">
-        <button type="submit" className="group inline-flex flex-col pt-4">
+        {/* `text-left`: a <button> centres its text by UA default, which would
+            push the label off the form's left edge. */}
+        <button type="submit" className="group inline-flex flex-col pt-4 text-left">
           <span className="font-serif text-xl font-medium italic leading-[1.139] tracking-label text-ink transition-colors duration-300 group-hover:text-accent">
             {contactPage.form.submit}
           </span>

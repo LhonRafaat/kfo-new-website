@@ -202,7 +202,10 @@ export function Underline({
     >
       <path
         d="M0 5.55005C43.9423 5.55005 85.3846 -1.07425 115 0.926624"
-        stroke="#FF6600"
+        // `.underline-wave` sets `text-accent`, so this is the Figma orange
+        // everywhere by default — but a `text-*` utility on the element can now
+        // recolour it (the contact form's submit rule is #645756).
+        stroke="currentColor"
         strokeWidth={strokeWidth ?? 1.10035}
         // `preserveAspectRatio="none"` squashes the box hard vertically, which
         // would thin the stroke well below its Figma weight. Pinning it to the
