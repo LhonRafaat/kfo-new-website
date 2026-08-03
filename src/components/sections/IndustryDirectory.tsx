@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import {
   Fragment,
   useEffect,
@@ -342,6 +343,9 @@ function RefinePanel({
  * black avatar and agency name, then three label/value rows separated by
  * hairlines at 16% black. Everything inside is inset 16px; the rows and the
  * dividers sit 12px apart.
+ *
+ * The whole card is the link to its detail page; the photo eases up a touch on
+ * hover, the same affordance the location cards use.
  */
 function AgencyCard({
   agency,
@@ -357,52 +361,57 @@ function AgencyCard({
   ];
 
   return (
-    <Reveal
-      as="article"
-      delay={delay}
-      className="flex flex-col overflow-hidden rounded-lg bg-card pb-3"
-    >
-      <div className="relative aspect-379/195 w-full">
-        <Image
-          src={agency.image}
-          alt={agency.imageAlt}
-          fill
-          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 379px"
-          className="object-cover"
-        />
-      </div>
-
-      <div className="mt-3 flex items-center gap-4 px-4">
-        <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black">
+    <Reveal as="article" delay={delay} className="flex">
+      <Link
+        href={`/industry-guide/${agency.slug}`}
+        className="group flex w-full flex-col overflow-hidden rounded-lg bg-card pb-3"
+      >
+        <div className="relative aspect-379/195 w-full overflow-hidden">
           <Image
-            src={agency.logo}
-            alt=""
-            width={46}
-            height={41}
-            className="h-10.25 w-11.5 object-contain"
+            src={agency.image}
+            alt={agency.imageAlt}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 379px"
+            // Figma desaturates the one colour photo among its six uploads
+            // (fills on 425:292 / 507:729 carry saturation -1). Kept as a CSS
+            // filter rather than baked into the asset so a colour photo dropped
+            // in later still reads as the design intends.
+            className="scale-100 object-cover grayscale transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none"
           />
-        </span>
-        <h3 className="font-serif text-xl font-medium leading-normal text-black">
-          {agency.name}
-        </h3>
-      </div>
+        </div>
 
-      {rows.map((row) => (
-        <Fragment key={row.label}>
-          {/* Figma draws these as zero-height LINE nodes, so the hairline is
-              pulled back out of the flow (`h-px -mb-px`) and the 12px gaps on
-              either side of it stay exactly 12px. */}
-          <div aria-hidden className="mt-3 -mb-px h-px bg-black/16" />
-          <div className="mt-3 flex h-6 items-center justify-between gap-4 px-4">
-            <span className="font-serif text-base font-medium leading-6 text-ink">
-              {row.label}
-            </span>
-            <span className="font-sans text-base font-medium leading-6 text-ink">
-              {row.value}
-            </span>
-          </div>
-        </Fragment>
-      ))}
+        <div className="mt-3 flex items-center gap-4 px-4">
+          <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black">
+            <Image
+              src={agency.logo}
+              alt=""
+              width={46}
+              height={41}
+              className="h-10.25 w-11.5 object-contain"
+            />
+          </span>
+          <h3 className="font-serif text-xl font-medium leading-normal text-black transition-colors duration-300 group-hover:text-accent">
+            {agency.name}
+          </h3>
+        </div>
+
+        {rows.map((row) => (
+          <Fragment key={row.label}>
+            {/* Figma draws these as zero-height LINE nodes, so the hairline is
+                pulled back out of the flow (`h-px -mb-px`) and the 12px gaps on
+                either side of it stay exactly 12px. */}
+            <div aria-hidden className="mt-3 -mb-px h-px bg-black/16" />
+            <div className="mt-3 flex h-6 items-center justify-between gap-4 px-4">
+              <span className="font-serif text-base font-medium leading-6 text-ink">
+                {row.label}
+              </span>
+              <span className="font-sans text-base font-medium leading-6 text-ink">
+                {row.value}
+              </span>
+            </div>
+          </Fragment>
+        ))}
+      </Link>
     </Reveal>
   );
 }

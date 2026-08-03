@@ -502,6 +502,8 @@ export const industryQuickFilters = [
 export const industryPerPage = 9;
 
 export type IndustryAgency = {
+  /** URL segment of this listing's detail page, /industry-guide/[slug]. */
+  slug: string;
   name: string;
   location: string;
   website: string;
@@ -514,6 +516,57 @@ export type IndustryAgency = {
 };
 
 /**
+ * Detail-page copy for a listing (Figma "Agency Opened", 507:906), keyed by the
+ * listing's `website` — the mock reuses two brands across its nine cards, and
+ * the detail frame is authored for one of them.
+ *
+ * COPY NOTE — only `baluagency.com` is real design copy (verbatim from the
+ * frame, contact details included). `admedia.agency` is written by me from the
+ * only thing the Figma says about that brand, its domain and logo: the blurb is
+ * placeholder and its phone/address are deliberately **absent** rather than
+ * invented, so the contact table drops those rows the way the location cards
+ * drop an unknown area. Replace both when client data lands.
+ */
+export type IndustryAgencyProfile = {
+  /** Trading name, shown as the detail page's title. The directory cards keep
+   *  the Figma's "Agency Name" placeholder; this is the real one. */
+  displayName: string;
+  /** Logo mark centred in the black card at the top of the detail page. */
+  mark: string;
+  blurb: string;
+  email: string;
+  phone?: string;
+  /** One entry per rendered line, right-aligned like the Figma. */
+  address?: string[];
+};
+
+export const industryProfiles: Record<string, IndustryAgencyProfile> = {
+  "baluagency.com": {
+    displayName: "Ballu Agency",
+    mark: "/images/industry-agency-mark-ballu.png",
+    blurb:
+      "BALLU Company is a service-based company for media production and advertising that is based in Iraq. BALLU works locally and internationally with high-quality and inclusive services including data insight, research, and production.",
+    email: "info@baluagency.com",
+    phone: "+964 771 585 5535",
+    address: [
+      "Hera business center, Floor 3, Office F2",
+      "24 46001 Sulaymaniyah Iraq",
+    ],
+  },
+  "admedia.agency": {
+    displayName: "AD Media Agency",
+    mark: "/images/industry-agency-mark-admedia.png",
+    blurb:
+      "AD Media Agency is a Slemani-based creative and production studio working across advertising, branded content and post-production. It supports national and international productions filming in the Kurdistan Region.",
+    email: "info@admedia.agency",
+  },
+};
+
+/** Closing line under the contact table (Figma 507:956). */
+export const industryAgencyContactLine =
+  "For logistics, Public Relations, and Information please contact us.";
+
+/**
  * COPY NOTE — the Figma authors this directory entirely with placeholder data:
  * every card is titled "Agency Name", every location is Sulaymaniyah, and the
  * websites alternate between two stock brands. It is reproduced verbatim here
@@ -524,6 +577,7 @@ export type IndustryAgency = {
  */
 export const industryAgencies: IndustryAgency[] = [
   {
+    slug: "agency-1",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "admedia.agency",
@@ -533,6 +587,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-2",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "baluagency.com",
@@ -542,6 +597,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-3",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "admedia.agency",
@@ -551,6 +607,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-4",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "baluagency.com",
@@ -560,6 +617,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-5",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "admedia.agency",
@@ -569,6 +627,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-6",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "baluagency.com",
@@ -578,6 +637,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-7",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "admedia.agency",
@@ -587,6 +647,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-8",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "admedia.agency",
@@ -596,6 +657,7 @@ export const industryAgencies: IndustryAgency[] = [
     logo: "/images/industry-agency-logo.png",
   },
   {
+    slug: "agency-9",
     name: "Agency Name",
     location: "Sulaymaniyah",
     website: "baluagency.com",
