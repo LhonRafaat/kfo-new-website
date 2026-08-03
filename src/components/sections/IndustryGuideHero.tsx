@@ -24,6 +24,9 @@ export function IndustryGuideHero() {
         fill
         priority
         sizes="100vw"
+        // The photo is a near-flat dark grayscale sky; at the optimiser's
+        // default quality of 75 the gradient bands into visible contours.
+        quality={92}
         className="object-cover object-center"
       />
 
