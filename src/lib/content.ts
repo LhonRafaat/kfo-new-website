@@ -469,6 +469,142 @@ export const servicesComingSoon = {
   },
 } as const;
 
+/* ---------------------------------------------------------------------------
+   /industry-guide — Figma "Industry Guide Page - V1" (425:96)
+   ------------------------------------------------------------------------- */
+
+/** Hero band (Figma 507:789 + 507:793) — centred over a darkened grayscale sky.
+ *  `titleItalic` is the run the Figma sets in Flecha Italic Regular. */
+export const industryGuideHero = {
+  title: "Kurdistan Film Commission’s ",
+  titleItalic: "Industry Guide",
+  intro:
+    "The KFO Slemani Industry Guide is the first for filmmaking in the region. It showcases Slemani's offerings. You can find specific services or companies for your project. To include your company, contact us.",
+  image: {
+    src: "/images/industry-hero.jpg",
+    alt: "Cloud banking against snow-covered peaks above Slemani",
+  },
+} as const;
+
+/** Headline on the directory's filter bar (Figma 505:117). */
+export const industryGuideCount = "1966 professionals waiting.";
+
+/** Quick-filter chips beside the headline (Figma 505:118). Verbatim from the
+ *  frame, including its mixed casing — the bar renders them uppercase. */
+export const industryQuickFilters = [
+  "Sales",
+  "post-production",
+  "rental",
+] as const;
+
+/** Directory entries shown per page, matching the Figma's nine cards. */
+export const industryPerPage = 9;
+
+export type IndustryAgency = {
+  name: string;
+  location: string;
+  website: string;
+  /** Third row of the card. The Figma labels it "Type" on some cards and
+   *  "Category" on others, so the label travels with the entry. */
+  field: { label: string; value: string };
+  image: string;
+  imageAlt: string;
+  logo: string;
+};
+
+/**
+ * COPY NOTE — the Figma authors this directory entirely with placeholder data:
+ * every card is titled "Agency Name", every location is Sulaymaniyah, and the
+ * websites alternate between two stock brands. It is reproduced verbatim here
+ * (including the duplicated team photos and the Type/Category label switch)
+ * rather than invented around, so the real 1966-strong dataset can drop
+ * straight in. The circular avatar uses the stock mark the Figma paints on
+ * every card; a real entry would carry its own logo.
+ */
+export const industryAgencies: IndustryAgency[] = [
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "admedia.agency",
+    field: { label: "Type", value: "Pre" },
+    image: "/images/industry-agency-1.jpg",
+    imageAlt: "Agency team photographed together in a bright studio",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "baluagency.com",
+    field: { label: "Category", value: "Post Production" },
+    image: "/images/industry-agency-2.jpg",
+    imageAlt: "Agency crew leaning into frame for a group portrait",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "admedia.agency",
+    field: { label: "Type", value: "Pre" },
+    image: "/images/industry-agency-3.jpg",
+    imageAlt: "Agency team in black tailoring against a dark backdrop",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "baluagency.com",
+    field: { label: "Category", value: "Post Production" },
+    image: "/images/industry-agency-4.jpg",
+    imageAlt: "Black-and-white group portrait of an agency's crew",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "admedia.agency",
+    field: { label: "Type", value: "Pre" },
+    image: "/images/industry-agency-5.jpg",
+    imageAlt: "Agency team standing shoulder to shoulder in suiting",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "baluagency.com",
+    field: { label: "Category", value: "Post Production" },
+    image: "/images/industry-agency-6.jpg",
+    imageAlt: "Editorial group portrait of an agency's production team",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "admedia.agency",
+    field: { label: "Type", value: "Pre" },
+    image: "/images/industry-agency-3.jpg",
+    imageAlt: "Agency team in black tailoring against a dark backdrop",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "admedia.agency",
+    field: { label: "Type", value: "Pre" },
+    image: "/images/industry-agency-1.jpg",
+    imageAlt: "Agency team photographed together in a bright studio",
+    logo: "/images/industry-agency-logo.png",
+  },
+  {
+    name: "Agency Name",
+    location: "Sulaymaniyah",
+    website: "baluagency.com",
+    field: { label: "Category", value: "Post Production" },
+    image: "/images/industry-agency-2.jpg",
+    imageAlt: "Agency crew leaning into frame for a group portrait",
+    logo: "/images/industry-agency-logo.png",
+  },
+];
+
 /** Movies shot in Kurdistan (Figma 636:63 carousel). Every poster renders in
  *  full colour at the same size, with its title and release year underneath.
  *  `href` is the external page opened (new tab) when a poster is clicked;

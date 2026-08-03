@@ -18,6 +18,8 @@ const config: Config = {
         },
         // Refine-search dropdown on the location database list (Figma 338:516).
         panel: "#D9CFC5",
+        // Industry Guide directory card surface (Figma 425:221).
+        card: "#DFD9D1",
         accent: {
           DEFAULT: "#FF6600",
           soft: "#F19352",
