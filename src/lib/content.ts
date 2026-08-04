@@ -649,6 +649,36 @@ export const industryAgencies: IndustryAgency[] = [
   },
 ];
 
+/**
+ * Founder's full message (Figma "Testimonial Section" 537:1923) — the bottom
+ * sheet the homepage testimonial's "Read Full Message" opens.
+ *
+ * COPY NOTE — the frame's heading reads "Biography & title is needed.", which
+ * is the designer asking the client for one rather than copy to ship. It is
+ * replaced here with the card's own subheading so the sheet reads properly;
+ * swap in the real biography title when it lands. The frame also gives the
+ * LinkedIn link a label but no URL, so `linkedin` points at a search for the
+ * founder rather than inventing a profile address — replace with the real one.
+ */
+export const founderMessage = {
+  heading: "Founder’s ",
+  headingItalic: "Statement & Vision",
+  /** Verbatim from 537:1933. */
+  body: "As a film production consultant, I work on various cultural, film affairs, and production projects. I have been developing a system for the sustainable film industry in Kurdistan-Iraq based on various research, statistics, networking, and lobbying all around the world. Next to this, I'm also a freelancer producer-production consultant to individuals, companies and government officials.",
+  name: "Bavi Yassin",
+  // The frame types "Commision"; shipped corrected, like the homepage's
+  // "Filiming" → "Filming".
+  title: "Founder, Kurdistan Film Commission",
+  linkedin: {
+    label: "LinkedIn Profile",
+    href: "https://www.linkedin.com/search/results/people/?keywords=Bavi%20Yassin",
+  },
+  image: {
+    src: "/images/founder-modal.jpg",
+    alt: "Bavi Yassin, Founder of the Kurdistan Film Commission",
+  },
+} as const;
+
 /* ---------------------------------------------------------------------------
    /contact — Figma "Contact Us" (508:1077)
    ------------------------------------------------------------------------- */

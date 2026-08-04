@@ -402,6 +402,10 @@
   .news-rise {
     animation: none;
   }
+  /* The founder's-message sheet appears rather than rising into place. */
+  .animate-sheet-in {
+    animation: none;
+  }
   .underline-wave,
   .reveal-underline .underline-wave {
     clip-path: inset(0 0 0 0);

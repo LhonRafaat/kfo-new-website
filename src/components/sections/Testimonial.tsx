@@ -1,7 +1,7 @@
 import Image from "next/image";
 import { Container } from "@/components/ui/Container";
-import { AccentLink } from "@/components/ui/AccentLink";
 import { Reveal } from "@/components/Reveal";
+import { FounderMessage } from "@/components/sections/FounderMessage";
 
 /**
  * Founder testimonial card (Figma 513:62): a rounded slate panel — B&W
@@ -87,8 +87,10 @@ export function Testimonial() {
                   heritage.
                 </p>
               </Reveal>
+              {/* Opens the founder's-message bottom sheet (Figma 537:1923)
+                  rather than navigating away. */}
               <div className="mt-4">
-                <AccentLink href="/about">Read Full Message</AccentLink>
+                <FounderMessage />
               </div>
             </div>
           </div>
