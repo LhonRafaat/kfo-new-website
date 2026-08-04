@@ -12,13 +12,28 @@ import {
 } from "react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
-import { CaretRight, DotsThree, MagnifyingGlassIcon } from "@/components/icons";
 import {
+  CaretRight,
+  DotsThree,
+  MagnifyingGlassIcon,
+  Underline,
+} from "@/components/icons";
+import {
+  LocationAccessBar,
+  type AccessStatus,
+} from "@/components/sections/LocationAccessBar";
+import {
+  freeLocations,
   locationDbRows,
   locationPins,
+  locationsGate,
   locationsPerPage,
   type LocationDbRow,
 } from "@/lib/content";
+
+/** Remembers a verified visitor between visits. See the note on
+ *  `locationsGate` in content.ts — there is no backend behind this yet. */
+const UNLOCKED_KEY = "kfo:locations-unlocked";
 
 const primaryCities = locationPins.filter((p) => p.primary).map((p) => p.city);
 const categories = Array.from(new Set(locationDbRows.map((row) => row.type)));
@@ -41,8 +56,30 @@ export function LocationsList() {
   const [panelOpen, setPanelOpen] = useState(false);
   const [categoryOpen, setCategoryOpen] = useState(false);
   const [page, setPage] = useState(1);
+  const [unlocked, setUnlocked] = useState(false);
+  const [status, setStatus] = useState<AccessStatus | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // `?verified=1` stands in for the link the verification e-mail would carry.
+  // Read from `window` rather than `useSearchParams` so this page keeps
+  // prerendering without a Suspense boundary.
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("verified") === "1") {
+      localStorage.setItem(UNLOCKED_KEY, "1");
+      setUnlocked(true);
+      setStatus("verified");
+      return;
+    }
+    if (localStorage.getItem(UNLOCKED_KEY) === "1") setUnlocked(true);
+  }, []);
+
+  // The success notice states something the page now shows for itself.
+  useEffect(() => {
+    if (status !== "verified") return;
+    const t = setTimeout(() => setStatus(null), 6000);
+    return () => clearTimeout(t);
+  }, [status]);
 
   const toggleSet = (
     setter: Dispatch<SetStateAction<Set<string>>>,
@@ -183,9 +220,20 @@ export function LocationsList() {
             No locations match your filters yet — try clearing a few.
           </p>
         ) : (
-          shown.map((row) => <LocationCard key={row.title} row={row} />)
+          shown.map((row, i) => (
+            <LocationCard
+              key={row.title}
+              row={row}
+              locked={!unlocked && start + i >= freeLocations}
+              onRequestAccess={() => setStatus("email")}
+            />
+          ))
         )}
       </div>
+
+      {status && (
+        <LocationAccessBar status={status} onSubmit={() => setStatus("sent")} />
+      )}
 
       {filtered.length > 0 && (
         <Pager
@@ -310,7 +358,15 @@ function RefinePanel({
  * r16, with black fading left→right at 64% over the photo so the white details
  * stay legible, and the text block centred vertically in 48px of padding.
  */
-function LocationCard({ row }: { row: LocationDbRow }) {
+function LocationCard({
+  row,
+  locked,
+  onRequestAccess,
+}: {
+  row: LocationDbRow;
+  locked: boolean;
+  onRequestAccess: () => void;
+}) {
   const fields = [
     { label: "Type", value: row.type },
     { label: "Area", value: row.area },
@@ -361,6 +417,54 @@ function LocationCard({ row }: { row: LocationDbRow }) {
 
   const shell =
     "group relative block h-90 w-full overflow-hidden rounded-2xl md:h-100";
+
+  // Registration gate (Figma "Frame 204", 651:524): the card blurs and darkens
+  // behind a centred invitation. `scale-105` pushes the blur's soft edges past
+  // the rounded clip so the corners stay crisp.
+  if (locked) {
+    return (
+      // `reveal-underline` opts the CTA's rule into drawing itself in with the
+      // card — `.underline-wave` starts fully clipped otherwise.
+      <Reveal as="article" className="reveal-underline">
+        <div className={shell}>
+          <div aria-hidden className="absolute inset-0 scale-105 blur-[6px]">
+            {body}
+          </div>
+          {/* Figma's own render of this state sits at ~12/255 mean luminance;
+              80% left the card at 17, 85% lands on 12.5. */}
+          <div aria-hidden className="absolute inset-0 bg-black/85" />
+
+          <div className="relative flex h-full flex-col items-center justify-center px-6 text-center text-white">
+            <p className="font-serif text-[1.375rem] font-medium italic leading-[1.139]">
+              {locationsGate.title}
+            </p>
+            {/* 4px under the title, per the container's item spacing. */}
+            <p className="mt-1 font-sans text-base leading-[1.4]">
+              {locationsGate.body}
+            </p>
+
+            <button
+              type="button"
+              onClick={onRequestAccess}
+              className="mt-12 pb-2.5 pt-4 transition-colors duration-300 hover:text-accent"
+            >
+              <span className="relative inline-block">
+                <span className="font-serif text-xl font-medium capitalize italic leading-[1.139] tracking-label">
+                  {locationsGate.cta}
+                </span>
+                {/* Figma draws the rule exactly as wide as the label. The wave
+                    fills 115 of the SVG's 150-unit box, so a box of 130.44% of
+                    the label does that at any text size — and taking it out of
+                    the flow keeps the button's width the label's, so the group
+                    centres on the marks rather than on the box's empty tail. */}
+                <Underline className="absolute left-0 top-full mt-[3px] !h-[7px] w-[130.44%]" />
+              </span>
+            </button>
+          </div>
+        </div>
+      </Reveal>
+    );
+  }
 
   return (
     <Reveal as="article">

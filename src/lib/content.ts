@@ -163,6 +163,30 @@ export type LocationDbRow = {
 /** Rows shown per page of the database list, matching the Figma's five cards. */
 export const locationsPerPage = 5;
 
+/** Rows readable without registering; everything after is gated (Figma 651:524). */
+export const freeLocations = 3;
+
+/**
+ * The registration gate over the locked cards (Figma "Frame 204", 651:524) and
+ * the three states of the access bar it opens (Figma "Bar Statuses", 651:493).
+ *
+ * NOTE — there is no backend behind this. Submitting an address does not send
+ * anything; the flow advances to "sent", and the verified state is reached by
+ * opening the page with `?verified=1` (standing in for the emailed link), which
+ * is then remembered in localStorage. Wire the real endpoint into
+ * `LocationsList`'s `onSubmit` and drop the query-string shortcut when one
+ * exists.
+ */
+export const locationsGate = {
+  title: "You can’t access this item.",
+  body: "You will need to register to access this item.",
+  cta: "access all database items",
+  prompt: "Enter your e-mail to access all database locations.",
+  placeholder: "you@example.com",
+  sent: "Please check your email for a verification request.",
+  verified: "Email verified. You can now check our location database.",
+} as const;
+
 export const locationDbRows: LocationDbRow[] = [
   {
     title: "Archaeological remains in Bazyan",
