@@ -669,6 +669,7 @@ export const founderMessage = {
   // The frame types "Commision"; shipped corrected, like the homepage's
   // "Filiming" → "Filming".
   title: "Founder, Kurdistan Film Commission",
+  readStatement: "Read Full Statement",
   linkedin: {
     label: "LinkedIn Profile",
     href: "https://www.linkedin.com/search/results/people/?keywords=Bavi%20Yassin",

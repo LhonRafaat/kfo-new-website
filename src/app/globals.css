@@ -402,8 +402,12 @@
   .news-rise {
     animation: none;
   }
-  /* The founder's-message sheet appears rather than rising into place. */
-  .animate-sheet-in {
+  /* The founder's-message dialog appears and disappears rather than
+     rising into and out of place. */
+  .animate-sheet-in,
+  .animate-sheet-out,
+  .animate-scrim-in,
+  .animate-scrim-out {
     animation: none;
   }
   .underline-wave,

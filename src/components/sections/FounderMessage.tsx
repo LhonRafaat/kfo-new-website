@@ -8,21 +8,27 @@ import { useInView } from "@/lib/useInView";
 import { founderMessage } from "@/lib/content";
 
 /**
- * "Read Full Message" on the founder card, and the sheet it opens
+ * "Read Full Message" on the founder card, and the dialog it opens
  * (Figma "Testimonial Section", 537:1923).
  *
- * The frame is a 1232×504 panel pinned to the bottom of the viewport with only
- * its top corners rounded — a bottom sheet, not a centred dialog. Its portrait
- * fills the left 632px edge-to-edge with the name over its base; the statement
- * column sits at x672, 524 wide. The paper scan behind it is a 1232×666 rect
- * starting 81px above the sheet's top, linear-burned at 60% and clipped by the
- * sheet, so only a slice of the crease shows.
+ * The panel is the frame's 1232×504: portrait filling the left 632px
+ * edge-to-edge with the name over its base, statement column at x672 and 524
+ * wide, close at 1160/48. The paper scan behind it is a 1232×666 rect starting
+ * 81px above the panel's top, linear-burned at 60% and clipped by it, so only
+ * a slice of the crease shows.
  *
- * The Figma paints no scrim behind the sheet, so neither does this — the
- * overlay is transparent and exists only to catch outside clicks.
+ * Three deliberate deviations from the frame, all requested: it is **centred**
+ * rather than pinned to the bottom of the viewport (so all four corners are
+ * rounded, not just the top two), it animates both in and out, and the page
+ * behind it dims to half. The exit animation is why closing runs through
+ * `requestClose` and a timer instead of unmounting on the spot.
  */
+/** Matches the `sheet-out` / `scrim-out` durations in tailwind.config.ts. */
+const EXIT_MS = 300;
+
 export function FounderMessage() {
   const [open, setOpen] = useState(false);
+  const [closing, setClosing] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
   const sheetRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
@@ -36,6 +42,17 @@ export function FounderMessage() {
   // with the copy above it. Doubles as the element focus returns to on close.
   const [triggerRef, visible] = useInView<HTMLButtonElement>();
 
+  // Play the exit animation, then unmount.
+  const requestClose = () => setClosing(true);
+  useEffect(() => {
+    if (!closing) return;
+    const t = setTimeout(() => {
+      setOpen(false);
+      setClosing(false);
+    }, EXIT_MS);
+    return () => clearTimeout(t);
+  }, [closing]);
+
   useEffect(() => {
     if (!open) return;
     const prev = document.body.style.overflow;
@@ -44,7 +61,7 @@ export function FounderMessage() {
 
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setOpen(false);
+        requestClose();
         return;
       }
       if (e.key !== "Tab" || !sheetRef.current) return;
@@ -79,7 +96,7 @@ export function FounderMessage() {
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        aria-expanded={open}
+        aria-expanded={open && !closing}
         className={`accent-link text-left ${visible ? "is-visible" : ""}`}
       >
         <span className="flex flex-col">
@@ -91,18 +108,24 @@ export function FounderMessage() {
       {open &&
         mounted &&
         createPortal(
-          <div
-            className="fixed inset-0 z-50 flex items-end justify-center"
-            onPointerDown={(e) => {
-              if (e.target === e.currentTarget) setOpen(false);
-            }}
-          >
+          <div className="fixed inset-0 z-50 flex items-center justify-center p-4 sm:p-6">
+            {/* Half-dark scrim over the page, and the click target that
+                dismisses the dialog. */}
+            <div
+              aria-hidden
+              onPointerDown={requestClose}
+              className={`absolute inset-0 bg-black/50 ${
+                closing ? "animate-scrim-out" : "animate-scrim-in"
+              }`}
+            />
             <div
               ref={sheetRef}
               role="dialog"
               aria-modal="true"
               aria-labelledby={titleId}
-              className="animate-sheet-in relative isolate flex max-h-[92svh] w-full max-w-[1232px] flex-col overflow-y-auto overflow-x-hidden rounded-t-2xl lg:h-[504px] lg:flex-row lg:overflow-y-hidden"
+              className={`relative isolate flex max-h-full w-full max-w-[1232px] flex-col overflow-y-auto overflow-x-hidden rounded-2xl lg:h-[504px] lg:flex-row lg:overflow-y-hidden ${
+                closing ? "animate-sheet-out" : "animate-sheet-in"
+              }`}
             >
               {/* Cream under the paper scan, linear-burned at 60% (537:1924).
                 Everything else paints above this sandwich — anything nested
@@ -166,6 +189,18 @@ export function FounderMessage() {
                     <Underline className="!h-[5px] w-[173px]" />
                   </span>
                 </a>
+                <a
+                  href={founderMessage.linkedin.href}
+                  target="_blank"
+                  rel="noreferrer noopener"
+                  className="accent-link is-visible self-start"
+                >
+                  <span className="flex flex-col">
+                    <span>{founderMessage.readStatement}</span>
+                    {/* 133px drawn; the wave fills 115 of the 150-unit box. */}
+                    <Underline className="!h-[5px] w-[173px]" />
+                  </span>
+                </a>
               </div>
 
               {/* Close (537:1937) — a 32px white square 40px in from the sheet's
@@ -175,9 +210,9 @@ export function FounderMessage() {
                 type="button"
                 onClick={() => setOpen(false)}
                 aria-label="Close the founder's message"
-                className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center bg-white text-black transition-colors duration-300 hover:text-accent lg:right-10 lg:top-12"
+                className="absolute right-6 top-6 flex h-8 w-8 items-center justify-center text-black transition-colors duration-300 hover:text-accent lg:right-10 lg:top-12"
               >
-                <CloseIcon className="h-5 w-5" />
+                <CloseIcon className="h-7 w-7" />
               </button>
             </div>
           </div>,
