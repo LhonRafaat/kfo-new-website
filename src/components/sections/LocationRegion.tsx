@@ -1,7 +1,6 @@
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/Reveal";
-import type { LocationEntry } from "@/lib/content";
 
 /**
  * "Location" block (Figma 338:1167 / 522:665): the city heading on the left, its
@@ -16,7 +15,13 @@ export function LocationRegion({
   cityBlurb,
   pin,
   mapsUrl,
-}: Pick<LocationEntry, "city" | "cityBlurb" | "pin" | "mapsUrl">) {
+}: {
+  city: string;
+  cityBlurb: string;
+  /** Percentages of the 611×543 hero-map artboard. */
+  pin: { x: number; y: number };
+  mapsUrl: string;
+}) {
   return (
     <Container className="relative z-10 mt-16">
       {/* No column gap at lg: the Figma's three columns tile the 1184 content
@@ -37,8 +42,17 @@ export function LocationRegion({
             role="img"
             aria-label={`Map of the Kurdistan Region with ${city} marked`}
             // Same silhouette as the database hero, recoloured by masking
-            // rather than shipping a second copy of the path data.
-            className="absolute inset-0 bg-slate [mask-image:url(/images/kurdistan-map-hero.svg)] [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-image:url(/images/kurdistan-map-hero.svg)] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]"
+            // rather than shipping a second copy of the path data. The artwork
+            // is the `kurdistanMapHero` site asset, published by the root
+            // layout — an inline style rather than an arbitrary Tailwind class
+            // because the fallback in `var(…, url(…))` needs a comma.
+            className="absolute inset-0 bg-slate [mask-position:center] [mask-repeat:no-repeat] [mask-size:contain] [-webkit-mask-position:center] [-webkit-mask-repeat:no-repeat] [-webkit-mask-size:contain]"
+            style={{
+              maskImage:
+                "var(--asset-map-hero, url(/images/kurdistan-map-hero.svg))",
+              WebkitMaskImage:
+                "var(--asset-map-hero, url(/images/kurdistan-map-hero.svg))",
+            }}
           />
 
           <a

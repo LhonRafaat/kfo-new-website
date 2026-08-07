@@ -14,18 +14,8 @@ import {
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { CaretRight, DotsThree, MagnifyingGlassIcon } from "@/components/icons";
-import {
-  industryAgencies,
-  industryGuideCount,
-  industryPerPage,
-  industryQuickFilters,
-  type IndustryAgency,
-} from "@/lib/content";
-
-const cities = Array.from(new Set(industryAgencies.map((a) => a.location)));
-const categories = Array.from(
-  new Set(industryAgencies.map((a) => a.field.value)),
-);
+import { media } from "@/lib/media";
+import type { Agency, IndustryGuidePage } from "@/lib/strapi";
 
 /** Lowercase and flatten punctuation, so the Figma's "post-production" chip
  *  still matches a listing filed as "Post Production". */
@@ -35,9 +25,12 @@ const normalise = (value: string) =>
     .replace(/[^a-z0-9]+/g, " ")
     .trim();
 
-function haystack(agency: IndustryAgency) {
+/** The third card row's value — the listing's category, by name. */
+const fieldValue = (agency: Agency) => agency.category?.name ?? "";
+
+function haystack(agency: Agency) {
   return normalise(
-    `${agency.name} ${agency.location} ${agency.website} ${agency.field.value}`,
+    `${agency.name} ${agency.displayName} ${agency.city} ${agency.website} ${fieldValue(agency)}`,
   );
 }
 
@@ -49,7 +42,13 @@ function haystack(agency: IndustryAgency) {
  * chips, the refine panel, the grid and the page number are all one piece of
  * filter state.
  */
-export function IndustryDirectory() {
+export function IndustryDirectory({
+  page: copy,
+  agencies,
+}: {
+  page: IndustryGuidePage;
+  agencies: Agency[];
+}) {
   const [query, setQuery] = useState("");
   const [quick, setQuick] = useState<Set<string>>(new Set());
   const [selectedCities, setSelectedCities] = useState<Set<string>>(new Set());
@@ -59,6 +58,16 @@ export function IndustryDirectory() {
   const [page, setPage] = useState(1);
   const panelRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
+
+  // The refine panel's own lists, taken from whatever the directory holds.
+  const cities = useMemo(
+    () => Array.from(new Set(agencies.map((a) => a.city))),
+    [agencies],
+  );
+  const categories = useMemo(
+    () => Array.from(new Set(agencies.map(fieldValue).filter(Boolean))),
+    [agencies],
+  );
 
   const toggleSet = (
     setter: Dispatch<SetStateAction<Set<string>>>,
@@ -94,25 +103,26 @@ export function IndustryDirectory() {
 
   const filtered = useMemo(
     () =>
-      industryAgencies.filter((agency) => {
+      agencies.filter((agency) => {
         const text = haystack(agency);
         if (query && !text.includes(normalise(query))) return false;
         // The chips are a free-text match rather than a taxonomy lookup, so a
         // real dataset's categories start working the moment it lands.
         if (quick.size > 0 && ![...quick].some((q) => text.includes(q)))
           return false;
-        if (selectedCities.size > 0 && !selectedCities.has(agency.location))
+        if (selectedCities.size > 0 && !selectedCities.has(agency.city))
           return false;
-        if (types.size > 0 && !types.has(agency.field.value)) return false;
+        if (types.size > 0 && !types.has(fieldValue(agency))) return false;
         return true;
       }),
-    [query, quick, selectedCities, types],
+    [agencies, query, quick, selectedCities, types],
   );
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / industryPerPage));
+  const perPage = copy.perPage;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / perPage));
   const current = Math.min(page, pageCount);
-  const start = (current - 1) * industryPerPage;
-  const shown = filtered.slice(start, start + industryPerPage);
+  const start = (current - 1) * perPage;
+  const shown = filtered.slice(start, start + perPage);
 
   const goTo = (next: number) => {
     setPage(Math.min(Math.max(next, 1), pageCount));
@@ -130,19 +140,19 @@ export function IndustryDirectory() {
         className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
         <h2 className="font-serif text-[1.375rem] font-medium leading-[1.139] text-ink">
-          {industryGuideCount}
+          {copy.countLine}
         </h2>
 
         <div
           ref={panelRef}
           className="relative flex flex-wrap items-center gap-x-6 gap-y-3"
         >
-          {industryQuickFilters.map((label) => {
-            const key = normalise(label);
+          {copy.quickFilters.map((filter) => {
+            const key = normalise(filter.value || filter.label);
             const isOn = quick.has(key);
             return (
               <button
-                key={label}
+                key={filter.label}
                 type="button"
                 onClick={() => toggleSet(setQuick, key)}
                 aria-pressed={isOn}
@@ -152,7 +162,7 @@ export function IndustryDirectory() {
                     : "text-cocoa/80 hover:text-accent"
                 }`}
               >
-                {label}
+                {filter.label}
               </button>
             );
           })}
@@ -164,7 +174,7 @@ export function IndustryDirectory() {
             aria-controls="industry-refine-panel"
             className="flex items-center gap-2 font-sans text-base font-semibold uppercase text-cocoa/80 transition-colors duration-300 hover:text-accent"
           >
-            More Filters
+            {copy.filtersLabel}
             {activeCount > 0 && (
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent font-sans text-xs font-semibold normal-case text-white">
                 {activeCount}
@@ -181,6 +191,9 @@ export function IndustryDirectory() {
 
           {panelOpen && (
             <RefinePanel
+              copy={copy}
+              cities={cities}
+              categories={categories}
               query={query}
               setQuery={(value) => {
                 setPage(1);
@@ -205,12 +218,12 @@ export function IndustryDirectory() {
       >
         {shown.length === 0 ? (
           <p className="body-lg col-span-full py-12 text-center text-ink/70">
-            No listings match your filters yet — try clearing a few.
+            {copy.emptyMessage}
           </p>
         ) : (
           shown.map((agency, i) => (
             <AgencyCard
-              key={`${agency.name}-${start + i}`}
+              key={agency.slug}
               agency={agency}
               // Cards cascade across each row rather than all landing at once.
               delay={(i % 3) * 80}
@@ -235,6 +248,9 @@ export function IndustryDirectory() {
 
 /** White dropdown under "More Filters", shared idiom with /locations. */
 function RefinePanel({
+  copy,
+  cities,
+  categories,
   query,
   setQuery,
   selectedCities,
@@ -245,6 +261,9 @@ function RefinePanel({
   onToggleType,
   onClose,
 }: {
+  copy: IndustryGuidePage;
+  cities: string[];
+  categories: string[];
   query: string;
   setQuery: (value: string) => void;
   selectedCities: Set<string>;
@@ -271,7 +290,7 @@ function RefinePanel({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search"
+          placeholder={copy.searchPlaceholder}
           className="w-full bg-transparent font-sans text-base tracking-[0.02em] text-ink placeholder:text-ink/60 focus:outline-none"
         />
       </label>
@@ -347,17 +366,14 @@ function RefinePanel({
  * The whole card is the link to its detail page; the photo eases up a touch on
  * hover, the same affordance the location cards use.
  */
-function AgencyCard({
-  agency,
-  delay,
-}: {
-  agency: IndustryAgency;
-  delay: number;
-}) {
+function AgencyCard({ agency, delay }: { agency: Agency; delay: number }) {
+  const photo = media(agency.image);
+  const logo = media(agency.logo);
+
   const rows = [
-    { label: "Location", value: agency.location },
+    { label: "Location", value: agency.city },
     { label: "Website", value: agency.website },
-    { label: agency.field.label, value: agency.field.value },
+    { label: agency.fieldLabel, value: fieldValue(agency) },
   ];
 
   return (
@@ -368,8 +384,8 @@ function AgencyCard({
       >
         <div className="relative aspect-379/195 w-full overflow-hidden">
           <Image
-            src={agency.image}
-            alt={agency.imageAlt}
+            src={photo.src}
+            alt={photo.alt}
             fill
             sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 379px"
             // Figma desaturates the one colour photo among its six uploads
@@ -383,7 +399,7 @@ function AgencyCard({
         <div className="mt-3 flex items-center gap-4 px-4">
           <span className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full bg-black">
             <Image
-              src={agency.logo}
+              src={logo.src}
               alt=""
               width={46}
               height={41}

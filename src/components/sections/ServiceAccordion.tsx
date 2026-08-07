@@ -2,7 +2,7 @@
 
 import { useId, useState } from "react";
 import { CaretRight } from "@/components/icons";
-import { serviceCategories, type ServiceCategorySlug } from "@/lib/content";
+import type { ServiceCategoryEntry } from "@/lib/strapi";
 
 /**
  * The disclosure list inside a service category (Figma "Frame 121" / "Frame
@@ -10,21 +10,23 @@ import { serviceCategories, type ServiceCategorySlug } from "@/lib/content";
  * its paragraph underneath and its caret turned a quarter-turn down. Collapsed
  * rows sit at 48% ink with the caret at 80%, exactly as the Figma has them.
  *
- * Takes a slug rather than the rows themselves: data objects exported from a
- * module and handed across the server/client boundary have bitten this codebase
- * before (see `ScrollCurve`'s `variant`), so client components look their own
- * copy up from `content.ts`.
+ * The rows arrive as props now that they come from Strapi — plain objects of
+ * strings, which cross the server/client boundary cleanly.
  */
-export function ServiceAccordion({ slug }: { slug: ServiceCategorySlug }) {
-  const category = serviceCategories.find((c) => c.slug === slug);
-  const [open, setOpen] = useState<number | null>(category?.defaultOpen ?? null);
+export function ServiceAccordion({
+  items,
+  defaultOpen,
+}: {
+  items: ServiceCategoryEntry["items"];
+  /** The row the Figma shows expanded when the page loads. */
+  defaultOpen: number;
+}) {
+  const [open, setOpen] = useState<number | null>(defaultOpen);
   const id = useId();
-
-  if (!category) return null;
 
   return (
     <ul className="flex flex-col gap-6">
-      {category.items.map((item, i) => {
+      {items.map((item, i) => {
         const isOpen = i === open;
         return (
           <li key={item.title}>

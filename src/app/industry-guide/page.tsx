@@ -3,15 +3,20 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { IndustryGuideHero } from "@/components/sections/IndustryGuideHero";
 import { IndustryDirectory } from "@/components/sections/IndustryDirectory";
+import { seoMetadata } from "@/lib/seo";
+import { getAgencies, getIndustryGuidePage } from "@/lib/strapi";
 
-export const metadata: Metadata = {
-  title: "Industry Guide",
-  description:
-    "The KFO Slemani Industry Guide is the first for filmmaking in the region — find the services, crews and companies working across Slemani for your project.",
-  alternates: { canonical: "/industry-guide" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getIndustryGuidePage();
+  return seoMetadata(page.seo);
+}
 
-export default function IndustryGuidePage() {
+export default async function IndustryGuidePage() {
+  const [page, agencies] = await Promise.all([
+    getIndustryGuidePage(),
+    getAgencies(),
+  ]);
+
   return (
     <>
       <Navbar />
@@ -24,8 +29,8 @@ export default function IndustryGuidePage() {
           aria-hidden
         />
 
-        <IndustryGuideHero />
-        <IndustryDirectory />
+        <IndustryGuideHero page={page} />
+        <IndustryDirectory page={page} agencies={agencies} />
       </main>
       <Footer />
     </>

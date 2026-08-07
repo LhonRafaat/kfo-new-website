@@ -13,11 +13,12 @@ import {
   PlayIcon,
   Underline,
 } from "@/components/icons";
-import { news } from "@/lib/content";
+import { lines } from "@/lib/text";
+import { media } from "@/lib/media";
+import type { HomePage, NewsArticle } from "@/lib/strapi";
 
 const ROTATE_MS = 5000;
 const PAGE_SIZE = 3;
-const pages = Math.ceil(news.length / PAGE_SIZE);
 
 /**
  * "News from Experts" (Figma "Highlights Section", 317:789): three headlines —
@@ -25,22 +26,29 @@ const pages = Math.ceil(news.length / PAGE_SIZE);
  * the others dimmed to 56% — with pause/prev/next controls pinned to the
  * bottom of the column and the feature photo crossfading on the right.
  */
-export function NewsExperts() {
+export function NewsExperts({
+  section,
+  news,
+}: {
+  section: HomePage["newsSection"];
+  news: NewsArticle[];
+}) {
   const [index, setIndex] = useState(0); // highlighted article across the pool
   const [playing, setPlaying] = useState(true);
 
+  const pages = Math.max(1, Math.ceil(news.length / PAGE_SIZE));
   const page = Math.floor(index / PAGE_SIZE);
   const activeInPage = index % PAGE_SIZE;
   const visible = news.slice(page * PAGE_SIZE, page * PAGE_SIZE + PAGE_SIZE);
 
   useEffect(() => {
-    if (!playing) return;
+    if (!playing || news.length === 0) return;
     const id = setInterval(
       () => setIndex((i) => (i + 1) % news.length),
       ROTATE_MS,
     );
     return () => clearInterval(id);
-  }, [playing]);
+  }, [playing, news.length]);
 
   // Arrows page through the pool — three brand-new articles each click.
   const goPage = (dir: 1 | -1) =>
@@ -54,9 +62,17 @@ export function NewsExperts() {
       <Container className="relative z-10 py-12">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Reveal as="h2" className="heading-section text-ink">
-            News from <em className="italic">Experts</em>
+            {lines(section.heading)}
+            {section.headingEmphasis && (
+              <>
+                {" "}
+                <em className="italic">{section.headingEmphasis}</em>
+              </>
+            )}
           </Reveal>
-          <AccentLink href="/news">Read all news</AccentLink>
+          {section.ctaLabel && section.ctaHref && (
+            <AccentLink href={section.ctaHref}>{section.ctaLabel}</AccentLink>
+          )}
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
@@ -68,14 +84,14 @@ export function NewsExperts() {
                 return (
                   <div key={i} className="relative">
                     <Link
-                      href={item.href}
+                      href={item.href ?? `/news/${item.slug}`}
                       onMouseEnter={() => setIndex(page * PAGE_SIZE + i)}
                       className={`crossfade group block ${
                         isActive ? "opacity-100" : "opacity-[0.56]"
                       }`}
                     >
                       <span className="font-sans text-base leading-6 tracking-[0.02em] text-ink">
-                        {item.date}
+                        {item.displayDate}
                       </span>
                       <p className="mt-1 max-w-[435px] font-serif text-[1.375rem] font-medium leading-[1.14] tracking-[0.02em] text-ink group-hover:text-espresso">
                         {item.title}
@@ -129,18 +145,21 @@ export function NewsExperts() {
           {/* Feature image — crossfades to the highlighted item's image */}
           <Reveal className="order-1 md:order-2">
             <div className="relative aspect-[572/515] w-full overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
-              {visible.map((item, i) => (
-                <Image
-                  key={`${page}-${i}`}
-                  src={item.image}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 90vw, 48vw"
-                  className={`crossfade object-cover ${
-                    i === activeInPage ? "opacity-100" : "opacity-0"
-                  }`}
-                />
-              ))}
+              {visible.map((item, i) => {
+                const image = media(item.image);
+                return (
+                  <Image
+                    key={`${page}-${i}`}
+                    src={image.src}
+                    alt={image.alt || item.title}
+                    fill
+                    sizes="(max-width: 768px) 90vw, 48vw"
+                    className={`crossfade object-cover ${
+                      i === activeInPage ? "opacity-100" : "opacity-0"
+                    }`}
+                  />
+                );
+              })}
             </div>
           </Reveal>
         </div>

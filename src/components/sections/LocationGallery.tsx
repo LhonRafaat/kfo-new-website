@@ -2,7 +2,7 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Eyebrow } from "@/components/ui/Eyebrow";
 import { Reveal } from "@/components/Reveal";
-import type { LocationEntry } from "@/lib/content";
+import type { Media } from "@/lib/media";
 
 /**
  * Top of a location page (Figma 338:1140/338:1141): an 816×446 hero tile with
@@ -14,11 +14,12 @@ export function LocationGallery({
   category,
   summary,
 }: {
-  gallery: LocationEntry["gallery"];
+  gallery: Media[];
   category: string;
   summary: string;
 }) {
   const [hero, wide] = gallery;
+  if (!hero) return null;
 
   return (
     <Container className="relative z-10 mt-12">

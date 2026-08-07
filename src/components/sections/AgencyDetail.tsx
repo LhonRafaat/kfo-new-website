@@ -7,10 +7,8 @@ import {
   type ContactTableRow,
 } from "@/components/ui/ContactTable";
 import { CaretRight } from "@/components/icons";
-import {
-  industryAgencyContactLine,
-  industryAgencyProfile as profile,
-} from "@/lib/content";
+import { media } from "@/lib/media";
+import type { Agency, IndustryGuidePage } from "@/lib/strapi";
 
 /**
  * One industry-guide listing opened up (Figma "Agency Opened", 507:906).
@@ -24,22 +22,33 @@ import {
  * both 372 tall with 40px between them. Because the two cards carry almost the
  * same aspect (1.559 vs 1.495) against columns in the same 580:556 ratio, the
  * rows stay level at every width without hard-coding a height.
+ *
+ * The Figma authored exactly one of these pages, which every listing opened
+ * verbatim. Each listing is its own record now, so the page shows that
+ * listing's own mark, blurb, category and contact details.
  */
 export function AgencyDetail({
-  photo,
-  photoAlt,
+  agency,
+  copy,
 }: {
-  photo: string;
-  photoAlt: string;
+  agency: Agency;
+  copy: IndustryGuidePage;
 }) {
+  const photo = media(agency.image);
+  const mark = media(agency.mark);
+
   const rows: ContactTableRow[] = [
-    { label: "E-mail", value: profile.email, href: `mailto:${profile.email}` },
+    { label: "E-mail", value: agency.email, href: `mailto:${agency.email}` },
     {
       label: "Phone Number",
-      value: profile.phone,
-      href: `tel:${profile.phone.replace(/\s/g, "")}`,
+      value: agency.phone,
+      href: `tel:${agency.phone.replace(/\s/g, "")}`,
     },
-    { label: "Location", lines: [...profile.address], valueWidth: "284px" },
+    {
+      label: "Location",
+      lines: agency.address.split("\n"),
+      valueWidth: "284px",
+    },
   ];
 
   return (
@@ -55,7 +64,7 @@ export function AgencyDetail({
             aria-hidden
           />
           <span className="font-sans text-base font-semibold uppercase leading-[1.4] tracking-label text-espresso">
-            Back to Industry guide
+            {copy.backLabel}
           </span>
         </Link>
       </Reveal>
@@ -65,7 +74,7 @@ export function AgencyDetail({
         delay={80}
         className="heading-section mt-10 text-center text-ink"
       >
-        {profile.displayName}
+        {agency.displayName}
       </Reveal>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[580fr_556fr] lg:gap-x-12">
@@ -73,8 +82,8 @@ export function AgencyDetail({
         <Reveal className="aspect-580/372 w-full self-start overflow-hidden rounded-lg bg-black">
           <span className="flex h-full w-full items-center justify-center">
             <Image
-              src={profile.mark}
-              alt={`${profile.displayName} logo`}
+              src={mark.src}
+              alt={mark.alt || `${agency.displayName} logo`}
               width={64}
               height={64}
               className="h-16 w-16 object-contain"
@@ -88,7 +97,7 @@ export function AgencyDetail({
           delay={120}
           className="self-end font-sans text-base font-semibold leading-6 text-ink/60"
         >
-          {profile.blurb}
+          {agency.blurb}
         </Reveal>
 
         {/* Category + domain (541:2341), centred against the photo beside it. */}
@@ -96,14 +105,14 @@ export function AgencyDetail({
           delay={80}
           className="flex flex-col items-center gap-4 self-center text-center"
         >
-          <p className="eyebrow leading-[1.4]">{profile.category}</p>
+          <p className="eyebrow leading-[1.4]">{agency.category?.name}</p>
           <a
-            href={`https://${profile.website}`}
+            href={`https://${agency.website}`}
             target="_blank"
             rel="noreferrer noopener"
             className="heading-section text-ink transition-colors duration-300 hover:text-accent"
           >
-            {profile.website}
+            {agency.website}
           </a>
         </Reveal>
 
@@ -113,8 +122,8 @@ export function AgencyDetail({
           className="relative aspect-556/372 w-full overflow-hidden rounded-lg"
         >
           <Image
-            src={photo}
-            alt={photoAlt}
+            src={photo.src}
+            alt={photo.alt}
             fill
             sizes="(max-width: 1024px) 100vw, 556px"
             className="object-cover grayscale"
@@ -131,7 +140,7 @@ export function AgencyDetail({
         delay={80}
         className="mt-16.5 text-center font-sans text-2xl font-medium leading-9 text-ink"
       >
-        {industryAgencyContactLine}
+        {copy.contactLine}
       </Reveal>
     </Container>
   );

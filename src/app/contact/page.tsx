@@ -2,15 +2,17 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { ContactSection } from "@/components/sections/ContactSection";
-import { contactPage } from "@/lib/content";
+import { seoMetadata } from "@/lib/seo";
+import { getContactPage } from "@/lib/strapi";
 
-export const metadata: Metadata = {
-  title: "Contact",
-  description: contactPage.intro,
-  alternates: { canonical: "/contact" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getContactPage();
+  return seoMetadata(page.seo);
+}
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const page = await getContactPage();
+
   return (
     <>
       {/* Cream under the tiled paper scan, with the navbar inside the texture
@@ -23,7 +25,7 @@ export default function ContactPage() {
 
         <Navbar variant="solid" />
         <main className="relative">
-          <ContactSection />
+          <ContactSection page={page} />
         </main>
       </div>
       <Footer />

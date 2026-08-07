@@ -5,7 +5,8 @@ import { createPortal } from "react-dom";
 import { useEffect, useId, useRef, useState } from "react";
 import { CloseIcon, Underline } from "@/components/icons";
 import { useInView } from "@/lib/useInView";
-import { founderMessage } from "@/lib/content";
+import { media } from "@/lib/media";
+import type { HomePage } from "@/lib/strapi";
 
 /**
  * "Read Full Message" on the founder card, and the dialog it opens
@@ -26,7 +27,16 @@ import { founderMessage } from "@/lib/content";
 /** Matches the `sheet-out` / `scrim-out` durations in tailwind.config.ts. */
 const EXIT_MS = 300;
 
-export function FounderMessage() {
+export function FounderMessage({
+  triggerLabel,
+  founder,
+}: {
+  /** Label on the testimonial card's link — the sheet's own "Read Full
+   *  Statement" is a separate string in the CMS. */
+  triggerLabel: string;
+  founder: HomePage["founderMessage"];
+}) {
+  const portrait = media(founder.image);
   const [open, setOpen] = useState(false);
   const [closing, setClosing] = useState(false);
   const closeRef = useRef<HTMLButtonElement>(null);
@@ -100,7 +110,7 @@ export function FounderMessage() {
         className={`accent-link text-left ${visible ? "is-visible" : ""}`}
       >
         <span className="flex flex-col">
-          <span>Read Full Message</span>
+          <span>{triggerLabel}</span>
           <Underline />
         </span>
       </button>
@@ -138,7 +148,8 @@ export function FounderMessage() {
                 <div
                   className="burn-layer absolute inset-x-0 -top-[16.07%] h-[132.14%] opacity-60"
                   style={{
-                    backgroundImage: "url(/images/texture-paper-modal.webp)",
+                    backgroundImage:
+                      "var(--asset-paper-modal, url(/images/texture-paper-modal.webp))",
                     backgroundSize: "100% 100%",
                   }}
                 />
@@ -148,18 +159,18 @@ export function FounderMessage() {
                 with the name block inset 32px from its left and base. */}
               <div className="relative aspect-632/504 w-full shrink-0 lg:aspect-auto lg:h-full lg:w-[51.3%]">
                 <Image
-                  src={founderMessage.image.src}
-                  alt={founderMessage.image.alt}
+                  src={portrait.src}
+                  alt={portrait.alt}
                   fill
                   sizes="(max-width: 1024px) 100vw, 632px"
                   className="object-cover object-top"
                 />
                 <div className="absolute bottom-8 left-8 text-white">
                   <p className="font-serif text-2xl font-bold italic leading-9">
-                    {founderMessage.name}
+                    {founder.name}
                   </p>
                   <p className="font-serif text-2xl font-medium leading-9">
-                    {founderMessage.title}
+                    {founder.title}
                   </p>
                 </div>
               </div>
@@ -167,36 +178,36 @@ export function FounderMessage() {
               {/* Statement column (537:1931) — x672 of 1232, 524 wide, 32px gaps. */}
               <div className="relative flex flex-1 flex-col gap-8 px-8 pb-12 pt-12 lg:pl-10 lg:pr-9">
                 <h2 id={titleId} className="heading-section text-ink">
-                  {founderMessage.heading}
+                  {founder.heading}
                   <em className="font-normal italic">
-                    {founderMessage.headingItalic}
+                    {founder.headingEmphasis}
                   </em>
                 </h2>
 
                 <p className="max-w-[493px] font-sans text-base font-medium leading-6 tracking-label text-[#291A1C]">
-                  {founderMessage.body}
+                  {founder.body}
                 </p>
 
                 <a
-                  href={founderMessage.linkedin.href}
+                  href={founder.linkedinHref}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="accent-link is-visible self-start"
                 >
                   <span className="flex flex-col">
-                    <span>{founderMessage.linkedin.label}</span>
+                    <span>{founder.linkedinLabel}</span>
                     {/* 133px drawn; the wave fills 115 of the 150-unit box. */}
                     <Underline className="!h-[5px] w-[173px]" />
                   </span>
                 </a>
                 <a
-                  href={founderMessage.linkedin.href}
+                  href={founder.linkedinHref}
                   target="_blank"
                   rel="noreferrer noopener"
                   className="accent-link is-visible self-start"
                 >
                   <span className="flex flex-col">
-                    <span>{founderMessage.readStatement}</span>
+                    <span>{founder.readStatementLabel}</span>
                     {/* 133px drawn; the wave fills 115 of the 150-unit box. */}
                     <Underline className="!h-[5px] w-[173px]" />
                   </span>

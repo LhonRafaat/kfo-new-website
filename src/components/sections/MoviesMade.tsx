@@ -12,18 +12,13 @@ import {
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { CarouselArrow, Underline } from "@/components/icons";
-import { movies } from "@/lib/content";
+import { lines } from "@/lib/text";
+import { media } from "@/lib/media";
+import type { HomePage, Movie } from "@/lib/strapi";
 
 const SLIDE_MS = 700;
-const N = movies.length;
 /** Horizontal travel (px) that counts as a swipe rather than a tap. */
 const SWIPE_PX = 40;
-
-/** Three copies of the reel so it can travel in either direction without ever
- *  running out of posters. The index lives in the middle copy; once it drifts
- *  into an outer one it snaps back by a copy-length with the transition off,
- *  which is invisible because the poster under it is the same film. */
-const reel = [...movies, ...movies, ...movies];
 
 /**
  * "Movies made in Kurdistan" (Figma: heading 317:677, arrows 636:58, strip
@@ -37,7 +32,21 @@ const reel = [...movies, ...movies, ...movies];
  * container rather than fixed pixels, so the same layout drops to four, three
  * and two across as the viewport narrows.
  */
-export function MoviesMade() {
+export function MoviesMade({
+  section,
+  movies,
+}: {
+  section: HomePage["moviesSection"];
+  movies: Movie[];
+}) {
+  const N = movies.length;
+  /** Three copies of the reel so it can travel in either direction without
+   *  ever running out of posters. The index lives in the middle copy; once it
+   *  drifts into an outer one it snaps back by a copy-length with the
+   *  transition off, which is invisible because the poster under it is the
+   *  same film. */
+  const reel = [...movies, ...movies, ...movies];
+
   const [index, setIndex] = useState(N); // first real poster of the middle copy
   const [animate, setAnimate] = useState(true);
   const swipeStart = useRef<{ x: number; y: number } | null>(null);
@@ -68,7 +77,7 @@ export function MoviesMade() {
         cancelAnimationFrame(inner);
       };
     }
-  }, [index, animate]);
+  }, [index, animate, N]);
 
   const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
     if (e.pointerType === "mouse") return; // mouse pages with the arrows
@@ -108,7 +117,15 @@ export function MoviesMade() {
       <Container className="relative z-10 pb-20 pt-10">
         <div className="flex items-center justify-between gap-6">
           <Reveal as="h2" className="heading-section text-ink">
-            Movies made <em className="font-normal italic">in Kurdistan</em>
+            {lines(section.heading)}
+            {section.headingEmphasis && (
+              <>
+                {" "}
+                <em className="font-normal italic">
+                  {section.headingEmphasis}
+                </em>
+              </>
+            )}
           </Reveal>
 
           {/* 32px arrows, right-aligned with the content column. They rest at
@@ -170,6 +187,7 @@ export function MoviesMade() {
           >
             {reel.map((movie, i) => {
               const clone = i < N || i >= 2 * N;
+              const poster = media(movie.poster);
               return (
                 <a
                   key={i}
@@ -186,8 +204,8 @@ export function MoviesMade() {
                 >
                   <div className="relative aspect-[218/281] overflow-hidden rounded-2xl">
                     <Image
-                      src={movie.src}
-                      alt={`${movie.title} — film poster`}
+                      src={poster.src}
+                      alt={poster.alt || `${movie.title} — film poster`}
                       fill
                       sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 240px"
                       className="object-cover"

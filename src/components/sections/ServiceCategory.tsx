@@ -2,30 +2,36 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { ServiceAccordion } from "@/components/sections/ServiceAccordion";
-import { serviceCategories, type ServiceCategorySlug } from "@/lib/content";
+import { media } from "@/lib/media";
+import type { ServiceCategoryEntry } from "@/lib/strapi";
 
 /**
  * A service category — heading, intro, the disclosure list, and the category
  * photo (Figma: Facilities at y896–1517, Logistics at y1637–2273).
  *
- * The two categories are laid out differently in the design and the data says
+ * The two categories are laid out differently in the design and the record says
  * which: Facilities runs its intro across the full content column with the
  * photo to the right of the list; Logistics puts the photo on the left and
  * keeps heading, intro and list stacked in the column beside it. Both collapse
  * to one column below `lg`, with the copy always ahead of the photo.
  */
-export function ServiceCategory({ slug }: { slug: ServiceCategorySlug }) {
-  const category = serviceCategories.find((c) => c.slug === slug);
-  if (!category) return null;
-
-  const { heading, intro, image, introPlacement } = category;
+export function ServiceCategory({
+  category,
+}: {
+  category: ServiceCategoryEntry;
+}) {
+  const { heading, intro, introPlacement } = category;
+  const image = media(category.image);
   const introAbove = introPlacement === "above";
 
   const photo = (
     <Reveal delay={introAbove ? 160 : 80}>
       <div
         className="relative overflow-hidden rounded-2xl"
-        style={{ aspectRatio: `${image.width} / ${image.height}` }}
+        // The frame's own crop, which is not the uploaded file's aspect.
+        style={{
+          aspectRatio: `${category.imageWidth} / ${category.imageHeight}`,
+        }}
       >
         <Image
           src={image.src}
@@ -85,7 +91,10 @@ export function ServiceCategory({ slug }: { slug: ServiceCategorySlug }) {
               </>
             )}
             <Reveal delay={120} className={introAbove ? "" : "mt-10"}>
-              <ServiceAccordion slug={slug} />
+              <ServiceAccordion
+                items={category.items}
+                defaultOpen={category.defaultOpen}
+              />
             </Reveal>
           </div>
           {photo}

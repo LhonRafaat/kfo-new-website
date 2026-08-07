@@ -3,19 +3,26 @@ import Link from "next/link";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { Underline } from "@/components/icons";
-import { quickLinks } from "@/lib/content";
+import { lines } from "@/lib/text";
+import { media } from "@/lib/media";
+import type { HomePage } from "@/lib/strapi";
 
 /**
  * Homepage hero (Figma 317:717): full-viewport mountain photo, static page
  * title, and the four explore quick-links pinned to the bottom band. The whole
  * section is exactly one viewport tall, per the V2 design.
+ *
+ * The title's line breaks are authored into the CMS field; the design puts the
+ * emphasised run on its own last line, which stays here rather than in the copy.
  */
-export function Hero() {
+export function Hero({ hero }: { hero: HomePage["hero"] }) {
+  const image = media(hero.image);
+
   return (
     <section className="relative flex h-svh min-h-[560px] flex-col overflow-hidden bg-ink">
       <Image
-        src="/images/hero-home.jpg"
-        alt="Snow-dusted mountains of Kurdistan glowing at golden hour"
+        src={image.src}
+        alt={image.alt}
         fill
         priority
         sizes="100vw"
@@ -34,18 +41,20 @@ export function Hero() {
       {/* Title block — centered in the space above the quick links */}
       <div className="relative z-10 flex flex-1 flex-col items-center justify-center px-6 pt-20 text-center text-white">
         <Reveal as="h1" className="display-title max-w-[680px]">
-          The New Filming
-          <br />
-          Destination in the
-          <br />
-          <em className="font-bold italic">Mena Region</em>
+          {lines(hero.title)}
+          {hero.titleEmphasis && (
+            <>
+              <br />
+              <em className="font-bold italic">{hero.titleEmphasis}</em>
+            </>
+          )}
         </Reveal>
         <Reveal
           as="p"
           delay={150}
           className="mt-4 font-serif text-xl text-white/95 md:text-[1.78rem] md:leading-[1.125]"
         >
-          Discover Kurdistan Through the Art of Filmmaking
+          {hero.subtitle}
         </Reveal>
       </div>
 
@@ -56,7 +65,7 @@ export function Hero() {
           delay={250}
           className="grid grid-cols-2 gap-x-6 gap-y-6 md:grid-cols-[450fr_205fr_205fr_205fr] md:gap-x-10"
         >
-          {quickLinks.map((item) => (
+          {hero.quickLinks.map((item) => (
             <Link
               key={item.title}
               href={item.href}

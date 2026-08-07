@@ -1,6 +1,8 @@
+import type { CSSProperties } from "react";
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
+import { getGlobal, getSiteAssets, mediaUrl } from "@/lib/strapi";
 
 // Flecha M — display serif (the design's headline + editorial face)
 const flecha = localFont({
@@ -27,58 +29,61 @@ const cadiz = localFont({
   ],
 });
 
-const siteUrl = "https://kurdistanfilmcommission.org";
+/**
+ * Site-wide metadata, from Strapi's `global` single type. Individual pages layer
+ * their own `seo` component over this through `seoMetadata()`; anything they
+ * leave blank falls through to these defaults.
+ */
+export async function generateMetadata(): Promise<Metadata> {
+  const site = await getGlobal();
+  const seo = site.defaultSeo;
+  const ogImage = mediaUrl(seo?.ogImage);
+  const title = seo?.metaTitle ?? `${site.siteName} — ${site.tagline}`;
+  const description = seo?.metaDescription ?? site.description;
 
-export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: {
-    default:
-      "Kurdistan Film Commission — The official film commission in Kurdistan & Iraq",
-    template: "%s | Kurdistan Film Commission",
-  },
-  description:
-    "The Kurdistan Film Commission supports filmmakers from around the world in bringing their stories to life — from breathtaking landscapes to rich cultural narratives, we provide the foundation for seamless, high-quality productions.",
-  keywords: [
-    "Kurdistan Film Commission",
-    "film commission Iraq",
-    "filming in Kurdistan",
-    "Kurdistan Film Fund",
-    "location database Kurdistan",
-    "film production Kurdistan",
-  ],
-  authors: [{ name: "Kurdistan Film Commission" }],
-  creator: "Kurdistan Film Commission",
-  alternates: { canonical: "/" },
-  openGraph: {
-    type: "website",
-    url: siteUrl,
-    siteName: "Kurdistan Film Commission",
-    title:
-      "Kurdistan Film Commission — The official film commission in Kurdistan & Iraq",
-    description:
-      "Shaping stories. Enabling productions. Showcasing Kurdistan. Explore the largest location database in the Kurdistan Region and apply for the Film Fund.",
-    locale: "en_US",
-    images: [
-      {
-        url: "/images/hero.jpg",
-        width: 1200,
-        height: 630,
-        alt: "The mountains of Kurdistan at golden hour",
-      },
-    ],
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Kurdistan Film Commission",
-    description: "The official film commission in Kurdistan & Iraq.",
-    images: ["/images/hero.jpg"],
-  },
-  robots: {
-    index: true,
-    follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
-  },
-};
+  return {
+    metadataBase: new URL(site.siteUrl),
+    title: { default: title, template: `%s | ${site.siteName}` },
+    description,
+    ...(seo?.keywords
+      ? { keywords: seo.keywords.split(",").map((k) => k.trim()) }
+      : {}),
+    authors: [{ name: site.siteName }],
+    creator: site.siteName,
+    alternates: { canonical: seo?.canonical ?? "/" },
+    openGraph: {
+      type: "website",
+      url: site.siteUrl,
+      siteName: site.siteName,
+      title,
+      description,
+      locale: "en_US",
+      ...(ogImage
+        ? {
+            images: [
+              {
+                url: ogImage,
+                width: 1200,
+                height: 630,
+                alt: seo?.ogImage?.alternativeText ?? "",
+              },
+            ],
+          }
+        : {}),
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: site.siteName,
+      description: site.tagline,
+      ...(ogImage ? { images: [ogImage] } : {}),
+    },
+    robots: {
+      index: true,
+      follow: true,
+      googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    },
+  };
+}
 
 export const viewport: Viewport = {
   themeColor: "#EAE3DB",
@@ -86,13 +91,42 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
-export default function RootLayout({
+/** `url(...)` for a CSS custom property, or nothing when the slot is empty. */
+const asset = (image: Parameters<typeof mediaUrl>[0]) => {
+  const url = mediaUrl(image);
+  return url ? `url("${url}")` : undefined;
+};
+
+export default async function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
+  const assets = await getSiteAssets();
+
+  // The paper scans, washes and map artwork are all editable in the admin
+  // panel, so they are published once here as custom properties rather than
+  // hard-coded into the stylesheet and half a dozen inline styles. Empty slots
+  // are left unset so each usage falls back to its bundled asset.
+  const textures = {
+    "--asset-paper-tile": asset(assets.paperTile),
+    "--asset-paper-testimonial": asset(assets.paperTestimonial),
+    "--asset-paper-founder": asset(assets.paperFounder),
+    "--asset-paper-modal": asset(assets.paperModal),
+    "--asset-paper-news": asset(assets.paperNews),
+    "--asset-floral": asset(assets.floralTexture),
+    "--asset-services-wash": asset(assets.servicesWash),
+    "--asset-founder-bg": asset(assets.founderBackground),
+    "--asset-map-hero": asset(assets.kurdistanMapHero),
+    "--asset-map": asset(assets.kurdistanMap),
+  } as CSSProperties;
+
   return (
-    <html lang="en" className={`${flecha.variable} ${cadiz.variable}`}>
+    <html
+      lang="en"
+      className={`${flecha.variable} ${cadiz.variable}`}
+      style={textures}
+    >
       <body>{children}</body>
     </html>
   );

@@ -3,29 +3,32 @@ import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { AgencyDetail } from "@/components/sections/AgencyDetail";
-import { industryAgencies, industryAgencyProfile } from "@/lib/content";
+import { getAgency, getAgencySlugs, getIndustryGuidePage } from "@/lib/strapi";
 
 type Params = { params: Promise<{ slug: string }> };
 
-export function generateStaticParams() {
-  return industryAgencies.map((agency) => ({ slug: agency.slug }));
+export async function generateStaticParams() {
+  return getAgencySlugs();
 }
 
 export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { slug } = await params;
-  const agency = industryAgencies.find((a) => a.slug === slug);
+  const agency = await getAgency(slug);
   if (!agency) return {};
 
   return {
-    title: industryAgencyProfile.displayName,
-    description: industryAgencyProfile.blurb,
+    title: agency.displayName,
+    description: agency.blurb,
     alternates: { canonical: `/industry-guide/${slug}` },
   };
 }
 
 export default async function AgencyPage({ params }: Params) {
   const { slug } = await params;
-  const agency = industryAgencies.find((a) => a.slug === slug);
+  const [agency, copy] = await Promise.all([
+    getAgency(slug),
+    getIndustryGuidePage(),
+  ]);
   if (!agency) notFound();
 
   return (
@@ -40,7 +43,7 @@ export default async function AgencyPage({ params }: Params) {
 
         <Navbar variant="solid" />
         <main className="relative">
-          <AgencyDetail photo={agency.image} photoAlt={agency.imageAlt} />
+          <AgencyDetail agency={agency} copy={copy} />
         </main>
       </div>
       <Footer />

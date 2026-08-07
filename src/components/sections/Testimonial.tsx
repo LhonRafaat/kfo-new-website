@@ -2,6 +2,9 @@ import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { FounderMessage } from "@/components/sections/FounderMessage";
+import { lines } from "@/lib/text";
+import { media } from "@/lib/media";
+import type { HomePage } from "@/lib/strapi";
 
 /**
  * Founder testimonial card (Figma 513:62): a rounded slate panel — B&W
@@ -15,7 +18,15 @@ import { FounderMessage } from "@/components/sections/FounderMessage";
  * NOT the copy (Figma paints both text frames above it). The grid above it
  * keeps a matching spacer column, so the layout is unchanged.
  */
-export function Testimonial() {
+export function Testimonial({
+  testimonial,
+  founder,
+}: {
+  testimonial: HomePage["testimonial"];
+  founder: HomePage["founderMessage"];
+}) {
+  const portrait = media(testimonial.portrait);
+
   return (
     <section className="relative">
       <Container className="relative z-10">
@@ -27,8 +38,8 @@ export function Testimonial() {
                   left half on md+. */}
               <div className="absolute inset-x-0 top-0 h-[320px] md:inset-y-0 md:left-0 md:h-auto md:w-1/2">
                 <Image
-                  src="/images/founder-bw.jpg"
-                  alt="Bavi Yassin, Founder of the Kurdistan Film Commission"
+                  src={portrait.src}
+                  alt={portrait.alt}
                   fill
                   sizes="(max-width: 768px) 100vw, 50vw"
                   className="object-cover object-top"
@@ -37,12 +48,14 @@ export function Testimonial() {
             </div>
             {/* Figma crops a tall slice out of the paper scan (imageTransform on
                 node 513:74) and turns it 90° counter-clockwise, so a single
-                crease runs down the middle of the card. This asset is that exact
-                crop, stretched to the card the way Figma's fill does. */}
+                crease runs down the middle of the card. That exact crop is the
+                `paperTestimonial` asset, stretched to the card the way Figma's
+                fill does. */}
             <div
               className="burn-layer absolute inset-0 opacity-60"
               style={{
-                backgroundImage: "url(/images/texture-paper-testimonial.webp)",
+                backgroundImage:
+                  "var(--asset-paper-testimonial, url(/images/texture-paper-testimonial.webp))",
                 backgroundSize: "100% 100%",
               }}
               aria-hidden
@@ -55,10 +68,10 @@ export function Testimonial() {
             <div className="relative min-h-[320px] md:min-h-[448px]">
               <div className="absolute bottom-8 left-12 text-white md:bottom-16 md:left-12">
                 <p className="font-serif text-[1.375rem] font-bold italic leading-normal">
-                  Bavi Yassin
+                  {testimonial.name}
                 </p>
                 <p className="font-serif text-base font-medium leading-6">
-                  Founder, Kurdistan Film Commission
+                  {testimonial.role}
                 </p>
               </div>
             </div>
@@ -66,31 +79,37 @@ export function Testimonial() {
             {/* Statement */}
             <div className="flex flex-col gap-6 px-6 py-10 md:px-16 md:py-16">
               <Reveal as="h2" className="heading-section text-ink">
-                We have so much more
-                <br />
-                than just <em className="font-normal italic">the mountains</em>.
+                {lines(testimonial.heading)}
+                {testimonial.headingEmphasis && (
+                  <>
+                    {" "}
+                    <em className="font-normal italic">
+                      {testimonial.headingEmphasis}
+                    </em>
+                    .
+                  </>
+                )}
               </Reveal>
               <Reveal
                 as="p"
                 delay={80}
                 className="font-serif text-[1.375rem] font-medium leading-[1.14] text-ink"
               >
-                Founder&rsquo;s Statement &amp; Vision
+                {testimonial.subheading}
               </Reveal>
               <Reveal as="blockquote" delay={140} className="max-w-[512px]">
                 <p className="font-sans text-base leading-6 text-[#291A1C]">
                   <span className="text-accent">&ldquo;</span>
-                  Kurdistan Film Commission is the newly established non-profit
-                  film commission in the Kurdistan region of Iraq. The northern
-                  region of Iraq is well-known for its rich history, beautiful
-                  landscapes, charming cities, mountains, and vibrant cultural
-                  heritage.
+                  {testimonial.quote}
                 </p>
               </Reveal>
               {/* Opens the founder's-message bottom sheet (Figma 537:1923)
                   rather than navigating away. */}
               <div className="mt-4">
-                <FounderMessage />
+                <FounderMessage
+                  triggerLabel={testimonial.ctaLabel}
+                  founder={founder}
+                />
               </div>
             </div>
           </div>

@@ -6,7 +6,8 @@ import {
   type ContactTableRow,
 } from "@/components/ui/ContactTable";
 import { ContactForm } from "@/components/sections/ContactForm";
-import { contactPage } from "@/lib/content";
+import { media } from "@/lib/media";
+import type { ContactPage } from "@/lib/strapi";
 
 /**
  * /contact (Figma "Contact Us", 508:1077): a two-column band — the invitation
@@ -17,19 +18,26 @@ import { contactPage } from "@/lib/content";
  * the design width: the intro (122) plus its 48px gap plus the form (348)
  * comes to exactly the photo's height, so the two edges line up.
  */
-export function ContactSection() {
+export function ContactSection({ page }: { page: ContactPage }) {
+  const image = media(page.image);
+  const { details } = page;
+
   const rows: ContactTableRow[] = [
     {
-      label: "E-mail",
-      value: contactPage.email,
-      href: `mailto:${contactPage.email}`,
+      label: details.emailLabel,
+      value: details.email,
+      href: `mailto:${details.email}`,
     },
     {
-      label: "Phone Number",
-      value: contactPage.phone,
-      href: `tel:${contactPage.phone.replace(/\s/g, "")}`,
+      label: details.phoneLabel,
+      value: details.phone,
+      href: `tel:${details.phone.replace(/\s/g, "")}`,
     },
-    { label: "Location", lines: [contactPage.address], valueWidth: "329px" },
+    {
+      label: details.addressLabel,
+      lines: details.address.split("\n"),
+      valueWidth: "329px",
+    },
   ];
 
   return (
@@ -37,17 +45,17 @@ export function ContactSection() {
       <div className="grid gap-10 lg:grid-cols-[480fr_657fr] lg:gap-x-12">
         <div className="flex flex-col">
           <Reveal className="max-w-[311px]">
-            <h1 className="heading-section text-ink">{contactPage.heading}</h1>
+            <h1 className="heading-section text-ink">{page.heading}</h1>
             {/* 14px under the heading, per the intro frame's item spacing. */}
             <p className="mt-3.5 font-sans text-base font-semibold leading-6 text-ink/60">
-              {contactPage.intro}
+              {page.intro}
             </p>
           </Reveal>
 
           {/* `reveal-underline` opts the submit rule into drawing itself in
               with the form, the same gesture as the services page title. */}
           <Reveal delay={120} className="reveal-underline mt-12">
-            <ContactForm />
+            <ContactForm form={page.form} email={details.email} />
           </Reveal>
         </div>
 
@@ -56,8 +64,8 @@ export function ContactSection() {
           className="relative aspect-657/518 w-full overflow-hidden rounded-2xl"
         >
           <Image
-            src={contactPage.image.src}
-            alt={contactPage.image.alt}
+            src={image.src}
+            alt={image.alt}
             fill
             priority
             sizes="(max-width: 1024px) 100vw, 657px"

@@ -264,15 +264,24 @@
 }
 
 @layer utilities {
+  /* The scans themselves come from Strapi's `site-assets`, which the root
+     layout writes onto <html> as --asset-* custom properties. The fallbacks
+     keep these utilities working if a slot is cleared in the admin panel. */
   .texture-floral {
-    background-image: url("/images/floral-texture.webp");
+    background-image: var(
+      --asset-floral,
+      url("/images/floral-texture.webp")
+    );
     background-size: cover;
     background-position: center;
   }
   /* Homepage V2 background — Figma tiles this paper scan at 0.64 scale
      (4096px source × 0.64 ≈ 2619px on screen), composited at 40% over cream. */
   .texture-tile {
-    background-image: url("/images/texture-paper-tile.webp");
+    background-image: var(
+      --asset-paper-tile,
+      url("/images/texture-paper-tile.webp")
+    );
     background-repeat: repeat;
     background-size: 2619px auto;
   }

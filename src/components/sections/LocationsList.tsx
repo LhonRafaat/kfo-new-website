@@ -22,24 +22,23 @@ import {
   LocationAccessBar,
   type AccessStatus,
 } from "@/components/sections/LocationAccessBar";
+import { media } from "@/lib/media";
 import {
-  freeLocations,
-  locationDbRows,
-  locationPins,
-  locationsGate,
-  locationsPerPage,
-  type LocationDbRow,
-} from "@/lib/content";
+  requestDatabaseAccess,
+  verifyDatabaseAccess,
+} from "@/lib/strapi-forms";
+import type { City, LocationEntry, LocationsPage, Taxonomy } from "@/lib/strapi";
 
-/** Remembers a verified visitor between visits. See the note on
- *  `locationsGate` in content.ts — there is no backend behind this yet. */
+/** Remembers a verified visitor between visits. The token itself is spent on
+ *  the server the moment it is exchanged, so this only records the outcome. */
 const UNLOCKED_KEY = "kfo:locations-unlocked";
 
-const primaryCities = locationPins.filter((p) => p.primary).map((p) => p.city);
-const categories = Array.from(new Set(locationDbRows.map((row) => row.type)));
+/** A row's category name — the label its card and its filter chip share. */
+const typeOf = (row: LocationEntry) => row.category?.name ?? "";
 
-function matches(row: LocationDbRow, query: string) {
-  const haystack = `${row.title} ${row.citySuffix} ${row.type}`.toLowerCase();
+function matches(row: LocationEntry, query: string) {
+  const haystack =
+    `${row.title} ${row.citySuffix} ${typeOf(row)}`.toLowerCase();
   return haystack.includes(query.toLowerCase());
 }
 
@@ -49,7 +48,17 @@ function matches(row: LocationDbRow, query: string) {
  * One client component because the chips, the panel's options, the list and the
  * page number all share the same filter state.
  */
-export function LocationsList() {
+export function LocationsList({
+  copy,
+  rows,
+  cities: allCities,
+  categories,
+}: {
+  copy: LocationsPage;
+  rows: LocationEntry[];
+  cities: City[];
+  categories: Taxonomy[];
+}) {
   const [query, setQuery] = useState("");
   const [cities, setCities] = useState<Set<string>>(new Set());
   const [types, setTypes] = useState<Set<string>>(new Set());
@@ -61,15 +70,47 @@ export function LocationsList() {
   const panelRef = useRef<HTMLDivElement>(null);
   const listRef = useRef<HTMLDivElement>(null);
 
-  // `?verified=1` stands in for the link the verification e-mail would carry.
-  // Read from `window` rather than `useSearchParams` so this page keeps
-  // prerendering without a Suspense boundary.
+  const primaryCities = useMemo(
+    () => allCities.filter((c) => c.primary).map((c) => c.name),
+    [allCities],
+  );
+  const categoryNames = useMemo(
+    () => categories.map((c) => c.name),
+    [categories],
+  );
+
+  // The verification e-mail links back here as `/locations?token=…`; exchanging
+  // that token with Strapi spends it and unlocks the list. Read from `window`
+  // rather than `useSearchParams` so this page keeps prerendering without a
+  // Suspense boundary.
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("verified") === "1") {
-      localStorage.setItem(UNLOCKED_KEY, "1");
-      setUnlocked(true);
-      setStatus("verified");
-      return;
+    const token = new URLSearchParams(window.location.search).get("token");
+    if (token) {
+      let live = true;
+      verifyDatabaseAccess(token)
+        .then(() => {
+          if (!live) return;
+          localStorage.setItem(UNLOCKED_KEY, "1");
+          setUnlocked(true);
+          setStatus("verified");
+        })
+        .catch(() => {
+          // A spent or unknown token: fall back to whatever this browser
+          // already knows rather than stranding the visitor on the gate.
+          if (live && localStorage.getItem(UNLOCKED_KEY) === "1") {
+            setUnlocked(true);
+          }
+        })
+        .finally(() => {
+          // Drop the token from the address bar either way — it is single-use,
+          // so a shared or reloaded URL would only fail the second time.
+          const url = new URL(window.location.href);
+          url.searchParams.delete("token");
+          window.history.replaceState({}, "", url);
+        });
+      return () => {
+        live = false;
+      };
     }
     if (localStorage.getItem(UNLOCKED_KEY) === "1") setUnlocked(true);
   }, []);
@@ -115,7 +156,7 @@ export function LocationsList() {
 
   const filtered = useMemo(
     () =>
-      locationDbRows.filter((row) => {
+      rows.filter((row) => {
         if (query && !matches(row, query)) return false;
         if (
           cities.size > 0 &&
@@ -124,16 +165,17 @@ export function LocationsList() {
           )
         )
           return false;
-        if (types.size > 0 && !types.has(row.type)) return false;
+        if (types.size > 0 && !types.has(typeOf(row))) return false;
         return true;
       }),
-    [query, cities, types],
+    [rows, query, cities, types],
   );
 
-  const pageCount = Math.max(1, Math.ceil(filtered.length / locationsPerPage));
+  const perPage = copy.perPage;
+  const pageCount = Math.max(1, Math.ceil(filtered.length / perPage));
   const current = Math.min(page, pageCount);
-  const start = (current - 1) * locationsPerPage;
-  const shown = filtered.slice(start, start + locationsPerPage);
+  const start = (current - 1) * perPage;
+  const shown = filtered.slice(start, start + perPage);
 
   const goTo = (next: number) => {
     setPage(Math.min(Math.max(next, 1), pageCount));
@@ -143,13 +185,37 @@ export function LocationsList() {
 
   const activeCount = cities.size + types.size + (query ? 1 : 0);
 
+  /**
+   * Ask the backend for an access link. It records the address, mints a
+   * single-use token and — once a mail provider is configured — sends
+   * `/locations?token=…`. While `EXPOSE_ACCESS_TOKEN` is on it hands the token
+   * straight back instead, so the gate can be walked end to end in development
+   * without an inbox.
+   */
+  const requestAccess = async (email: string) => {
+    try {
+      const result = await requestDatabaseAccess(email);
+      setStatus("sent");
+      if (result?.token) {
+        // Development shortcut only — in production there is no token here and
+        // the visitor comes back through the emailed link.
+        await verifyDatabaseAccess(result.token);
+        localStorage.setItem(UNLOCKED_KEY, "1");
+        setUnlocked(true);
+        setStatus("verified");
+      }
+    } catch {
+      setStatus("error");
+    }
+  };
+
   return (
     <Container className="relative z-10 pb-12 pt-0">
       <Reveal
         as="div"
         className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
-        <h2 className="heading-section text-ink">Locations</h2>
+        <h2 className="heading-section text-ink">{copy.listHeading}</h2>
 
         <div
           ref={panelRef}
@@ -181,7 +247,7 @@ export function LocationsList() {
             aria-controls="locations-refine-panel"
             className="flex items-center gap-2 font-sans text-base font-semibold uppercase text-cocoa/80 transition-colors duration-300 hover:text-accent"
           >
-            More Filters
+            {copy.filtersLabel}
             {activeCount > 0 && (
               <span className="flex h-5 w-5 items-center justify-center rounded-full bg-accent font-sans text-xs font-semibold normal-case text-white">
                 {activeCount}
@@ -196,6 +262,9 @@ export function LocationsList() {
 
           {panelOpen && (
             <RefinePanel
+              copy={copy}
+              primaryCities={primaryCities}
+              categories={categoryNames}
               query={query}
               setQuery={(value) => {
                 setPage(1);
@@ -217,14 +286,15 @@ export function LocationsList() {
       <div ref={listRef} className="mt-12 flex scroll-mt-24 flex-col gap-6">
         {shown.length === 0 ? (
           <p className="body-lg py-12 text-center text-ink/70">
-            No locations match your filters yet — try clearing a few.
+            {copy.emptyMessage}
           </p>
         ) : (
           shown.map((row, i) => (
             <LocationCard
-              key={row.title}
+              key={row.slug}
               row={row}
-              locked={!unlocked && start + i >= freeLocations}
+              gate={copy.gate}
+              locked={!unlocked && start + i >= copy.freeCount}
               onRequestAccess={() => setStatus("email")}
             />
           ))
@@ -232,7 +302,11 @@ export function LocationsList() {
       </div>
 
       {status && (
-        <LocationAccessBar status={status} onSubmit={() => setStatus("sent")} />
+        <LocationAccessBar
+          status={status}
+          gate={copy.gate}
+          onSubmit={requestAccess}
+        />
       )}
 
       {filtered.length > 0 && (
@@ -251,6 +325,9 @@ export function LocationsList() {
 
 /** White dropdown under "More Filters" (Figma 522:538). */
 function RefinePanel({
+  copy,
+  primaryCities,
+  categories,
   query,
   setQuery,
   cities,
@@ -261,6 +338,9 @@ function RefinePanel({
   onToggleType,
   onClose,
 }: {
+  copy: LocationsPage;
+  primaryCities: string[];
+  categories: string[];
   query: string;
   setQuery: (value: string) => void;
   cities: Set<string>;
@@ -287,7 +367,7 @@ function RefinePanel({
         <input
           value={query}
           onChange={(e) => setQuery(e.target.value)}
-          placeholder="Search"
+          placeholder={copy.searchPlaceholder}
           className="w-full bg-transparent font-sans text-base tracking-[0.02em] text-ink placeholder:text-ink/60 focus:outline-none"
         />
       </label>
@@ -299,7 +379,7 @@ function RefinePanel({
           aria-expanded={categoryOpen}
           className="flex h-9.5 items-center justify-between rounded-lg bg-black/2 px-4 font-sans text-base font-semibold text-ink"
         >
-          Category
+          {copy.categoryLabel}
           <CaretRight
             className={`h-4 w-4 text-cocoa/80 transition-transform duration-300 ${
               categoryOpen ? "rotate-90" : ""
@@ -324,7 +404,7 @@ function RefinePanel({
 
         {/* The city list is the open disclosure in the Figma, so it starts open. */}
         <div className="flex h-9.5 items-center justify-between rounded-lg bg-black/2 px-4 font-sans text-base font-semibold text-ink">
-          City
+          {copy.cityLabel}
           <CaretRight className="h-4 w-4 rotate-90 text-cocoa/80" />
         </div>
         <div className="flex flex-col items-start gap-2.5 px-4">
@@ -347,7 +427,7 @@ function RefinePanel({
         onClick={onClose}
         className="h-10 w-full rounded-lg bg-ink font-sans text-base tracking-[0.02em] text-white transition-colors duration-300 hover:bg-ink/85"
       >
-        Refine Search
+        {copy.refineLabel}
       </button>
     </div>
   );
@@ -360,15 +440,21 @@ function RefinePanel({
  */
 function LocationCard({
   row,
+  gate,
   locked,
   onRequestAccess,
 }: {
-  row: LocationDbRow;
+  row: LocationEntry;
+  gate: LocationsPage["gate"];
   locked: boolean;
   onRequestAccess: () => void;
 }) {
+  const image = media(row.cardImage);
+
+  // Area and last-active date are only known for some entries; the card drops
+  // the field rather than inventing a figure.
   const fields = [
-    { label: "Type", value: row.type },
+    { label: "Type", value: typeOf(row) },
     { label: "Area", value: row.area },
     { label: "Last Active Date", value: row.lastActiveDate },
   ].filter((f) => f.value);
@@ -376,8 +462,8 @@ function LocationCard({
   const body = (
     <>
       <Image
-        src={row.image}
-        alt={row.imageAlt}
+        src={image.src}
+        alt={image.alt}
         fill
         sizes="(max-width: 1280px) 100vw, 1184px"
         className="object-cover transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] group-hover:scale-[1.03] motion-reduce:transition-none"
@@ -436,11 +522,11 @@ function LocationCard({
 
           <div className="relative flex h-full flex-col items-center justify-center px-6 text-center text-white">
             <p className="font-serif text-[1.375rem] font-medium italic leading-[1.139]">
-              {locationsGate.title}
+              {gate.title}
             </p>
             {/* 4px under the title, per the container's item spacing. */}
             <p className="mt-1 font-sans text-base leading-[1.4]">
-              {locationsGate.body}
+              {gate.body}
             </p>
 
             <button
@@ -450,7 +536,7 @@ function LocationCard({
             >
               <span className="relative inline-block">
                 <span className="font-serif text-xl font-medium capitalize italic leading-[1.139] tracking-label">
-                  {locationsGate.cta}
+                  {gate.cta}
                 </span>
                 {/* Figma draws the rule exactly as wide as the label. The wave
                     fills 115 of the SVG's 150-unit box, so a box of 130.44% of
@@ -468,7 +554,9 @@ function LocationCard({
 
   return (
     <Reveal as="article">
-      {row.slug ? (
+      {/* Only the entries an editor has written a full page for link through;
+          the rest are catalogue rows. */}
+      {row.hasDetailPage ? (
         <Link href={`/locations/${row.slug}`} className={shell}>
           {body}
         </Link>

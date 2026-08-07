@@ -3,15 +3,27 @@ import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { LocationsIntro } from "@/components/sections/LocationsIntro";
 import { LocationsList } from "@/components/sections/LocationsList";
+import { seoMetadata } from "@/lib/seo";
+import {
+  getCities,
+  getLocationCategories,
+  getLocations,
+  getLocationsPage,
+} from "@/lib/strapi";
 
-export const metadata: Metadata = {
-  title: "Location Database",
-  description:
-    "The largest location database in the Kurdistan Region — explore catalogued filming locations across Duhok, Erbil, Kifri, Sulaymaniyah and Halabjah.",
-  alternates: { canonical: "/locations" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getLocationsPage();
+  return seoMetadata(page.seo);
+}
 
-export default function LocationsPage() {
+export default async function LocationsPage() {
+  const [page, rows, cities, categories] = await Promise.all([
+    getLocationsPage(),
+    getLocations(),
+    getCities(),
+    getLocationCategories(),
+  ]);
+
   return (
     <>
       {/* The redesigned frame drops the hero's own texture and flowing curve:
@@ -24,10 +36,15 @@ export default function LocationsPage() {
         />
 
         <Navbar variant="solid" />
-        <LocationsIntro />
+        <LocationsIntro page={page} cities={cities} />
 
         <main className="relative">
-          <LocationsList />
+          <LocationsList
+            copy={page}
+            rows={rows}
+            cities={cities}
+            categories={categories}
+          />
         </main>
       </div>
       <Footer />

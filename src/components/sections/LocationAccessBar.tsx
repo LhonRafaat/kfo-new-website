@@ -7,27 +7,34 @@ import {
   MailboxIcon,
   NewsletterArrow,
 } from "@/components/icons";
-import { locationsGate } from "@/lib/content";
+import type { LocationsPage } from "@/lib/strapi";
 
-export type AccessStatus = "email" | "sent" | "verified";
+export type AccessStatus = "email" | "sent" | "verified" | "error";
 
 /**
  * The bar the database gate opens (Figma "Bar Statuses", 651:493): a black pill
  * centred 32px above the base of the viewport (its placement comes from
  * "Bar Showing up", 649:452, where it sits at 294/744 of the 1280×832 frame).
  *
- * Three states, all 56px tall with a 20px white icon and 16/24 copy:
+ * The design draws three states, all 56px tall with a 20px white icon and
+ * 16/24 copy:
  *   email    — lock + the prompt + a white/8 address field with its arrow
  *   sent     — mailbox + "check your email"
  *   verified — check + "you can now check our location database"
  *
- * The address field is the only interactive state; the other two are notices.
+ * `error` is a fourth the Figma does not draw, added now that the address goes
+ * to a real endpoint that can fail; it reuses the lock and lets the visitor try
+ * again rather than leaving the bar stuck on "sent".
+ *
+ * The address field is the only interactive state; the others are notices.
  */
 export function LocationAccessBar({
   status,
+  gate,
   onSubmit,
 }: {
   status: AccessStatus;
+  gate: LocationsPage["gate"];
   onSubmit: (email: string) => void;
 }) {
   const [email, setEmail] = useState("");
@@ -43,21 +50,25 @@ export function LocationAccessBar({
         role="status"
         // Reuses the dialog's entrance so the bar arrives on the same curve.
         className={`animate-sheet-in pointer-events-auto flex max-w-full items-center gap-2.5 rounded-full bg-black text-white ${
-          status === "email" ? "py-2 pl-6 pr-3" : "px-6 py-4"
+          status === "email" || status === "error"
+            ? "py-2 pl-6 pr-3"
+            : "px-6 py-4"
         }`}
       >
-        {status === "email" && (
+        {(status === "email" || status === "error") && (
           <>
             <LockIcon className="h-5 w-5 shrink-0" />
             <p className="hidden font-sans text-base leading-6 tracking-label sm:block">
-              {locationsGate.prompt}
+              {status === "error"
+                ? "That didn’t go through — try again."
+                : gate.prompt}
             </p>
             <form
               onSubmit={submit}
               className="flex h-10 w-60 max-w-full items-center gap-2.5 rounded-full bg-white/8 pl-3 pr-3"
             >
               <label htmlFor="locations-access-email" className="sr-only">
-                {locationsGate.prompt}
+                {gate.prompt}
               </label>
               <input
                 id="locations-access-email"
@@ -66,7 +77,7 @@ export function LocationAccessBar({
                 autoFocus
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                placeholder={locationsGate.placeholder}
+                placeholder={gate.placeholder}
                 className="w-full min-w-0 bg-transparent font-sans text-base leading-6 tracking-label text-white placeholder:text-white/50 focus:outline-none"
               />
               <button
@@ -86,7 +97,7 @@ export function LocationAccessBar({
           <>
             <MailboxIcon className="h-5 w-5 shrink-0 !text-[#FF6600]" />
             <p className="font-sans text-base leading-6 tracking-label">
-              {locationsGate.sent}
+              {gate.sent}
             </p>
           </>
         )}
@@ -95,7 +106,7 @@ export function LocationAccessBar({
           <>
             <CheckIcon className="h-5 w-5 shrink-0 !text-[#FF6600]" />
             <p className="font-sans text-base leading-6 tracking-label">
-              {locationsGate.verified}
+              {gate.verified}
             </p>
           </>
         )}

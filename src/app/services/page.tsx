@@ -4,15 +4,20 @@ import { Footer } from "@/components/Footer";
 import { ServicesHero } from "@/components/sections/ServicesHero";
 import { ServiceCategory } from "@/components/sections/ServiceCategory";
 import { ProductionTeaser } from "@/components/sections/ProductionTeaser";
+import { seoMetadata } from "@/lib/seo";
+import { getServiceCategories, getServicesPage } from "@/lib/strapi";
 
-export const metadata: Metadata = {
-  title: "Services",
-  description:
-    "KFO Slemani is the ultimate destination for all your production requirements — facilities and logistics for national and international productions filming in the Kurdistan Region.",
-  alternates: { canonical: "/services" },
-};
+export async function generateMetadata(): Promise<Metadata> {
+  const page = await getServicesPage();
+  return seoMetadata(page.seo);
+}
 
-export default function ServicesPage() {
+export default async function ServicesPage() {
+  const [page, categories] = await Promise.all([
+    getServicesPage(),
+    getServiceCategories(),
+  ]);
+
   return (
     <>
       <Navbar />
@@ -36,7 +41,8 @@ export default function ServicesPage() {
         <div
           className="pointer-events-none absolute inset-x-0 bottom-0 -z-10 h-[393px] mix-blend-darken"
           style={{
-            backgroundImage: "url(/images/services-wash.webp)",
+            backgroundImage:
+              "var(--asset-services-wash, url(/images/services-wash.webp))",
             backgroundSize: "100% 146.5vw",
             backgroundPosition: "left top",
             backgroundRepeat: "no-repeat",
@@ -45,10 +51,11 @@ export default function ServicesPage() {
           aria-hidden
         />
 
-        <ServicesHero />
-        <ServiceCategory slug="facilities" />
-        <ServiceCategory slug="logistics" />
-        <ProductionTeaser />
+        <ServicesHero hero={page.hero} />
+        {categories.map((category) => (
+          <ServiceCategory key={category.slug} category={category} />
+        ))}
+        <ProductionTeaser comingSoon={page.comingSoon} />
       </main>
       <Footer />
     </>

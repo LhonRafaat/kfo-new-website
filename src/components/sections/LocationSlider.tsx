@@ -10,7 +10,7 @@ import {
   type PointerEvent,
 } from "react";
 import { CarouselArrow } from "@/components/icons";
-import type { LocationEntry } from "@/lib/content";
+import type { Media } from "@/lib/media";
 
 const SLIDE_MS = 700;
 const SWIPE_PX = 40;
@@ -22,11 +22,7 @@ const SWIPE_PX = 40;
  * same triple-reel trick as the homepage movie slider — the index lives in the
  * middle copy and snaps back a copy-length, un-animated, once it drifts out.
  */
-export function LocationSlider({
-  images,
-}: {
-  images: LocationEntry["gallery"];
-}) {
+export function LocationSlider({ images }: { images: Media[] }) {
   const n = images.length;
   const [index, setIndex] = useState(n);
   const [animate, setAnimate] = useState(true);

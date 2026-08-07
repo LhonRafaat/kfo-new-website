@@ -9,10 +9,11 @@ import { CaretRight } from "@/components/icons";
 import { LocationGallery } from "@/components/sections/LocationGallery";
 import { LocationSlider } from "@/components/sections/LocationSlider";
 import { LocationRegion } from "@/components/sections/LocationRegion";
-import { locationProductionBlurb, locations } from "@/lib/content";
+import { mediaList } from "@/lib/media";
+import { getLocation, getLocationSlugs, getLocationsPage } from "@/lib/strapi";
 
-export function generateStaticParams() {
-  return locations.map((l) => ({ slug: l.slug }));
+export async function generateStaticParams() {
+  return getLocationSlugs();
 }
 
 export async function generateMetadata({
@@ -21,8 +22,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const location = locations.find((l) => l.slug === slug);
+  const location = await getLocation(slug);
   if (!location) return {};
+
+  const [hero] = mediaList(location.gallery);
   return {
     title: location.title,
     description: location.summary,
@@ -30,7 +33,7 @@ export async function generateMetadata({
     openGraph: {
       title: location.title,
       description: location.summary,
-      images: [{ url: location.gallery[0].src, alt: location.gallery[0].alt }],
+      ...(hero ? { images: [{ url: hero.src, alt: hero.alt }] } : {}),
     },
   };
 }
@@ -41,11 +44,20 @@ export default async function LocationDetailPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const location = locations.find((l) => l.slug === slug);
+  const [location, copy] = await Promise.all([
+    getLocation(slug),
+    getLocationsPage(),
+  ]);
   if (!location) notFound();
 
+  const gallery = mediaList(location.gallery);
   // [0] is the hero tile, [1] the full-width band; the rest feed the slider.
-  const strip = location.gallery.slice(2);
+  const strip = gallery.slice(2);
+
+  // The blurb lives on the city record so every location in a city shares it;
+  // an entry can still override it with its own.
+  const cityName = location.citySuffix || location.city?.name || "";
+  const cityBlurb = location.cityBlurb ?? location.city?.blurb ?? "";
 
   return (
     <>
@@ -67,7 +79,7 @@ export default async function LocationDetailPage({
                 className="flex items-center gap-2 font-sans text-base font-semibold uppercase tracking-[0.02em] text-espresso opacity-64 transition-opacity duration-300 hover:opacity-100"
               >
                 <CaretRight className="h-5 w-5 rotate-180" />
-                Back to Location Database
+                {copy.backLabel}
               </Link>
             </Reveal>
 
@@ -81,14 +93,14 @@ export default async function LocationDetailPage({
           </Container>
 
           <LocationGallery
-            gallery={location.gallery}
-            category={location.category}
+            gallery={gallery}
+            category={location.category?.name ?? ""}
             summary={location.summary}
           />
 
           <Container className="relative z-10 mt-16">
             <Reveal as="p" className="body-md mx-auto max-w-160 leading-6">
-              {locationProductionBlurb}
+              {copy.productionBlurb}
             </Reveal>
           </Container>
 
@@ -100,31 +112,51 @@ export default async function LocationDetailPage({
             </Container>
           )}
 
-          <LocationRegion
-            city={location.city}
-            cityBlurb={location.cityBlurb}
-            pin={location.pin}
-            mapsUrl={location.mapsUrl}
-          />
+          {/* The region map needs a placed pin and somewhere for it to link;
+              an entry whose page is published before those are filled in shows
+              the rest of the page without it. */}
+          {location.pinX != null &&
+            location.pinY != null &&
+            location.mapsUrl && (
+              <LocationRegion
+                city={cityName}
+                cityBlurb={cityBlurb}
+                pin={{ x: location.pinX, y: location.pinY }}
+                mapsUrl={location.mapsUrl}
+              />
+            )}
 
           <Container className="relative z-10 pb-16 pt-12">
             <Reveal
               as="p"
               className="mx-auto max-w-100 text-center font-serif text-base leading-6 text-ink"
             >
-              For logistics, Public Relations, and Information please{" "}
-              <Link
-                href="/contact"
-                className="link-underline font-medium italic"
-              >
-                contact us
-              </Link>
-              .
+              {/* The closing line ends in "contact us", which the Figma sets as
+                  a link — so the last two words are pulled out of the CMS
+                  string and re-rendered as one. */}
+              <ContactLine text={copy.contactLine} />
             </Reveal>
           </Container>
         </main>
       </div>
       <Footer />
+    </>
+  );
+}
+
+/** Renders the standing contact line with its final "contact us" linked. */
+function ContactLine({ text }: { text: string }) {
+  const match = text.match(/^(.*?)(contact us)(\.?)$/i);
+  if (!match) return <>{text}</>;
+
+  const [, lead, phrase, stop] = match;
+  return (
+    <>
+      {lead}
+      <Link href="/contact" className="link-underline font-medium italic">
+        {phrase}
+      </Link>
+      {stop}
     </>
   );
 }
