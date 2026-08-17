@@ -9,5 +9,6 @@ export function Container({
   className?: string;
   children: ReactNode;
 }) {
+  console.log("hu");
   return <Tag className={`container-edge ${className}`}>{children}</Tag>;
 }
