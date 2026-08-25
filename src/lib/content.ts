@@ -825,6 +825,140 @@ export const news = [
   },
 ] as const;
 
+/* ---------------------------------------------------------------------------
+   /about — Figma "About Page - V1" (338:1246, file nbxKoz4mGA6K2A7z6v1RNY)
+   ------------------------------------------------------------------------- */
+
+/** Hero band (Frame 160 + Frame 16): one full-bleed photo under a corner-to-
+ *  corner black wash, title + squiggle + lead sitting on its base line. */
+export const aboutHero = {
+  title: "All about ",
+  titleItalic: "Kurdistan Film Commission",
+  lead: "Kurdistan Film Commission is the newly established non-profit film commission in the Kurdistan region of Iraq.",
+  image: {
+    src: "/images/about-hero.jpg",
+    alt: "Late sun raking across the green rolling hills of the Kurdistan Region",
+  },
+} as const;
+
+/** The three paragraphs in the right-hand column under the hero. */
+export const aboutIntro = [
+  "The northern region of Iraq is well-known for its rich history, beautiful landscapes, charming cities, mountains, and vibrant cultural heritage. It is also known for its safety and security.",
+  "KFO acts as a liaison between foreign production companies and every aspect of their production on the ground. As a minority nation in the region, we want to put our great locations and talents on the map by promoting this new upcoming destination.",
+  "We are confident that Kurdistan can play a role in the audio-visual sector in the region and the world.",
+] as const;
+
+/** Full-bleed photo strip between the intro and the mission (Rectangle 20 —
+ *  Figma crops a 12.5% band out of the middle of a tall shot, which is what
+ *  `about-band.jpg` is). */
+export const aboutBand = {
+  src: "/images/about-band.jpg",
+  alt: "Snow-dusted peaks above a river running through bare winter trees",
+} as const;
+
+export const aboutMission = {
+  heading: "Mission",
+  body: "We facilitate international and national productions as we collaborate closely with official entities, such as ministries, governmental institutions, and private security companies, to ensure seamless logistics services, acquire film permits and necessary administrative authorisations, obtain security clearance, and ensure the safety of the international and national crew during production.",
+} as const;
+
+/** Vision card (Testimonial Section) — the same slate panel + linear-burned
+ *  paper scan as the homepage founder card, mirrored: photo left, copy right.
+ *  Figma desaturates the photo with a `saturation: -1` image filter, kept as a
+ *  CSS filter so a colour photo dropped in later still reads as intended. */
+export const aboutVision = {
+  heading: "Vision",
+  lead: "Our top priority is to involve the local film community.",
+  body: [
+    "We have partnered with film schools, organisations, and institutions in Sulaymaniyah and abroad to organise intensive educational courses, workshops, and more.",
+    "We also recommend local crew and film school students as interns or second-third-range crew positions. We have established strong partnerships with key players in the private sector.",
+    "We believe that the growth of a sustainable film industry is not limited to governmental support alone but also through co-production and private-sector involvement.",
+    "Our objective is to create opportunities for co-productions with local film companies, private investors, and sponsors by unleashing the limitless possibilities of investing in the film industry and boosting film tourism.",
+  ],
+  image: {
+    src: "/images/about-vision.jpg",
+    alt: "A lit tent on a hillside above a valley town at dusk",
+  },
+} as const;
+
+export type Person = {
+  name: string;
+  role: string;
+  /** Shown over the portrait while the card is hovered or focused. */
+  bio: string;
+  image: string;
+};
+
+export type PeopleSection = {
+  heading: string;
+  intro: string;
+  people: readonly Person[];
+  /** Trailing panel that closes the grid (Figma's sixth cell). */
+  more: { body: string; cta: string; href: string };
+};
+
+/**
+ * COPY NOTE — every name, role and biography below is the Figma's own
+ * placeholder ("Sara Ahmed", "A person's bio would show up here…"), including
+ * the repeated cards, and the portraits are the frame's stock photography.
+ * They are laid out exactly as the frame has them so the client can see the
+ * real shape of the section; swap the whole array once the real people land.
+ *
+ * The frame also gives the closing card's button no destination — it points at
+ * /contact until a team page exists.
+ */
+const placeholderBio =
+  "A person’s bio would show up here when their card is hovered.";
+
+export const aboutTeam: PeopleSection = {
+  heading: "Team",
+  intro:
+    "Meet the smarts and passion dedicated to shaping better futures for places.",
+  people: [
+    { name: "Sara Ahmed", role: "Co-Founder", bio: placeholderBio, image: "/images/about-person-1.jpg" },
+    { name: "Rojin Hama", role: "Lead Designer", bio: placeholderBio, image: "/images/about-person-2.jpg" },
+    { name: "Kamal Nuri", role: "Product Manager", bio: placeholderBio, image: "/images/about-person-3.jpg" },
+    { name: "Dilan Azad", role: "Marketing Specialist", bio: placeholderBio, image: "/images/about-person-4.jpg" },
+    { name: "Rojin Hama", role: "Lead Designer", bio: placeholderBio, image: "/images/about-person-2.jpg" },
+  ],
+  more: {
+    body: "There’s more people behind the scene.",
+    cta: "Meet our team",
+    href: "/contact",
+  },
+};
+
+export const aboutAdvisory: PeopleSection = {
+  heading: "Advisory Board",
+  intro:
+    "Meet the smarts and passion dedicated to shaping better futures for places.",
+  people: [
+    { name: "Sara Ahmed", role: "Co-Founder", bio: placeholderBio, image: "/images/about-person-5.jpg" },
+    { name: "Kamal Nuri", role: "Product Manager", bio: placeholderBio, image: "/images/about-person-6.jpg" },
+    { name: "Kamal Nuri", role: "Product Manager", bio: placeholderBio, image: "/images/about-person-7.jpg" },
+    { name: "Dilan Azad", role: "Marketing Specialist", bio: placeholderBio, image: "/images/about-person-8.jpg" },
+    { name: "Rojin Hama", role: "Lead Designer", bio: placeholderBio, image: "/images/about-person-2.jpg" },
+  ],
+  more: {
+    body: "There’s more people behind the scene.",
+    cta: "Meet Advisory Board",
+    href: "/contact",
+  },
+};
+
+/** Partner logos (Frame 115). The strip repeats them, so the marquee only
+ *  needs one copy here. `wide` marks the one lock-up Figma lays out in a
+ *  174-wide box rather than a 104 square. */
+export const aboutPartners = {
+  heading: "Partners",
+  logos: [
+    { name: "Association of Film Commissioners International", src: "/images/partner-afci.png", wide: true },
+    { name: "University of Sulaimani", src: "/images/partner-sulaimani.png", wide: false },
+    { name: "Asian Film Commissions Network", src: "/images/partner-afcnet.png", wide: true },
+    { name: "Location Managers Guild International", src: "/images/partner-lmgi.png", wide: true },
+    { name: "Kurdsat", src: "/images/partner-kurdsat.png", wide: false },
+  ],
+} as const;
+
 /** Footer link columns. */
 export const footerColumns = [
   [

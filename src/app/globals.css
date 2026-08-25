@@ -416,6 +416,10 @@
   .news-rise {
     animation: none;
   }
+  /* The partner strip holds still rather than scrolling. */
+  .animate-marquee {
+    animation: none;
+  }
   /* The founder's-message dialog appears and disappears rather than
      rising into and out of place. */
   .animate-sheet-in,

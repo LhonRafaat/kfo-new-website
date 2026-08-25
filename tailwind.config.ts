@@ -78,6 +78,9 @@ const config: Config = {
         "sheet-out": "sheet-out 0.3s cubic-bezier(0.4, 0, 1, 1) both",
         "scrim-in": "scrim-in 0.35s var(--fade-ease) both",
         "scrim-out": "scrim-out 0.3s cubic-bezier(0.4, 0, 1, 1) both",
+        // Partner logo strip on /about: the row holds two copies of the list,
+        // so travelling exactly -50% loops seamlessly.
+        marquee: "marquee 45s linear infinite",
       },
     },
   },
