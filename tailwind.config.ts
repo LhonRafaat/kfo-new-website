@@ -11,9 +11,10 @@ const config: Config = {
         },
         ink: {
           DEFAULT: "#2A1B1D",
-          // Ground for the dark pages (the film fund): ink taken down far
-          // enough for white type, but still warm rather than black.
-          deep: "#191011",
+          // Ground for the dark pages (the film fund). Near-black and
+          // deliberately NEUTRAL: the paper scan is warm, so anything that
+          // lifts it tints the page brown, which is not what the design wants.
+          deep: "#191919",
         },
         espresso: "#3E2F2E",
         cocoa: "#3C2F2E",

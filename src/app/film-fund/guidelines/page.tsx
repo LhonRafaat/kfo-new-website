@@ -21,7 +21,7 @@ export default function FundGuidelinesPage() {
     <>
       <div className="relative isolate overflow-x-clip bg-ink-deep">
         <div
-          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.10] mix-blend-screen"
+          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-50 grayscale mix-blend-multiply"
           aria-hidden
         />
 

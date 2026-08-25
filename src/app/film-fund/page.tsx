@@ -21,13 +21,15 @@ export default function FilmFundPage() {
     <>
       <Navbar />
       {/* The only dark page on the site. It runs the same paper as every other
-          page, just turned down: a warm near-black ground with the tile
-          screened back over it, so the grain still reads. (The frame fills the
-          page flat black with the tile at 8% "hard light", which composites to
-          pure black in the browser and loses the paper entirely.) */}
-      <main className="relative isolate overflow-x-clip bg-ink-deep">
+          page, turned down: a near-black neutral ground with the tile
+          multiplied over it, so the scan's specks and fibres still read while
+          the field stays dark. The tile is desaturated first — the paper is
+          cream, and any blend that lifts it washes the page brown. (The frame
+          asks for flat black at 8% "hard light", which composites to pure
+          black in the browser and loses the paper entirely.) */}
+      <main className="relative isolate overflow-x-clip bg-black/90">
         <div
-          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.10] mix-blend-screen"
+          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-50 grayscale mix-blend-multiply"
           aria-hidden
         />
         <FundHero />
