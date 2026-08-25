@@ -37,7 +37,10 @@ function Tile({
       aria-label={`${tile.title} — ${showcaseCta}`}
       onMouseEnter={onActivate}
       onFocus={onActivate}
-      className={`group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10 ${
+      /* The mobile column is auto-height, so the tile has to size itself from
+         its aspect ratio — `basis-0` (which the md+ flex-grow mosaic needs)
+         would collapse it to nothing there. */
+      className={`group relative min-h-0 basis-auto overflow-hidden rounded-2xl bg-ink/10 md:basis-0 ${
         hideOnMobile ? "hidden md:block" : "block aspect-[3/2] md:aspect-auto"
       }`}
       style={{ flexGrow: tile.tall ? 320 : 234 }}
@@ -46,7 +49,7 @@ function Tile({
         src={tile.src}
         alt={tile.alt}
         fill
-        sizes="(max-width: 768px) 48vw, 25vw"
+        sizes="(max-width: 768px) 92vw, 25vw"
         /* Follows the cursor, so it runs on the interactive token, not the
            slower entrance one — it shares the easing curve either way. */
         className={`object-cover transition-[filter] duration-(--fade-duration-interactive) ease-(--fade-ease) ${
