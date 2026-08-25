@@ -390,7 +390,7 @@ function LocationCard({
       <div className="relative flex h-full flex-col justify-center p-6 text-white md:p-12">
         <div className="flex max-w-120 flex-col gap-2.5">
           <div className="flex flex-col gap-1">
-            <h3 className="font-serif italic text-[1.375rem] font-medium leading-[1.139]">
+            <h3 className="heading-card font-serif font-medium italic">
               {row.title}
             </h3>
             <p className="font-sans text-base leading-[1.4]">
@@ -435,7 +435,7 @@ function LocationCard({
           <div aria-hidden className="absolute inset-0 bg-black/85" />
 
           <div className="relative flex h-full flex-col items-center justify-center px-6 text-center text-white">
-            <p className="font-serif text-[1.375rem] font-medium italic leading-[1.139]">
+            <p className="heading-card font-serif font-medium italic">
               {locationsGate.title}
             </p>
             {/* 4px under the title, per the container's item spacing. */}

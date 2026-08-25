@@ -193,7 +193,7 @@ export function MoviesMade() {
                       className="object-cover"
                     />
                   </div>
-                  <h3 className="mt-[17px] font-serif text-xl font-medium leading-[1.139] text-ink xl:text-[1.375rem]">
+                  <h3 className="mt-[17px] font-serif text-lg font-medium leading-[1.139] text-ink md:text-xl xl:text-[1.375rem]">
                     {movie.title}
                   </h3>
                   {/* Kept in flow even when the year is unknown, so every

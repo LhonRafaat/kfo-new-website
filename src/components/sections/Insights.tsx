@@ -77,7 +77,7 @@ export function Insights() {
                       <span className="font-sans text-base leading-6 tracking-[0.02em] text-ink">
                         {item.date}
                       </span>
-                      <p className="mt-1 max-w-[435px] font-serif text-[1.125rem] md:text-[1.375rem] font-medium leading-[1.14] tracking-[0.02em] text-ink group-hover:text-espresso">
+                      <p className="heading-card mt-1 max-w-[435px] font-serif font-medium tracking-[0.02em] text-ink group-hover:text-espresso">
                         {item.title}
                       </p>
                     </Link>
@@ -128,7 +128,7 @@ export function Insights() {
 
           {/* Feature image — crossfades to the highlighted item's image */}
           <Reveal className="order-1 md:order-2">
-            <div className="relative aspect-[3/2] w-full md:aspect-[572/515] overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
+            <div className="relative aspect-3/2 w-full md:aspect-572/515 overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
               {visible.map((item, i) => (
                 <Image
                   key={`${page}-${i}`}

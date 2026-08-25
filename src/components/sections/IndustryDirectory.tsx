@@ -129,7 +129,7 @@ export function IndustryDirectory() {
         as="div"
         className="relative z-30 flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between"
       >
-        <h2 className="font-serif text-[1.375rem] font-medium leading-[1.139] text-ink">
+        <h2 className="heading-card font-serif font-medium text-ink">
           {industryGuideCount}
         </h2>
 
@@ -390,7 +390,7 @@ function AgencyCard({
               className="h-10.25 w-11.5 object-contain"
             />
           </span>
-          <h3 className="font-serif text-xl font-medium leading-normal text-black transition-colors duration-300 group-hover:text-accent">
+          <h3 className="font-serif text-lg font-medium leading-normal text-black transition-colors duration-300 group-hover:text-accent md:text-xl">
             {agency.name}
           </h3>
         </div>

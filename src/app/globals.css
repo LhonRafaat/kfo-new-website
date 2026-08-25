@@ -108,6 +108,20 @@
     line-height: 1.125;
   }
 
+  /* Card / item title — 22px Flecha at the design width, stepped down to 18px
+     on mobile, where these titles sit on full-width cards and 22px crowds the
+     rest of the row. Size only, so each usage keeps its own serif weight and
+     italics (the services accordion swaps weight per open/closed state). */
+  .heading-card {
+    font-size: 1.125rem; /* 18px */
+    line-height: 1.14;
+  }
+  @media (min-width: 48rem) {
+    .heading-card {
+      font-size: 1.375rem; /* 22px */
+    }
+  }
+
   /* ---- Eyebrow / label ---- */
   .eyebrow {
     @apply font-sans font-semibold uppercase text-espresso;

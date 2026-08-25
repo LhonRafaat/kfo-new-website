@@ -38,7 +38,7 @@ export function ServiceAccordion({ slug }: { slug: ServiceCategorySlug }) {
                 className="group flex w-full items-center justify-between gap-6 text-left"
               >
                 <span
-                  className={`disclosure-title font-serif text-[1.375rem] leading-[1.14] ${
+                  className={`disclosure-title heading-card font-serif ${
                     isOpen
                       ? "font-medium italic text-ink"
                       : "font-normal text-ink/48 group-hover:text-ink/75"

@@ -146,7 +146,7 @@ export function FounderMessage() {
 
               {/* Portrait panel (649:191) — 632 of the sheet's 1232, full height,
                 with the name block inset 32px from its left and base. */}
-              <div className="relative aspect-632/504 w-full shrink-0 lg:aspect-auto lg:h-full lg:w-[51.3%]">
+              <div className="relative aspect-3/2 w-full shrink-0 lg:aspect-auto lg:h-full lg:w-[51.3%]">
                 <Image
                   src={founderMessage.image.src}
                   alt={founderMessage.image.alt}
@@ -155,10 +155,10 @@ export function FounderMessage() {
                   className="object-cover object-top"
                 />
                 <div className="absolute bottom-8 left-8 text-white">
-                  <p className="font-serif text-2xl font-bold italic leading-9">
+                  <p className="font-serif text-xl font-bold italic leading-7 lg:text-2xl lg:leading-9">
                     {founderMessage.name}
                   </p>
-                  <p className="font-serif text-2xl font-medium leading-9">
+                  <p className="font-serif text-xl font-medium leading-7 lg:text-2xl lg:leading-9">
                     {founderMessage.title}
                   </p>
                 </div>

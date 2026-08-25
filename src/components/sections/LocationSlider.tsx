@@ -116,7 +116,7 @@ export function LocationSlider({
               <div
                 key={i}
                 aria-hidden={clone}
-                className="relative aspect-379/372 w-[var(--slide-w)] shrink-0 overflow-hidden rounded-2xl"
+                className="relative aspect-3/2 w-[var(--slide-w)] shrink-0 overflow-hidden rounded-2xl md:aspect-379/372"
               >
                 <Image
                   src={img.src}

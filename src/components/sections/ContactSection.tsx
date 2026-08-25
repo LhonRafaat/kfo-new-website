@@ -53,7 +53,7 @@ export function ContactSection() {
 
         <Reveal
           delay={80}
-          className="relative aspect-657/518 w-full overflow-hidden rounded-2xl"
+          className="relative aspect-3/2 w-full overflow-hidden rounded-2xl lg:aspect-657/518"
         >
           <Image
             src={contactPage.image.src}

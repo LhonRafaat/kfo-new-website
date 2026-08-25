@@ -60,7 +60,7 @@ export function Testimonial() {
             {/* Spacer holding the portrait's footprint, with the name overlaid */}
             <div className="relative min-h-[320px] md:min-h-[448px]">
               <div className="absolute bottom-8 left-12 text-white md:bottom-16 md:left-12">
-                <p className="font-serif text-[1.375rem] font-bold italic leading-normal">
+                <p className="heading-card font-serif font-bold italic leading-normal">
                   Bavi Yassin
                 </p>
                 <p className="font-serif text-base font-medium leading-6">
@@ -79,7 +79,7 @@ export function Testimonial() {
               <Reveal
                 as="p"
                 delay={80}
-                className="font-serif text-[1.375rem] font-medium leading-[1.14] text-ink"
+                className="heading-card font-serif font-medium text-ink"
               >
                 Founder&rsquo;s Statement &amp; Vision
               </Reveal>

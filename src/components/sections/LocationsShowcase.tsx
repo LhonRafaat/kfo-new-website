@@ -41,7 +41,7 @@ function Tile({
          its aspect ratio — `basis-0` (which the md+ flex-grow mosaic needs)
          would collapse it to nothing there. */
       className={`group relative min-h-0 basis-auto overflow-hidden rounded-2xl bg-ink/10 md:basis-0 ${
-        hideOnMobile ? "hidden md:block" : "block aspect-[3/2] md:aspect-auto"
+        hideOnMobile ? "hidden md:block" : "block aspect-3/2 md:aspect-auto"
       }`}
       style={{ flexGrow: tile.tall ? 320 : 234 }}
     >
@@ -65,7 +65,7 @@ function Tile({
             "linear-gradient(180deg, rgba(0,0,0,0.16) 0%, rgba(0,0,0,0.8) 100%)",
         }}
       >
-        <h3 className="font-serif text-[1.375rem] font-medium italic leading-[1.14]">
+        <h3 className="heading-card font-serif font-medium italic">
           {tile.title}
         </h3>
         <span className="rounded-full bg-white px-3 py-2 font-sans text-base font-semibold leading-[1.375] text-ink">
