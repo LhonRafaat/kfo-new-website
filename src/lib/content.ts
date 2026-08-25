@@ -959,6 +959,198 @@ export const aboutPartners = {
   ],
 } as const;
 
+/* ---------------------------------------------------------------------------
+   /film-fund — Figma "Film Fund - V1" (541:2432) and its guidelines page
+   (939:110), both in file nbxKoz4mGA6K2A7z6v1RNY.
+
+   This page is the site's only dark one: black under the shared paper tile at
+   8% "hard light", white headings, slate (#ADB8BD) body copy.
+
+   COPY NOTE — the frame leaves several blocks unwritten, twice with a note to
+   the client in place of copy ("Rahand writes the contact content here.", and
+   a caption reading "Rahand leraya 2-3 sentence anuse."). Those notes are not
+   shipped; where a disclosure needs *something* to open onto, `body` carries a
+   plainly provisional line instead of invented policy. Everything marked
+   "awaiting copy" below needs the commission's own words before launch.
+   ------------------------------------------------------------------------- */
+
+/** Stands in for the blocks the frame leaves empty — deliberately obvious. */
+const fundAwaitingCopy = "Copy for this section is still to come from the commission.";
+
+export const fundHero = {
+  wordmark: {
+    src: "/images/fund-wordmark.svg",
+    alt: "Kurdistan Film Fund",
+  },
+  image: {
+    src: "/images/fund-hero.jpg",
+    alt: "A lone tree on the plain below the mountains of the Kurdistan Region",
+  },
+  lead: "Initiative of the Kurdish Film Commission, the Kurdish Film Fund is a grant initiative dedicated to supporting the development, production, co-production, post-production and distribution of Kurdish short, medium-length, feature films and TV series in the Kurdistan region of Iraq and around the world through two annual funding cycles.",
+  aside: [
+    "The Fund also aims to expand beyond their borders Kurdish projects by connecting them with international opportunities.",
+    "The Fund supports projects through both financial grants and tailored professional support designed to strengthen their artistic and production potential and maximize their chances of success.",
+  ],
+} as const;
+
+export type FundDisclosure = { title: string; body: string };
+
+export const fundAbout = {
+  heading: "About",
+  headingItalic: "The Kurdistan Film Fund",
+  /** The figure is picked out in accent orange, the rest in slate. */
+  amount: "$2M",
+  amountSuffix: "fund given to selected individuals",
+  cta: "Click here to Apply",
+  image: {
+    src: "/images/fund-about.jpg",
+    alt: "A pool below snow-streaked peaks in the Kurdistan Region",
+  },
+  items: [
+    {
+      title: "Our Vision",
+      body: "The Kurdistan Film Fund (KFF) exists to empower Kurdish filmmakers, strengthen the local audiovisual industry, and connect Kurdish stories with international audiences. We believe cinema creates culture, employment, dialogue and opportunity, while contributing to the long-term development and international visibility of the Kurdistan Region of Iraq.",
+    },
+    // Awaiting copy — the frame gives these two rows a heading only.
+    { title: "Our Mission", body: fundAwaitingCopy },
+    { title: "Building a Sustainable Film Ecosystem", body: fundAwaitingCopy },
+  ] as FundDisclosure[],
+} as const;
+
+export const fundGrants = {
+  heading: "Grants",
+  intro:
+    "Through its financial and professional support, the Kurdish Film Fund fosters the Kurdish film industry while building a strong community of filmmakers who are bringing Kurdish stories to audiences around the world.\nThe Kurdish Film Fund supports projects across multiple formats.",
+  cards: [
+    {
+      title: "Short and Medium-length films",
+      body: "Fiction, Documentary and Animation at Production or Co-production stage, or may need Distribution support.",
+      image: "/images/fund-grant-1.jpg",
+      alt: "Cloud rolling over a dark ridge at dusk",
+    },
+    {
+      title: "Feature films",
+      body: "Fiction, Documentary and Animation at Development, Production, Co-production, or Post-production stage, or may need Distribution support.",
+      image: "/images/fund-grant-2.jpg",
+      alt: "A town on the far shore of a lake under a pale sky",
+    },
+    {
+      title: "TV Series",
+      body: "Fiction, Documentary and Animation at Development, Production, or Co-production stage.",
+      image: "/images/fund-grant-3.jpg",
+      alt: "Golden hills rolling to the horizon",
+    },
+  ],
+} as const;
+
+export const fundApplication = {
+  heading: "Application",
+  cta: "Click here to Apply",
+  body: [
+    "Registering a project requires submitting an online form and a single PDF containing all required documents during an open cycle.",
+    "Once submitted, applications cannot be modified or withdrawn, and any incomplete dossiers will be automatically rejected.",
+    "The full regulations, guidelines, and templates are available in detail below.",
+  ],
+  image: {
+    src: "/images/fund-application.jpg",
+    alt: "",
+  },
+} as const;
+
+/** Where both "Click here to Apply" buttons point. The frame gives them no
+ *  destination and there is no application form yet, so they open the contact
+ *  page — swap for the real form when it exists. */
+export const fundApplyHref = "/contact";
+
+export const fundTimeline = {
+  heading: "Fund Cycle Timeline",
+  intro:
+    "The Kurdish Film Fund holds two grant cycles each year. The dates below apply to the 2026 cycle and the first grant cycle of 2027.",
+  /** `major` marks the announcements, which Figma draws at twice the diameter;
+   *  `above` lifts the 2027 cycle's labels over the line, as the frame has them. */
+  milestones: [
+    { label: "Call opening", date: "September 1st, 2026", major: false, above: false },
+    { label: "Deadline", date: "October 16th, 2026\n6pm (UTC+3)", major: false, above: false },
+    { label: "Announcement of supported projects", date: "mid-January 2027", major: true, above: false },
+    { label: "Call opening", date: "March 1st, 2027", major: false, above: true },
+    { label: "Deadline", date: "April 2nd, 2027", major: false, above: true },
+    { label: "Announcement of supported projects", date: "early July 2027", major: true, above: true },
+  ],
+} as const;
+
+/**
+ * The four regulation sets (Frame 239). Only "Guidelines & Templates" has a
+ * page in the design (939:110); the other three are awaiting their content, so
+ * they render without a link until it lands.
+ */
+export const fundGuidelines = {
+  heading: "Application Guidelines",
+  intro:
+    "The Kurdish Film Fund holds two grant cycles each year. The dates below apply to the 2026 cycle and the first grant cycle of 2027.",
+  rows: [
+    { title: "General Regulations", href: null },
+    { title: "Guidelines & Templates", href: "/film-fund/guidelines" },
+    { title: "Eligibility & Policies", href: null },
+    { title: "Evaluation & Selection", href: null },
+  ] as { title: string; href: string | null }[],
+} as const;
+
+export const fundFaq = {
+  heading: "Frequently asked questions",
+  image: {
+    src: "/images/fund-faq.jpg",
+    alt: "Snow-covered peaks above a bare winter treeline",
+  },
+  /** Questions per page — the frame's list runs to five before its pager. */
+  perPage: 5,
+  items: [
+    {
+      title: "Does the KFF support the development of feature film projects?",
+      body: "Yes. Feature films are eligible for funding at the Development stage, as well as Production, Co-production, Post-production and Distribution.",
+    },
+    // Awaiting copy — the frame lists these questions without answers.
+    {
+      title:
+        "Does the KFF support the development or post-production of short film projects?",
+      body: fundAwaitingCopy,
+    },
+    { title: "How can I submit a project for the KFF grant?", body: fundAwaitingCopy },
+    {
+      title:
+        "As a director, is it possible to apply for the funding without previous works?",
+      body: fundAwaitingCopy,
+    },
+    { title: "Do I need to complete the online submission all at once?", body: fundAwaitingCopy },
+    { title: "Can I apply in Kurdish language?", body: fundAwaitingCopy },
+  ] as FundDisclosure[],
+} as const;
+
+/**
+ * /film-fund/guidelines — Figma 939:110. Seven documents, none of which the
+ * client has supplied yet: a row with no `file` renders with its arrow dimmed
+ * rather than linking nowhere. Drop the PDFs in `public/documents/` and fill
+ * `file` in to switch them on.
+ */
+export const fundDownloadsPage = {
+  backLabel: "Back to Kurdistan Film Fund",
+  heading: "Guidelines & Templates",
+  intro:
+    "The Kurdish Film Fund holds two grant cycles each year. The dates below apply to the 2026 cycle and the first grant cycle of 2027.",
+  image: {
+    src: "/images/fund-guidelines-strip.jpg",
+    alt: "",
+  },
+  rows: [
+    { title: "Development PDF", file: null },
+    { title: "Production & Co-Production PDF", file: null },
+    { title: "Post-Production PDF", file: null },
+    { title: "Distribution PDF", file: null },
+    { title: "Financial Plan Template PDF", file: null },
+    { title: "Budget Template PDF", file: null },
+    { title: "Checklist PDF", file: null },
+  ] as { title: string; file: string | null }[],
+} as const;
+
 /** Footer link columns. */
 export const footerColumns = [
   [
