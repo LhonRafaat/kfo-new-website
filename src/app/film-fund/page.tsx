@@ -20,12 +20,14 @@ export default function FilmFundPage() {
   return (
     <>
       <Navbar />
-      {/* The only dark page on the site: the frame fills it black and lays the
-          shared paper scan over it at 8% "hard light" rather than the cream
-          pages' 40% normal. */}
-      <main className="relative isolate overflow-x-clip bg-black">
+      {/* The only dark page on the site. It runs the same paper as every other
+          page, just turned down: a warm near-black ground with the tile
+          screened back over it, so the grain still reads. (The frame fills the
+          page flat black with the tile at 8% "hard light", which composites to
+          pure black in the browser and loses the paper entirely.) */}
+      <main className="relative isolate overflow-x-clip bg-ink-deep">
         <div
-          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.08] mix-blend-hard-light"
+          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.10] mix-blend-screen"
           aria-hidden
         />
         <FundHero />

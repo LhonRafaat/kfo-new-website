@@ -9,7 +9,12 @@ const config: Config = {
           DEFAULT: "#EAE3DB",
           light: "#F0EBE3",
         },
-        ink: "#2A1B1D",
+        ink: {
+          DEFAULT: "#2A1B1D",
+          // Ground for the dark pages (the film fund): ink taken down far
+          // enough for white type, but still warm rather than black.
+          deep: "#191011",
+        },
         espresso: "#3E2F2E",
         cocoa: "#3C2F2E",
         slate: {

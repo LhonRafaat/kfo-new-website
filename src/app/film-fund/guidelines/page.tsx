@@ -19,9 +19,9 @@ export const metadata: Metadata = {
 export default function FundGuidelinesPage() {
   return (
     <>
-      <div className="relative isolate overflow-x-clip bg-black">
+      <div className="relative isolate overflow-x-clip bg-ink-deep">
         <div
-          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.08] mix-blend-hard-light"
+          className="texture-tile pointer-events-none absolute inset-0 -z-10 opacity-[0.10] mix-blend-screen"
           aria-hidden
         />
 

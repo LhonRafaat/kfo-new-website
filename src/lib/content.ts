@@ -1006,6 +1006,11 @@ export const fundAbout = {
     src: "/images/fund-about.jpg",
     alt: "A pool below snow-streaked peaks in the Kurdistan Region",
   },
+  /** DRAFT COPY — the frame carries a note to the client here ("Rahand leraya
+   *  2-3 sentence anuse.") rather than words. Written to the brief the note
+   *  gives; needs the commission's sign-off. */
+  imageCaption:
+    "The Kurdistan Film Fund backs Kurdish stories from development through to distribution. It opens twice a year to shorts, features and TV series. Every selected project gets professional support alongside the grant.",
   items: [
     {
       title: "Our Vision",

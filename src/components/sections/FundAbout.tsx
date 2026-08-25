@@ -11,9 +11,8 @@ import { fundAbout, fundApplyHref } from "@/lib/content";
  * total and the apply link in a narrow left column, the photo beside it, and
  * the vision/mission disclosures underneath.
  *
- * The frame captions the photo with a note to the client ("Rahand leraya 2-3
- * sentence anuse.") rather than copy, so no caption ships — see the COPY NOTE
- * in content.ts.
+ * The caption under the photo is drafted copy: the frame carries a note to the
+ * client there rather than words, so it needs sign-off — see content.ts.
  */
 export function FundAbout() {
   return (
@@ -55,6 +54,15 @@ export function FundAbout() {
             />
           </Reveal>
         </div>
+
+        {/* Sits under the photo, aligned to its left edge (Figma y1358). */}
+        <Reveal
+          as="p"
+          delay={160}
+          className="mt-6 max-w-[592px] font-sans text-base leading-[1.6] text-slate lg:ml-[476px]"
+        >
+          {fundAbout.imageCaption}
+        </Reveal>
 
         {/* Figma insets the disclosure block 99px from the content column. */}
         <div className="mt-20 md:mt-[136px] lg:px-[99px]">

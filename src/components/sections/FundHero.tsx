@@ -15,7 +15,7 @@ import { fundHero } from "@/lib/content";
  */
 export function FundHero() {
   return (
-    <section className="relative flex h-svh min-h-[620px] flex-col overflow-hidden bg-black">
+    <section className="relative flex h-svh min-h-[620px] flex-col overflow-hidden bg-ink-deep">
       <Image
         src={fundHero.image.src}
         alt={fundHero.image.alt}
