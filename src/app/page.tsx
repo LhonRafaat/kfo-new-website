@@ -5,7 +5,7 @@ import { Introduction } from "@/components/sections/Introduction";
 import { LocationsShowcase } from "@/components/sections/LocationsShowcase";
 import { MoviesMade } from "@/components/sections/MoviesMade";
 import { Testimonial } from "@/components/sections/Testimonial";
-import { NewsExperts } from "@/components/sections/NewsExperts";
+import { Insights } from "@/components/sections/Insights";
 
 const jsonLd = {
   "@context": "https://schema.org",
@@ -43,7 +43,7 @@ export default function HomePage() {
         <LocationsShowcase />
         <MoviesMade />
         <Testimonial />
-        <NewsExperts />
+        <Insights />
       </main>
       <Footer />
     </>

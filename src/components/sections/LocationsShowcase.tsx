@@ -24,10 +24,12 @@ function Tile({
   tile,
   active,
   onActivate,
+  hideOnMobile = false,
 }: {
   tile: ShowcaseTile;
   active: boolean;
   onActivate: () => void;
+  hideOnMobile?: boolean;
 }) {
   return (
     <Link
@@ -35,7 +37,9 @@ function Tile({
       aria-label={`${tile.title} — ${showcaseCta}`}
       onMouseEnter={onActivate}
       onFocus={onActivate}
-      className="group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10"
+      className={`group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10 ${
+        hideOnMobile ? "hidden md:block" : "block aspect-[3/2] md:aspect-auto"
+      }`}
       style={{ flexGrow: tile.tall ? 320 : 234 }}
     >
       <Image
@@ -93,14 +97,14 @@ export function LocationsShowcase() {
         </div>
 
         <div
-          className="mt-10 grid grid-cols-2 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4"
+          className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4"
           onMouseLeave={() => setActive(0)}
         >
           {locationShowcase.map((col, c) => (
             <Reveal
               key={c}
               delay={c * 90}
-              className="flex h-[min(58vw,calc(100svh-390px))] min-h-[320px] flex-col gap-3 md:h-[min(46vw,calc(100svh-330px))] md:max-h-[571px] md:gap-[17px]"
+              className="flex h-auto flex-col gap-3 md:h-[min(46vw,calc(100svh-330px))] md:min-h-[320px] md:max-h-[571px] md:gap-[17px]"
             >
               {col.map((tile, r) => {
                 const index = c * 2 + r;
@@ -110,6 +114,9 @@ export function LocationsShowcase() {
                     tile={tile}
                     active={index === active}
                     onActivate={() => setActive(index)}
+                    /* Single column on mobile, so only the first tile of each
+                       column is shown — four in all; md+ keeps the full mosaic. */
+                    hideOnMobile={r > 0}
                   />
                 );
               })}

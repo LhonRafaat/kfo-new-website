@@ -20,12 +20,12 @@ const PAGE_SIZE = 3;
 const pages = Math.ceil(news.length / PAGE_SIZE);
 
 /**
- * "News from Experts" (Figma "Highlights Section", 317:789): three headlines —
+ * "Insights" (Figma "Highlights Section", 317:789): three headlines —
  * the active one at full ink with the wavy accent underline drawn beneath it,
  * the others dimmed to 56% — with pause/prev/next controls pinned to the
  * bottom of the column and the feature photo crossfading on the right.
  */
-export function NewsExperts() {
+export function Insights() {
   const [index, setIndex] = useState(0); // highlighted article across the pool
   const [playing, setPlaying] = useState(true);
 
@@ -54,9 +54,9 @@ export function NewsExperts() {
       <Container className="relative z-10 py-12">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Reveal as="h2" className="heading-section text-ink">
-            News from <em className="italic">Experts</em>
+            <em className="italic">Insights</em>
           </Reveal>
-          <AccentLink href="/news">Read all news</AccentLink>
+          <AccentLink href="/news">Read all insights</AccentLink>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
@@ -77,7 +77,7 @@ export function NewsExperts() {
                       <span className="font-sans text-base leading-6 tracking-[0.02em] text-ink">
                         {item.date}
                       </span>
-                      <p className="mt-1 max-w-[435px] font-serif text-[1.375rem] font-medium leading-[1.14] tracking-[0.02em] text-ink group-hover:text-espresso">
+                      <p className="mt-1 max-w-[435px] font-serif text-[1.125rem] md:text-[1.375rem] font-medium leading-[1.14] tracking-[0.02em] text-ink group-hover:text-espresso">
                         {item.title}
                       </p>
                     </Link>
@@ -128,7 +128,7 @@ export function NewsExperts() {
 
           {/* Feature image — crossfades to the highlighted item's image */}
           <Reveal className="order-1 md:order-2">
-            <div className="relative aspect-[572/515] w-full overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
+            <div className="relative aspect-[3/2] w-full md:aspect-[572/515] overflow-hidden rounded-2xl bg-ink/10 md:max-h-[calc(100svh-280px)]">
               {visible.map((item, i) => (
                 <Image
                   key={`${page}-${i}`}

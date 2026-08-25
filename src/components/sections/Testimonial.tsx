@@ -21,7 +21,7 @@ export function Testimonial() {
       <Container className="relative z-10">
         <Reveal className="relative isolate overflow-hidden rounded-2xl">
           {/* ---- Background stack: slate + portrait, burned by the paper ---- */}
-          <div className="burn-restore absolute inset-0 isolate">
+          <div className="burn-restore absolute inset-0 isolate [container-type:size]">
             <div className="burn-scope absolute inset-0 bg-slate">
               {/* Mirrors the spacer column below: full-width top band on mobile,
                   left half on md+. */}
@@ -39,14 +39,20 @@ export function Testimonial() {
                 node 513:74) and turns it 90° counter-clockwise, so a single
                 crease runs down the middle of the card. This asset is that exact
                 crop, stretched to the card the way Figma's fill does. */}
-            <div
-              className="burn-layer absolute inset-0 opacity-60"
-              style={{
-                backgroundImage: "url(/images/texture-paper-testimonial.webp)",
-                backgroundSize: "100% 100%",
-              }}
-              aria-hidden
-            />
+            <div className="burn-layer absolute inset-0 opacity-60" aria-hidden>
+              {/* Below lg: turned a further 90°. The wrapper is sized to the
+                  card's diagonal-swapped box (height × width) and rotated about
+                  the centre, so the rotated fill still covers it edge to edge.
+                  From lg up it goes back to the unturned, card-sized fill. */}
+              <div
+                className="absolute left-1/2 top-1/2 h-[100cqw] w-[100cqh] -translate-x-1/2 -translate-y-1/2 rotate-90 lg:h-full lg:w-full lg:rotate-0"
+                style={{
+                  backgroundImage:
+                    "url(/images/texture-paper-testimonial.webp)",
+                  backgroundSize: "100% 100%",
+                }}
+              />
+            </div>
           </div>
 
           {/* ---- Copy, above the burn ---- */}
