@@ -1,9 +1,8 @@
-import Image from "next/image";
 import { Container } from "@/components/ui/Container";
 import { AccentLink } from "@/components/ui/AccentLink";
 import { Reveal } from "@/components/Reveal";
-import { Underline } from "@/components/icons";
-import { aboutAdvisory, aboutTeam, type Person } from "@/lib/content";
+import { PersonCard } from "@/components/PersonCard";
+import { aboutAdvisory, aboutTeam } from "@/lib/content";
 
 /**
  * "Team" and "Advisory Board" (Figma "Frame 153"/"Frame 161" + the two Gallery
@@ -11,10 +10,9 @@ import { aboutAdvisory, aboutTeam, type Person } from "@/lib/content";
  * on the right, the sixth cell being a panel that points at the rest of the
  * people instead of a portrait.
  *
- * Hovering a card fades an ink wash over the portrait carrying that person's
- * biography — Figma draws card 2 of the team grid in that state. The cards are
- * focusable so the bio is reachable by keyboard, and a tap opens it on touch,
- * where there is no hover at all.
+ * The sixth cell links through to the full directory of that group — the
+ * "Team Opened" frame (981:106), built here as /about/team and
+ * /about/advisory-board.
  */
 const sections = { team: aboutTeam, advisory: aboutAdvisory };
 
@@ -49,50 +47,5 @@ export function PeopleGrid({ section }: { section: keyof typeof sections }) {
         </div>
       </Container>
     </section>
-  );
-}
-
-function PersonCard({ person, delay }: { person: Person; delay: number }) {
-  return (
-    <Reveal delay={delay} className="flex flex-col gap-4">
-      <div
-        tabIndex={0}
-        className="group relative aspect-253/301 overflow-hidden rounded-2xl bg-ink/10 outline-offset-4"
-      >
-        <Image
-          src={person.image}
-          alt={`${person.name}, ${person.role}`}
-          fill
-          sizes="(max-width: 768px) 45vw, (max-width: 1024px) 30vw, 253px"
-          className="object-cover object-center"
-        />
-
-        {/* Figma "Frame 212": the portrait under a 72% ink wash, the biography
-            inset 24px from the top-left and the link on the base line. */}
-        <div className="crossfade absolute inset-0 flex flex-col justify-between bg-ink/72 p-6 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
-          <p className="max-w-[170px] font-sans text-base leading-6 text-white">
-            {person.bio}
-          </p>
-          <span className="font-serif text-lg font-medium italic capitalize leading-[1.14] tracking-label text-white">
-            Read Biography
-            {/* Drawn out in full: this rule arrives with the wash rather than
-                on the scroll reveal every other underline uses. */}
-            <Underline
-              className="!mt-1 !h-[5px] w-[129px]"
-              style={{ clipPath: "inset(0 0 0 0)" }}
-            />
-          </span>
-        </div>
-      </div>
-
-      <div>
-        <p className="font-sans text-base font-semibold uppercase leading-[1.4] tracking-label text-espresso">
-          {person.name}
-        </p>
-        <p className="font-sans text-base leading-6 text-ink/60">
-          {person.role}
-        </p>
-      </div>
-    </Reveal>
   );
 }

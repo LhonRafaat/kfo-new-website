@@ -903,8 +903,8 @@ export type PeopleSection = {
  * They are laid out exactly as the frame has them so the client can see the
  * real shape of the section; swap the whole array once the real people land.
  *
- * The frame also gives the closing card's button no destination — it points at
- * /contact until a team page exists.
+ * The closing cards link through to the "Team Opened" frame (981:106), built
+ * as /about/team and /about/advisory-board.
  */
 const placeholderBio =
   "A person’s bio would show up here when their card is hovered.";
@@ -923,7 +923,7 @@ export const aboutTeam: PeopleSection = {
   more: {
     body: "There’s more people behind the scene.",
     cta: "Meet our team",
-    href: "/contact",
+    href: "/about/team",
   },
 };
 
@@ -941,7 +941,7 @@ export const aboutAdvisory: PeopleSection = {
   more: {
     body: "There’s more people behind the scene.",
     cta: "Meet Advisory Board",
-    href: "/contact",
+    href: "/about/advisory-board",
   },
 };
 

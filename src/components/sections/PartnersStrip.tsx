@@ -22,12 +22,15 @@ export function PartnersStrip() {
         </Reveal>
       </Container>
 
-      <Reveal className="mt-7 flex h-[130px] w-full items-center overflow-hidden bg-[#E7E1D9]">
-        <div className="flex w-max animate-marquee items-center gap-[58px] pl-[58px]">
+      {/* The strip rests in black and white; a logo colours up under the
+          pointer and the row stops travelling while the band is hovered, so a
+          lock-up can be read without chasing it. */}
+      <Reveal className="group mt-7 flex h-[130px] w-full items-center overflow-hidden bg-[#E7E1D9]">
+        <div className="flex w-max animate-marquee items-center gap-[58px] pl-[58px] group-hover:[animation-play-state:paused]">
           {reel.map((logo, i) => (
             <div
               key={`${logo.src}-${i}`}
-              className={`relative h-[104px] shrink-0 ${
+              className={`group/logo relative h-[104px] shrink-0 ${
                 logo.wide ? "w-[174px]" : "w-[104px]"
               }`}
             >
@@ -37,7 +40,9 @@ export function PartnersStrip() {
                 aria-hidden={i >= aboutPartners.logos.length}
                 fill
                 sizes="174px"
-                className="object-contain"
+                /* Chases the pointer, so it runs on the interactive token
+                   rather than the slower entrance one. */
+                className="object-contain grayscale transition-[filter] duration-(--fade-duration-interactive) ease-(--fade-ease) group-hover/logo:grayscale-0"
               />
             </div>
           ))}
