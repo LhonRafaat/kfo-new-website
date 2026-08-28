@@ -93,14 +93,16 @@ export function Insights() {
                       className={`pointer-events-none !absolute -bottom-[15px] left-0 !mt-0 !h-[5px] !w-3/4 ${
                         isActive ? "" : "!opacity-0"
                       }`}
-                      style={{ clipPath: isActive ? "inset(0 0 0 0)" : undefined }}
+                      style={{
+                        clipPath: isActive ? "inset(0 0 0 0)" : undefined,
+                      }}
                     />
                   </div>
                 );
               })}
             </div>
 
-            <div className="mt-12 flex items-center gap-3 md:mt-auto md:gap-[9px]">
+            <div className="mt-12 flex justify-center md:justify-start items-center gap-3 md:mt-auto md:gap-[9px]">
               <button
                 type="button"
                 onClick={() => setPlaying((p) => !p)}

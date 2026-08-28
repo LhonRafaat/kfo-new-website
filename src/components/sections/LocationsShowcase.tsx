@@ -20,17 +20,17 @@ import {
  * shows it on the Bazyan tile, but a permanent "Get access to all database"
  * pill reads as a badge on one photo rather than as the hover affordance it
  * is. Column height is viewport-capped so the whole section fits within 100vh.
+ *
+ * Below `md` the mosaic gives way to a swipable strip — see `ShowcaseStrip`.
  */
 function Tile({
   tile,
   active,
   onActivate,
-  hideOnMobile = false,
 }: {
   tile: ShowcaseTile;
   active: boolean;
   onActivate: () => void;
-  hideOnMobile?: boolean;
 }) {
   return (
     <Link
@@ -38,19 +38,14 @@ function Tile({
       aria-label={`${tile.title} — ${showcaseCta}`}
       onMouseEnter={onActivate}
       onFocus={onActivate}
-      /* The mobile column is auto-height, so the tile has to size itself from
-         its aspect ratio — `basis-0` (which the md+ flex-grow mosaic needs)
-         would collapse it to nothing there. */
-      className={`group relative min-h-0 basis-auto overflow-hidden rounded-2xl bg-ink/10 md:basis-0 ${
-        hideOnMobile ? "hidden md:block" : "block aspect-3/2 md:aspect-auto"
-      }`}
+      className="group relative min-h-0 basis-0 overflow-hidden rounded-2xl bg-ink/10"
       style={{ flexGrow: tile.tall ? 320 : 234 }}
     >
       <Image
         src={tile.src}
         alt={tile.alt}
         fill
-        sizes="(max-width: 768px) 92vw, 25vw"
+        sizes="25vw"
         /* Follows the cursor, so it runs on the interactive token, not the
            slower entrance one — it shares the easing curve either way. */
         className={`object-cover transition-[filter] duration-(--fade-duration-interactive) ease-(--fade-ease) ${
@@ -77,6 +72,62 @@ function Tile({
   );
 }
 
+/**
+ * The same photos on a phone: one horizontally swipable row of all eight
+ * rather than a stack of four (user, 2026-08-28).
+ *
+ * Native scroll-snap rather than the `useDragSlider` reel the movies and
+ * location strips run on — those are transform-driven because desktop arrows
+ * page them, whereas this exists only below `md`, where letting the browser do
+ * it buys momentum, fling and rubber-banding for nothing.
+ *
+ * **No hover treatment here.** A phone has no hover, so the title it used to
+ * reveal is simply on, ranged bottom-left over a scrim, and the photo keeps
+ * its colour. The CTA pill stays behind on the desktop mosaic — it is the
+ * affordance for a state that no longer exists, and the section's own "View
+ * all database" link is right above the strip.
+ */
+function ShowcaseStrip() {
+  return (
+    <Reveal
+      /* Bleeds past the container's gutter so the strip runs to the screen
+         edge, while the first card still lines up with the copy above it. */
+      className="no-scrollbar mt-10 -mx-6 flex snap-x snap-mandatory gap-3 overflow-x-auto scroll-px-6 px-6 md:hidden"
+    >
+      {locationShowcase.flat().map((tile) => (
+        <Link
+          key={tile.src}
+          href="/locations"
+          aria-label={`${tile.title} — ${showcaseCta}`}
+          className="relative aspect-3/2 w-[78%] shrink-0 snap-start overflow-hidden rounded-2xl bg-ink/10"
+        >
+          <Image
+            src={tile.src}
+            alt={tile.alt}
+            fill
+            sizes="78vw"
+            className="object-cover"
+          />
+          {/* The frame's own gradient, weighted to the base: it has to carry
+              the title without dimming the whole photo, since here it is never
+              off. Same 0.8 at the foot as the hover treatment. */}
+          <div
+            className="absolute inset-x-0 bottom-0 top-1/2"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.8) 100%)",
+            }}
+            aria-hidden
+          />
+          <h3 className="heading-card absolute bottom-4 left-4 right-4 font-serif font-medium italic text-white">
+            {tile.title}
+          </h3>
+        </Link>
+      ))}
+    </Reveal>
+  );
+}
+
 export function LocationsShowcase() {
   // Index into the flattened column-major grid; null while nothing is hovered.
   const [active, setActive] = useState<number | null>(null);
@@ -100,15 +151,17 @@ export function LocationsShowcase() {
           </AccentLink>
         </div>
 
+        <ShowcaseStrip />
+
         <div
-          className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4"
+          className="mt-10 hidden grid-cols-[346fr_207fr_340fr_237fr] gap-4 md:grid"
           onMouseLeave={() => setActive(null)}
         >
           {locationShowcase.map((col, c) => (
             <Reveal
               key={c}
               delay={c * 90}
-              className="flex h-auto flex-col gap-3 md:h-[min(46vw,calc(100svh-330px))] md:min-h-[320px] md:max-h-[571px] md:gap-[17px]"
+              className="flex h-[min(46vw,calc(100svh-330px))] min-h-[320px] max-h-[571px] flex-col gap-[17px]"
             >
               {col.map((tile, r) => {
                 const index = c * 2 + r;
@@ -118,9 +171,6 @@ export function LocationsShowcase() {
                     tile={tile}
                     active={index === active}
                     onActivate={() => setActive(index)}
-                    /* Single column on mobile, so only the first tile of each
-                       column is shown — four in all; md+ keeps the full mosaic. */
-                    hideOnMobile={r > 0}
                   />
                 );
               })}

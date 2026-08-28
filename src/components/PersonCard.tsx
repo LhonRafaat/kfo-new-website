@@ -1,5 +1,9 @@
+"use client";
+
 import Image from "next/image";
+import { useRef, useState } from "react";
 import { Reveal } from "@/components/Reveal";
+import { ProfileDialog } from "@/components/ProfileDialog";
 import { Underline } from "@/components/icons";
 import { type Person } from "@/lib/content";
 
@@ -9,9 +13,11 @@ import { type Person } from "@/lib/content";
  * name and role under it.
  *
  * Hovering fades an ink wash over the portrait carrying that person's
- * biography — Figma draws card 2 of the team grid in that state. The card is
- * focusable so the bio is reachable by keyboard, and a tap opens it on touch,
- * where there is no hover at all.
+ * biography — Figma draws card 2 of the team grid in that state. That wash is
+ * the trigger, not just a preview: "Read Biography" opens the same sheet the
+ * founder's "Read Full Message" does, minus the links out of it (user,
+ * 2026-08-28). It is a real button, so the wash is reachable by keyboard and a
+ * tap opens the sheet on touch, where there is no hover at all.
  *
  * `tone="dark"` is the film fund's copy of the same card (Figma 1040:65): the
  * portrait and the wash are identical, only the name and role under it turn
@@ -27,11 +33,13 @@ export function PersonCard({
   tone?: "light" | "dark";
 }) {
   const dark = tone === "dark";
+  const [open, setOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
   return (
     <Reveal delay={delay} className="flex flex-col gap-4">
       <div
-        tabIndex={0}
-        className={`group relative aspect-253/301 overflow-hidden rounded-2xl outline-offset-4 ${
+        className={`group relative aspect-253/301 overflow-hidden rounded-2xl ${
           dark ? "bg-white/10" : "bg-ink/10"
         }`}
       >
@@ -45,10 +53,18 @@ export function PersonCard({
 
         {/* Figma "Frame 212": the portrait under a 72% ink wash, the biography
             inset 24px from the top-left and the link on the base line. */}
-        <div className="crossfade absolute inset-0 flex flex-col justify-between bg-ink/72 p-6 opacity-0 group-hover:opacity-100 group-focus:opacity-100">
-          <p className="max-w-[170px] font-sans text-base leading-6 text-white">
+        <button
+          ref={triggerRef}
+          type="button"
+          onClick={() => setOpen(true)}
+          aria-haspopup="dialog"
+          aria-expanded={open}
+          aria-label={`Read ${person.name}'s biography`}
+          className="crossfade absolute inset-0 flex flex-col justify-between bg-ink/72 p-6 text-left opacity-0 outline-offset-4 group-hover:opacity-100 focus-visible:opacity-100"
+        >
+          <span className="max-w-[170px] font-sans text-base leading-6 text-white">
             {person.bio}
-          </p>
+          </span>
           <span className="font-serif text-lg font-medium italic capitalize leading-[1.14] tracking-label text-white">
             Read Biography
             {/* Drawn out in full: this rule arrives with the wash rather than
@@ -58,7 +74,7 @@ export function PersonCard({
               style={{ clipPath: "inset(0 0 0 0)" }}
             />
           </span>
-        </div>
+        </button>
       </div>
 
       <div>
@@ -77,6 +93,23 @@ export function PersonCard({
           {person.role}
         </p>
       </div>
+
+      {/* The frame gives no design for a person's sheet, so it reuses the
+          founder's: portrait, name and role, then the biography. */}
+      <ProfileDialog
+        open={open}
+        onClose={() => setOpen(false)}
+        returnFocusRef={triggerRef}
+        image={{
+          src: person.image,
+          alt: `${person.name}, ${person.role}`,
+        }}
+        name={person.name}
+        title={person.role}
+        heading="Biography"
+        body={person.bio}
+        closeLabel={`Close ${person.name}'s biography`}
+      />
     </Reveal>
   );
 }
