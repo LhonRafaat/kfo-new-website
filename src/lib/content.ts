@@ -1026,8 +1026,13 @@ export const fundAbout = {
 
 export const fundGrants = {
   heading: "Grants",
-  intro:
-    "Through its financial and professional support, the Kurdish Film Fund fosters the Kurdish film industry while building a strong community of filmmakers who are bringing Kurdish stories to audiences around the world.\nThe Kurdish Film Fund supports projects across multiple formats.",
+  /** The frame breaks the first paragraph by hand — those breaks are kept and
+   *  only honoured at the design width (see FundGrants); narrower than that the
+   *  text sets itself. */
+  intro: [
+    "Through its financial and professional support, the Kurdish Film Fund fosters the\nKurdish film industry while building a strong community of filmmakers who are\nbringing Kurdish stories to audiences around the world.",
+    "The Kurdish Film Fund supports projects across multiple formats.",
+  ],
   cards: [
     {
       title: "Short and Medium-length films",
@@ -1053,8 +1058,10 @@ export const fundGrants = {
 export const fundApplication = {
   heading: "Application",
   cta: "Click here to Apply",
+  /** The frame styles the opening line as 20px serif and drops the two that
+   *  follow to 16px sans (overrides 32 and 31 on node 753:59). */
+  lead: "Registering a project requires submitting an online form and a single PDF containing all required documents during an open cycle.",
   body: [
-    "Registering a project requires submitting an online form and a single PDF containing all required documents during an open cycle.",
     "Once submitted, applications cannot be modified or withdrawn, and any incomplete dossiers will be automatically rejected.",
     "The full regulations, guidelines, and templates are available in detail below.",
   ],
@@ -1086,14 +1093,22 @@ export const fundTimeline = {
 } as const;
 
 /**
- * The four regulation sets (Frame 239). Only "Guidelines & Templates" has a
- * page in the design (939:110); the other three are awaiting their content, so
- * they render without a link until it lands.
+ * The four regulation sets (Frame 223 + Frame 239). The heading sits in ink on
+ * a 1184×240 band of the mountain photo; the rows run the full width beneath
+ * it. Only "Guidelines & Templates" has a page in the design (939:110); the
+ * other three are awaiting their content, so they render without a link until
+ * it lands.
  */
 export const fundGuidelines = {
-  heading: "Application Guidelines",
+  heading: "Fund Guidelines:",
+  headingLine2: "Recourses & Governance",
   intro:
     "The Kurdish Film Fund holds two grant cycles each year. The dates below apply to the 2026 cycle and the first grant cycle of 2027.",
+  image: {
+    /** e65128cf45 under the frame's own crop transform (Rectangle 20). */
+    src: "/images/fund-guidelines-band.jpg",
+    alt: "",
+  },
   rows: [
     { title: "General Regulations", href: null },
     { title: "Guidelines & Templates", href: "/film-fund/guidelines" },
@@ -1133,6 +1148,63 @@ export const fundFaq = {
 } as const;
 
 /**
+ * "The Fund Team" (Figma "Group 21", y4804) and the full directory behind it
+ * (1078:128, built as /film-fund/team).
+ *
+ * COPY NOTE — the frame reuses the about page's placeholder people verbatim,
+ * portraits included, so this pulls from `aboutTeam` rather than duplicating
+ * them: when the real people land, replacing `aboutTeam` fixes both pages.
+ * The frame's directory shows twelve cards by repeating four faces; that
+ * repetition is the frame's, not a mistake to be tidied.
+ */
+export const fundTeam: PeopleSection = {
+  heading: "The Fund Team",
+  intro: aboutTeam.intro,
+  people: aboutTeam.people.slice(0, 5),
+  more: {
+    body: aboutTeam.more.body,
+    cta: "Meet our team",
+    href: "/film-fund/team",
+  },
+};
+
+/** /film-fund/team — Figma 1078:128. Twelve cards over the same four faces. */
+export const fundTeamPage = {
+  backLabel: "Back to film fund",
+  heading: "The Fund Team",
+  people: Array.from(
+    { length: 12 },
+    (_, i) => aboutTeam.people[i % aboutTeam.people.length],
+  ) as readonly Person[],
+} as const;
+
+/**
+ * The film fund pages carry their own footer (Figma "Footer VB", 753:68): the
+ * same block as the site's, turned over — a slate ground with espresso type —
+ * under the fund's own wordmark, and linking within the fund rather than
+ * across the site.
+ */
+export const fundFooter = {
+  wordmark: "KURDISTAN FILM FUND",
+  description:
+    "Your first point of contact for filming and production in the Kurdistan Region of Iraq. Contact us for inquires.",
+  copyright: "© 2026 Kurdistan Film Fund",
+  columns: [
+    [
+      { label: "About", href: "/film-fund#about" },
+      { label: "Grants", href: "/film-fund#grants" },
+      { label: "Cycle Timeline", href: "/film-fund#cycle-timeline" },
+      { label: "Kurdistan Film Commission", href: "/" },
+    ],
+    [
+      { label: "FAQ", href: "/film-fund#faq" },
+      { label: "Application Guidelines", href: "/film-fund#guidelines" },
+      { label: "Contact", href: "/contact" },
+    ],
+  ],
+} as const;
+
+/**
  * /film-fund/guidelines — Figma 939:110. Seven documents, none of which the
  * client has supplied yet: a row with no `file` renders with its arrow dimmed
  * rather than linking nowhere. Drop the PDFs in `public/documents/` and fill
@@ -1141,6 +1213,10 @@ export const fundFaq = {
 export const fundDownloadsPage = {
   backLabel: "Back to Kurdistan Film Fund",
   heading: "Guidelines & Templates",
+  /** 1078:115. There is no Kurdish set of documents yet, so the link has no
+   *  destination and renders as plain text until one exists. */
+  switchLabel: "Switch to Kurdish Documents",
+  switchHref: null as string | null,
   intro:
     "The Kurdish Film Fund holds two grant cycles each year. The dates below apply to the 2026 cycle and the first grant cycle of 2027.",
   image: {

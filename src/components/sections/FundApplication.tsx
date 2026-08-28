@@ -12,7 +12,7 @@ import { fundApplication, fundApplyHref } from "@/lib/content";
  */
 export function FundApplication() {
   return (
-    <section className="relative">
+    <section id="application" className="relative">
       <Container className="relative z-10 pt-24 md:pt-40">
         <Reveal className="reveal-underline relative isolate overflow-hidden rounded-2xl">
           <Image
@@ -20,7 +20,19 @@ export function FundApplication() {
             alt={fundApplication.image.alt}
             fill
             sizes="(max-width: 1280px) 100vw, 1184px"
-            className="-z-10 object-cover object-center"
+            /* The crop's aspect is the card's at the design width, so this
+               only bites on a phone, where the card turns tall: anchoring the
+               sky keeps the copy off the bright ridge. */
+            className="-z-10 object-cover object-top"
+          />
+
+          {/* Below lg the card turns tall and the ridge rises behind the copy;
+              a haze over the lower half keeps the ink readable. At the design
+              width the card is the frame's 422 and the copy is all over sky,
+              so this is off there entirely. */}
+          <div
+            className="absolute inset-0 -z-10 bg-gradient-to-b from-transparent via-white/35 to-white/60 lg:hidden"
+            aria-hidden
           />
 
           {/* Figma's card is 422 tall: hold that at lg so the copy stays over
@@ -32,19 +44,21 @@ export function FundApplication() {
               </h2>
               <Link
                 href={fundApplyHref}
-                className="self-start font-serif text-[1.375rem] font-medium italic leading-[1.14] transition-colors duration-300 hover:text-accent md:text-[2rem]"
+                className="self-start font-serif text-[1.375rem] font-medium italic leading-[1.14] tracking-label transition-colors duration-300 hover:text-accent md:text-[2rem]"
               >
                 {fundApplication.cta}
-                <Underline className="!mt-1.5 !h-[5px] w-full" />
+                <Underline className="!mt-1 !h-[5px] w-full text-rust" />
               </Link>
             </div>
 
-            <div className="flex max-w-[494px] flex-col gap-4">
+            {/* The opening line is set in the serif a size up; the two under it
+                drop to 16px sans, 8px apart. */}
+            <div className="flex max-w-[494px] flex-col gap-2">
+              <p className="font-serif text-lg font-medium leading-[1.5] md:text-xl">
+                {fundApplication.lead}
+              </p>
               {fundApplication.body.map((paragraph) => (
-                <p
-                  key={paragraph}
-                  className="font-sans text-base leading-[1.5] md:text-xl md:leading-[1.5]"
-                >
+                <p key={paragraph} className="font-sans text-base leading-6">
                   {paragraph}
                 </p>
               ))}

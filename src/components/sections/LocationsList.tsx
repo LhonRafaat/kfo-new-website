@@ -452,12 +452,10 @@ function LocationCard({
                 <span className="font-serif text-xl font-medium capitalize italic leading-[1.139] tracking-label">
                   {locationsGate.cta}
                 </span>
-                {/* Figma draws the rule exactly as wide as the label. The wave
-                    fills 115 of the SVG's 150-unit box, so a box of 130.44% of
-                    the label does that at any text size — and taking it out of
-                    the flow keeps the button's width the label's, so the group
-                    centres on the marks rather than on the box's empty tail. */}
-                <Underline className="absolute left-0 top-full mt-[3px] !h-[7px] w-[130.44%]" />
+                {/* Figma draws the rule exactly as wide as the label. Taking
+                    it out of the flow keeps the button's width the label's, so
+                    the group centres on the marks rather than on the rule. */}
+                <Underline className="absolute left-0 top-full mt-[3px] !h-[7px] w-full" />
               </span>
             </button>
           </div>

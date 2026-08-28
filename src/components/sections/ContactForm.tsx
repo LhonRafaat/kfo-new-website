@@ -67,10 +67,8 @@ export function ContactForm() {
           <span className="font-serif text-xl font-medium italic leading-[1.139] tracking-label text-ink transition-colors duration-300 group-hover:text-accent">
             {contactPage.form.submit}
           </span>
-          {/* Figma strokes this rule #645756 rather than the accent (508:1237).
-              The wave fills 115 of the SVG's 150-unit box, so a 168px box draws
-              the frame's 129px stroke. */}
-          <Underline className="mt-1.5 !h-[5px] w-42 text-[#645756] transition-colors duration-300 group-hover:text-accent" />
+          {/* Figma strokes this rule #645756 rather than the accent (508:1237). */}
+          <Underline className="mt-1.5 !h-[5px] w-[129px] text-[#645756] transition-colors duration-300 group-hover:text-accent" />
         </button>
 
         {sent && (

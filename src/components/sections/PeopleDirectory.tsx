@@ -3,42 +3,66 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { CaretRight } from "@/components/icons";
 import { PersonCard } from "@/components/PersonCard";
-import { aboutAdvisory, aboutTeam } from "@/lib/content";
+import { aboutAdvisory, aboutTeam, fundTeamPage } from "@/lib/content";
 
 /**
- * The full directory behind the about page's "Meet our team" / "Meet Advisory
- * Board" cards (Figma "Team Opened", 981:106): a centred back-link and
- * heading over a four-up grid of the same portrait cards, on the cream page.
+ * The full directory behind a "Meet our team" card (Figma "Team Opened",
+ * 981:106, and the film fund's copy of it, 1078:128): a centred back-link and
+ * heading over a four-up grid of the same portrait cards.
  *
- * Figma mocks the grid with twelve cards, all repeats of its four placeholder
+ * Figma mocks each grid with twelve cards, all repeats of its four placeholder
  * people — it is a layout study, not a roster — so this renders whatever the
  * group actually holds and stays centred at any count.
  */
-const sections = { team: aboutTeam, advisory: aboutAdvisory };
+const sections = {
+  team: {
+    heading: aboutTeam.heading,
+    people: aboutTeam.people,
+    back: { href: "/about", label: "Back to About" },
+    tone: "light",
+  },
+  advisory: {
+    heading: aboutAdvisory.heading,
+    people: aboutAdvisory.people,
+    back: { href: "/about", label: "Back to About" },
+    tone: "light",
+  },
+  fund: {
+    heading: fundTeamPage.heading,
+    people: fundTeamPage.people,
+    back: { href: "/film-fund", label: fundTeamPage.backLabel },
+    tone: "dark",
+  },
+} as const;
 
 export function PeopleDirectory({
   section,
 }: {
   section: keyof typeof sections;
 }) {
-  const { heading, people } = sections[section];
+  const { heading, people, back, tone } = sections[section];
+  const dark = tone === "dark";
 
   return (
     <Container className="relative z-10 pb-24 pt-12">
       <Reveal className="flex justify-center">
         <Link
-          href="/about"
-          className="flex items-center gap-2 font-sans text-base font-semibold uppercase tracking-label text-espresso opacity-64 transition-opacity duration-300 hover:opacity-100"
+          href={back.href}
+          className={`flex items-center gap-2 font-sans text-base font-semibold uppercase tracking-label opacity-64 transition-opacity duration-300 hover:opacity-100 ${
+            dark ? "text-white" : "text-espresso"
+          }`}
         >
           <CaretRight className="h-5 w-5 rotate-180" />
-          Back to About
+          {back.label}
         </Link>
       </Reveal>
 
       <Reveal
         as="h1"
         delay={60}
-        className="heading-section mt-10 text-center text-ink"
+        className={`heading-section mt-10 text-center ${
+          dark ? "text-white" : "text-ink"
+        }`}
       >
         {heading}
       </Reveal>
@@ -52,6 +76,7 @@ export function PeopleDirectory({
               key={`${person.name}-${i}`}
               person={person}
               delay={i * 60}
+              tone={tone}
             />
           ))}
         </div>

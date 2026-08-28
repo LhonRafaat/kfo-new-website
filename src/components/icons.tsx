@@ -210,11 +210,22 @@ export function ArrowLeft(props: SVGProps<SVGSVGElement>) {
   );
 }
 
-/* Hand-drawn wavy underline for accent links. `preserveAspectRatio="none"` plus
-   a non-scaling stroke let the caller set the length purely from className
-   (e.g. `w-32`, `w-48`, `w-full`) without distorting the line's thickness or
-   wave height. Colour comes from `currentColor` — the `.underline-wave` base
-   class defaults it to accent, and a `text-*` utility overrides it. */
+/* Hand-drawn wavy underline for accent links — the centreline of Figma's
+   "Vector 5", recovered from its strokeGeometry and normalised to a 100×5 box.
+   Every instance in the file (25, 125, 133, 181, 229 and 242 wide) is the same
+   curve stretched, so one path serves them all.
+
+   The curve fills its viewBox exactly: it starts on the base line, rises to
+   touch y=0 around 74% along, and settles just under the top at the right end.
+   That means **the element's height IS the wave's depth** — `!h-[5px]` draws
+   Figma's 5px squiggle, and the box needs no slack. `preserveAspectRatio="none"`
+   stretches it to whatever width the caller gives; the stroke is pinned to real
+   pixels so it stays a hairline at any length. `overflow-visible` keeps the
+   half-stroke that hangs outside the box (Figma centres the stroke on the path)
+   from being clipped at the top and bottom edges.
+
+   Colour comes from `currentColor` — the `.underline-wave` base class defaults
+   it to accent, and a `text-*` utility overrides it. */
 export function Underline({
   className = "",
   strokeWidth,
@@ -223,24 +234,21 @@ export function Underline({
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      viewBox="0 0 150 13"
+      viewBox="0 0 100 5"
       fill="none"
       preserveAspectRatio="none"
       aria-hidden
-      className={`underline-wave ${className}`}
+      className={`underline-wave overflow-visible ${className}`}
       {...props}
     >
       <path
-        d="M0 5.55005C43.9423 5.55005 85.3846 -1.07425 115 0.926624"
-        // `.underline-wave` sets `text-accent`, so this is the Figma orange
-        // everywhere by default — but a `text-*` utility on the element can now
-        // recolour it (the contact form's submit rule is #645756).
+        d="M0 5C19.105 5 37.667 3.344 54.672 1.938C71.676 0.532 87.124 -0.624 100 0.377"
         stroke="currentColor"
         strokeWidth={strokeWidth ?? 1.10035}
-        // `preserveAspectRatio="none"` squashes the box hard vertically, which
-        // would thin the stroke well below its Figma weight. Pinning it to the
-        // screen keeps the given width in real pixels.
-        vectorEffect={strokeWidth ? "non-scaling-stroke" : undefined}
+        strokeLinecap="round"
+        // The box is stretched hard in both axes, which would drag the stroke
+        // weight with it. Pinning it to the screen keeps Figma's hairline.
+        vectorEffect="non-scaling-stroke"
       />
     </svg>
   );

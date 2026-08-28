@@ -18,19 +18,19 @@ export function FundDownloads() {
         {fundDownloadsPage.rows.map((row, i) => {
           const inner = (
             <>
-              <span className="font-serif text-[2rem] font-medium leading-[1.14] md:text-[3.5rem]">
+              <span className="font-serif text-[1.75rem] font-medium leading-[1.14] md:text-[2.5rem]">
                 {row.title}
               </span>
               <ArrowLineDown
-                className={`mt-2 h-8 w-8 shrink-0 transition-transform duration-300 md:mt-4 ${
+                className={`h-8 w-8 shrink-0 transition-transform duration-300 ${
                   row.file ? "group-hover:translate-y-1" : "opacity-40"
                 }`}
               />
             </>
           );
-          const rowClass = `flex w-full items-start justify-between gap-6 py-5 text-left text-white ${
-            i > 0 ? "border-t border-white/15" : ""
-          }`;
+          /* Every row rules off along its BOTTOM edge in the frame, the last
+             one included, so the list closes on a hairline. */
+          const rowClass = `flex w-full items-center justify-between gap-6 border-b border-white/15 py-5 text-left text-white`;
 
           return (
             <Reveal as="li" key={row.title} delay={i * 60}>

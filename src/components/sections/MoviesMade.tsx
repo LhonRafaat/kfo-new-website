@@ -109,7 +109,7 @@ export function MoviesMade() {
             >
               <CarouselArrow direction="left" className="h-[19px] w-[22px]" />
               <Underline
-                className="mt-2 h-[3px] w-[33px]"
+                className="mt-2 h-[3px] w-[25px]"
                 strokeWidth={1.1003}
               />
             </button>
@@ -121,7 +121,7 @@ export function MoviesMade() {
             >
               <CarouselArrow className="h-[19px] w-[22px]" />
               <Underline
-                className="mt-2 h-[3px] w-[33px]"
+                className="mt-2 h-[3px] w-[25px]"
                 strokeWidth={1.1003}
               />
             </button>

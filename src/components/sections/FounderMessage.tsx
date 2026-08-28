@@ -185,8 +185,8 @@ export function FounderMessage() {
                 >
                   <span className="flex flex-col">
                     <span>{founderMessage.linkedin.label}</span>
-                    {/* 133px drawn; the wave fills 115 of the 150-unit box. */}
-                    <Underline className="!h-[5px] w-[173px]" />
+                    {/* 133px in the frame. */}
+                    <Underline className="!h-[5px] w-[133px]" />
                   </span>
                 </a>
                 <a
@@ -197,8 +197,8 @@ export function FounderMessage() {
                 >
                   <span className="flex flex-col">
                     <span>{founderMessage.readStatement}</span>
-                    {/* 133px drawn; the wave fills 115 of the 150-unit box. */}
-                    <Underline className="!h-[5px] w-[173px]" />
+                    {/* 133px in the frame. */}
+                    <Underline className="!h-[5px] w-[133px]" />
                   </span>
                 </a>
               </div>

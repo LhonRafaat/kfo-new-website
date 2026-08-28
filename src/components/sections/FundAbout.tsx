@@ -16,7 +16,7 @@ import { fundAbout, fundApplyHref } from "@/lib/content";
  */
 export function FundAbout() {
   return (
-    <section className="relative">
+    <section id="about" className="relative">
       <Container className="relative z-10 pt-24 md:pt-40">
         <div className="flex flex-col gap-10 lg:flex-row lg:items-start lg:gap-[85px] lg:pl-[73px]">
           {/* Figma drops the copy column 99px against the photo's top edge. */}
@@ -34,10 +34,10 @@ export function FundAbout() {
 
             <Link
               href={fundApplyHref}
-              className="group mt-8 self-start font-serif text-[1.375rem] font-medium italic leading-[1.14] text-white transition-colors duration-300 hover:text-accent"
+              className="group mt-8 self-start font-serif text-xl font-medium italic leading-[1.14] tracking-label text-white transition-colors duration-300 hover:text-accent md:text-2xl"
             >
               {fundAbout.cta}
-              <Underline className="!mt-1.5 !h-[5px] w-full" />
+              <Underline className="!mt-1.5 !h-[5px] w-full text-rust" />
             </Link>
           </Reveal>
 
@@ -55,17 +55,18 @@ export function FundAbout() {
           </Reveal>
         </div>
 
-        {/* Sits under the photo, aligned to its left edge (Figma y1358). */}
+        {/* Sits under the photo, aligned to its left edge (Figma y1358). The
+            photo starts 476px into the 1184 content column. */}
         <Reveal
           as="p"
           delay={160}
-          className="mt-6 max-w-[592px] font-sans text-base leading-[1.6] text-slate lg:ml-[476px]"
+          className="mt-6 max-w-[582px] font-sans text-base leading-[1.6] text-slate lg:ml-[476px]"
         >
           {fundAbout.imageCaption}
         </Reveal>
 
         {/* Figma insets the disclosure block 99px from the content column. */}
-        <div className="mt-20 md:mt-[136px] lg:px-[99px]">
+        <div className="mt-20 md:mt-40 lg:px-[99px]">
           <FundDisclosureList group="about" />
         </div>
       </Container>

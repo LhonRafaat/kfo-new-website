@@ -38,10 +38,8 @@ export function ServicesHero() {
         <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-16">
           <Reveal className="reveal-underline max-w-[480px]">
             <h1 className="heading-section">{servicesHero.title}</h1>
-            {/* Figma draws this 149px wide; the wave only occupies 115 of the
-                SVG's 150-unit box, so the box has to run to 194px for the
-                stroke itself to measure 149. */}
-            <Underline className="mt-2.5 !h-[5px] max-w-[194px]" />
+            {/* Figma draws this 149px wide. */}
+            <Underline className="mt-2.5 !h-[5px] max-w-[149px]" />
             <p className="mt-2.5 font-serif text-lg font-medium leading-[1.5]">
               {servicesHero.lead}
             </p>

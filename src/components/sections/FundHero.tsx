@@ -15,7 +15,7 @@ import { fundHero } from "@/lib/content";
  */
 export function FundHero() {
   return (
-    <section className="relative flex h-svh min-h-[620px] flex-col overflow-hidden bg-ink-deep">
+    <section className="relative flex h-svh min-h-[620px] flex-col justify-end overflow-hidden bg-ink-deep">
       <Image
         src={fundHero.image.src}
         alt={fundHero.image.alt}
@@ -34,8 +34,11 @@ export function FundHero() {
         aria-hidden
       />
 
-      {/* Wordmark, centred in the photo */}
-      <div className="relative z-10 flex flex-1 items-center justify-center px-6">
+      {/* Wordmark, centred in the photo. The frame centres the lockup on the
+          hero itself (its midpoint is the hero's), not on the band left over
+          above the intro row — so it comes out of the flow and the intro keeps
+          the base line to itself. */}
+      <div className="absolute inset-0 z-10 flex items-center justify-center px-6">
         <Reveal className="reveal-underline flex flex-col items-center">
           <h1 className="w-[min(464px,80vw)]">
             <Image
@@ -49,16 +52,19 @@ export function FundHero() {
               className="h-auto w-full"
             />
           </h1>
-          {/* Figma draws the rule 229px wide under a 464px wordmark. */}
+          {/* Figma draws the rule 229px wide under a 464px wordmark, and at
+              2.52 it is the heaviest squiggle on the site. */}
           <Underline
-            strokeWidth={2}
-            className="!mt-9 !h-[6px] w-[min(229px,40vw)]"
+            strokeWidth={2.5182}
+            className="!mt-9 !h-[6px] w-[min(229px,40vw)] text-rust"
           />
         </Reveal>
       </div>
 
       <Container className="relative z-10 pb-10 text-white">
-        <div className="flex flex-col gap-8 lg:flex-row lg:items-start lg:gap-12">
+        {/* The frame sets the row's cross axis to MAX: the two columns are
+            different depths and sit on a shared BASE line, not a shared top. */}
+        <div className="flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between lg:gap-12">
           <Reveal
             as="p"
             delay={120}
@@ -66,7 +72,9 @@ export function FundHero() {
           >
             {fundHero.lead}
           </Reveal>
-          <Reveal delay={180} className="flex max-w-[480px] flex-col gap-4">
+          {/* One text block in the frame, so the two paragraphs run on
+              consecutive lines with no space between them. */}
+          <Reveal delay={180} className="max-w-[480px] lg:w-[480px] lg:shrink-0">
             {fundHero.aside.map((paragraph) => (
               <p key={paragraph} className="body-md leading-6 text-white">
                 {paragraph}

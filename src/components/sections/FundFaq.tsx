@@ -12,7 +12,7 @@ import { fundFaq } from "@/lib/content";
  */
 export function FundFaq() {
   return (
-    <section className="relative">
+    <section id="faq" className="relative">
       <Container className="relative z-10 py-24 md:py-40">
         <Reveal as="h2" className="heading-section text-white">
           {fundFaq.heading}

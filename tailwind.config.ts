@@ -30,6 +30,10 @@ const config: Config = {
           DEFAULT: "#FF6600",
           soft: "#F19352",
         },
+        // The film fund frames stroke every hand-drawn rule and fill every
+        // timeline dot in this rust, and reserve the accent orange for the
+        // "$2M" figure alone — so the two are NOT interchangeable there.
+        rust: "#CA4A2F",
       },
       fontFamily: {
         serif: ["var(--font-serif)", "Georgia", "Cambria", "serif"],

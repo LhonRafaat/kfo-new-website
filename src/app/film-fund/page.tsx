@@ -7,6 +7,7 @@ import { FundGrants } from "@/components/sections/FundGrants";
 import { FundApplication } from "@/components/sections/FundApplication";
 import { FundTimeline } from "@/components/sections/FundTimeline";
 import { FundGuidelines } from "@/components/sections/FundGuidelines";
+import { FundTeam } from "@/components/sections/FundTeam";
 import { FundFaq } from "@/components/sections/FundFaq";
 
 export const metadata: Metadata = {
@@ -38,9 +39,10 @@ export default function FilmFundPage() {
         <FundApplication />
         <FundTimeline />
         <FundGuidelines />
+        <FundTeam />
         <FundFaq />
       </main>
-      <Footer />
+      <Footer variant="fund" />
     </>
   );
 }

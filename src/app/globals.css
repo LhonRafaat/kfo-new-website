@@ -181,7 +181,9 @@
      layer, so any `w-*` / `h-*` / `text-*` utility on the element overrides them.
      It draws itself in (clip-path) the first time the link scrolls into view. */
   .underline-wave {
-    @apply mt-1 block h-3 w-full text-accent;
+    /* 5px is the height of Figma's own underline box, and the curve fills its
+       viewBox — so this is the wave's real depth, not padding around it. */
+    @apply mt-1 block h-[5px] w-full text-accent;
     clip-path: inset(0 100% 0 0);
     transition: clip-path var(--fade-duration) var(--fade-ease);
   }

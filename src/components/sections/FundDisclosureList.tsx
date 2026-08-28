@@ -6,8 +6,9 @@ import { fundAbout, fundFaq } from "@/lib/content";
 
 /**
  * The two disclosure lists on the film fund page (Figma "Frame 238" and the
- * FAQ list): 20px of padding around each row, a hairline of white at 15%
- * between them, and the open row's answer 12px under its question.
+ * FAQ list): 20px of padding around each row, a hairline of white at 15% on
+ * each row's BOTTOM edge — so the list closes on a rule rather than trailing
+ * off — and the open row's answer 12px under its question.
  *
  * The FAQ list pages through its questions the way the frame's pager does —
  * five to a page, the current number underlined with the accent squiggle.
@@ -53,7 +54,12 @@ export function FundDisclosureList({ group }: { group: keyof typeof groups }) {
           const index = start + i;
           const isOpen = index === open;
           return (
-            <li key={item.title} className={i > 0 ? "border-t border-white/15" : ""}>
+            /* Figma's row frame: 20px of padding top and bottom (the first
+               row has none above it) with the hairline on the bottom edge. */
+            <li
+              key={item.title}
+              className={`border-b border-white/15 pb-5 ${i > 0 ? "pt-5" : ""}`}
+            >
               <h3>
                 <button
                   type="button"
@@ -61,13 +67,13 @@ export function FundDisclosureList({ group }: { group: keyof typeof groups }) {
                   aria-expanded={isOpen}
                   aria-controls={`${id}-panel-${index}`}
                   id={`${id}-row-${index}`}
-                  className="group flex w-full items-start justify-between gap-6 py-5 text-left text-white"
+                  className="group flex w-full items-center justify-between gap-6 text-left text-white"
                 >
                   <span className={`${titleClass} transition-opacity duration-300 group-hover:opacity-75`}>
                     {item.title}
                   </span>
                   <CaretRight
-                    className={`disclosure-caret mt-1 h-4 w-4 shrink-0 ${
+                    className={`disclosure-caret h-4 w-4 shrink-0 ${
                       isOpen ? "rotate-90" : "group-hover:translate-x-1"
                     }`}
                   />
@@ -83,7 +89,8 @@ export function FundDisclosureList({ group }: { group: keyof typeof groups }) {
               >
                 <div className="overflow-hidden">
                   <p
-                    className={`${bodyClass} pb-5 font-sans text-base leading-[1.6] text-slate`}
+                    /* 12px under the question, per the row's auto-layout. */
+                    className={`${bodyClass} pt-3 font-sans text-base leading-[1.6] text-slate`}
                   >
                     {item.body}
                   </p>
@@ -97,7 +104,7 @@ export function FundDisclosureList({ group }: { group: keyof typeof groups }) {
       {pageCount > 1 && (
         <nav
           aria-label="FAQ pages"
-          className="mt-6 flex items-center justify-center gap-6 text-white"
+          className="mt-5 flex items-center justify-center gap-6 text-white"
         >
           <button
             type="button"
@@ -123,7 +130,9 @@ export function FundDisclosureList({ group }: { group: keyof typeof groups }) {
                 /* At 3px tall the default stroke would scale to a hairline —
                    passing the weight pins it to real pixels (see icons.tsx). */
                 strokeWidth={1.5}
-                className={`!mt-0.5 !h-[3px] w-6 ${n === page ? "" : "!opacity-0"}`}
+                className={`!mt-0.5 !h-[3px] w-[25px] text-rust ${
+                  n === page ? "" : "!opacity-0"
+                }`}
                 style={{ clipPath: "inset(0 0 0 0)" }}
               />
             </button>

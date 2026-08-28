@@ -41,9 +41,8 @@ export function AboutHero() {
             <em className="italic">{aboutHero.titleItalic}</em>
             <span className="font-normal italic"> .</span>
           </h1>
-          {/* 149px in the frame; the wave fills 115 of the SVG's 150-unit box,
-              so the box runs to 194 for the stroke itself to measure 149. */}
-          <Underline className="mt-2.5 !h-[5px] max-w-[194px]" />
+          {/* 149px in the frame. */}
+          <Underline className="mt-2.5 !h-[5px] max-w-[149px]" />
           <p className="mt-2.5 font-serif text-lg font-medium leading-[1.5] md:text-[1.375rem]">
             {aboutHero.lead}
           </p>

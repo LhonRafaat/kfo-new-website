@@ -9,13 +9,19 @@ import { fundGrants } from "@/lib/content";
  */
 export function FundGrants() {
   return (
-    <section className="relative">
+    <section id="grants" className="relative">
       <Container className="relative z-10 pt-24 md:pt-40">
         <Reveal className="flex max-w-[691px] flex-col gap-4">
           <h2 className="heading-section text-white">{fundGrants.heading}</h2>
-          <p className="whitespace-pre-line font-sans text-base leading-[1.6] text-slate">
-            {fundGrants.intro}
-          </p>
+          {/* The frame's own line breaks, honoured only where the measure it
+              ragged for actually applies. */}
+          <div className="font-sans text-base leading-[1.6] text-slate">
+            {fundGrants.intro.map((paragraph) => (
+              <p key={paragraph} className="lg:whitespace-pre-line">
+                {paragraph}
+              </p>
+            ))}
+          </div>
         </Reveal>
 
         <div className="mt-12 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">

@@ -2,21 +2,16 @@ import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { fundTimeline } from "@/lib/content";
 
-/** Figma paints the dots in its own rust, not the site's accent orange. */
-const DOT = "#CA4A2F";
+/* Figma's "Group 19": six 148px columns with 48px between them — 1128px of
+   run, centred in the 1280 frame — over a hairline that goes edge to edge.
+   Each dot is centred on that line and its label sits 16px clear of the dot,
+   which puts the 2026 cycle under the line and the 2027 cycle over it. */
+const DOT_SIZE = { minor: 32, major: 64 };
+const LABEL_GAP = 16;
 
-/**
- * "Fund Cycle Timeline" (Figma "Group 20"): six milestones threaded on a line
- * that runs the full width of the page — the 2026 cycle labelled under it, the
- * 2027 cycle over it, and the two announcement dots drawn at twice the size.
- *
- * The line is only meaningful when the whole run is visible at once, so below
- * `md` it turns and the milestones stack down a rail instead of squeezing six
- * columns into a phone.
- */
 export function FundTimeline() {
   return (
-    <section className="relative">
+    <section id="cycle-timeline" className="relative">
       <Container className="relative z-10 pt-24 md:pt-40">
         <Reveal className="flex max-w-[387px] flex-col gap-4">
           <h2 className="heading-section text-white">{fundTimeline.heading}</h2>
@@ -26,34 +21,40 @@ export function FundTimeline() {
         </Reveal>
       </Container>
 
-      {/* ---- md+: the horizontal line, full-bleed as in the frame ---- */}
-      <Reveal className="relative mt-10 hidden h-[250px] w-full md:block">
-        <div className="absolute inset-x-0 top-1/2 h-px bg-espresso/80" aria-hidden />
-        <ol className="absolute inset-0 grid grid-cols-6">
-          {fundTimeline.milestones.map((m, i) => (
-            <li key={`${m.label}-${i}`} className="relative">
-              <span
-                aria-hidden
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full"
-                style={{
-                  background: DOT,
-                  width: m.major ? 64 : 32,
-                  height: m.major ? 64 : 32,
-                }}
-              />
-              <div
-                className={`absolute left-1/2 w-[148px] -translate-x-1/2 text-center ${
-                  m.above ? "bottom-1/2" : "top-1/2"
-                }`}
-                style={{
-                  [m.above ? "marginBottom" : "marginTop"]: m.major ? 44 : 31,
-                }}
-              >
-                <Label {...m} />
-              </div>
-            </li>
-          ))}
-        </ol>
+      {/* ---- md+: the horizontal run, the line full-bleed as in the frame ---- */}
+      <Reveal className="relative mt-[34px] hidden h-[250px] w-full md:block">
+        <div
+          className="absolute inset-x-0 top-1/2 h-px -translate-y-1/2 bg-cocoa/80"
+          aria-hidden
+        />
+        <Container className="h-full">
+          {/* 1128px at the design width, so the columns measure Figma's 148. */}
+          <ol className="mx-auto grid h-full max-w-[1128px] grid-cols-6 gap-x-12">
+            {fundTimeline.milestones.map((m, i) => {
+              const size = m.major ? DOT_SIZE.major : DOT_SIZE.minor;
+              const offset = size / 2 + LABEL_GAP;
+              return (
+                <li key={`${m.label}-${i}`} className="relative">
+                  <span
+                    aria-hidden
+                    className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 rounded-full bg-rust"
+                    style={{ width: size, height: size }}
+                  />
+                  <div
+                    className={`absolute left-1/2 w-full -translate-x-1/2 text-center ${
+                      m.above ? "bottom-1/2" : "top-1/2"
+                    }`}
+                    style={{
+                      [m.above ? "marginBottom" : "marginTop"]: offset,
+                    }}
+                  >
+                    <Label {...m} />
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </Container>
       </Reveal>
 
       {/* ---- below md: the same run, turned on its side ---- */}
@@ -61,7 +62,7 @@ export function FundTimeline() {
         <ol className="relative flex flex-col gap-8">
           {/* The rail runs down x=7, and every dot is centred on it. */}
           <div
-            className="absolute bottom-3 left-[7px] top-3 w-px bg-espresso/80"
+            className="absolute bottom-3 left-[7px] top-3 w-px bg-cocoa/80"
             aria-hidden
           />
           {fundTimeline.milestones.map((m, i) => {
@@ -75,9 +76,8 @@ export function FundTimeline() {
               >
                 <span
                   aria-hidden
-                  className="absolute top-1.5 rounded-full"
+                  className="absolute top-1.5 rounded-full bg-rust"
                   style={{
-                    background: DOT,
                     width: size,
                     height: size,
                     left: 7 - size / 2,
