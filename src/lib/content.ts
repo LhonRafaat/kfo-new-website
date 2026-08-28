@@ -12,8 +12,10 @@ export const primaryNav = [
   { index: "02", label: "About", href: "/about" },
   { index: "03", label: "Services", href: "/services" },
   { index: "04", label: "Locations", href: "/locations" },
-  { index: "05", label: "Production", href: "/production" },
-  { index: "06", label: "Kurdistan Film Fund", href: "/film-fund" },
+  // Production is hidden from the menu (user, 2026-08-28) until the page is
+  // built — restore it here, renumbering the Film Fund to 06, to bring it back.
+  // { index: "05", label: "Production", href: "/production" },
+  { index: "05", label: "Kurdistan Film Fund", href: "/film-fund" },
 ] as const;
 
 export const secondaryNav = [

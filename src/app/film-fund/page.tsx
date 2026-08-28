@@ -19,7 +19,7 @@ export const metadata: Metadata = {
 export default function FilmFundPage() {
   return (
     <>
-      <Navbar />
+      <Navbar tone="dark" />
       {/* The only dark page on the site. It runs the same paper as every other
           page, turned down: a near-black neutral ground with the tile
           multiplied over it, so the scan's specks and fibres still read while

@@ -23,9 +23,13 @@ export function Testimonial() {
           {/* ---- Background stack: slate + portrait, burned by the paper ---- */}
           <div className="burn-restore absolute inset-0 isolate [container-type:size]">
             <div className="burn-scope absolute inset-0 bg-slate">
-              {/* Mirrors the spacer column below: full-width top band on mobile,
-                  left half on md+. */}
-              <div className="absolute inset-x-0 top-0 h-[320px] md:inset-y-0 md:left-0 md:h-auto md:w-1/2">
+              {/* Mirrors the spacer column below: full-width top band on
+                  mobile, left half on md+. Below md both are sized from the
+                  card's own width by the SAME aspect ratio, so the band ends
+                  exactly where the statement begins at every viewport instead
+                  of two fixed heights having to agree. 3:4 is the portrait's
+                  own ratio (1200×1600), so nothing of it is cropped away. */}
+              <div className="absolute inset-x-0 top-0 aspect-3/4 md:inset-y-0 md:left-0 md:aspect-auto md:h-auto md:w-1/2">
                 <Image
                   src="/images/founder-bw.jpg"
                   alt="Bavi Yassin, Founder of the Kurdistan Film Commission"
@@ -58,8 +62,8 @@ export function Testimonial() {
           {/* ---- Copy, above the burn ---- */}
           <div className="relative z-10 grid grid-cols-1 md:grid-cols-2">
             {/* Spacer holding the portrait's footprint, with the name overlaid */}
-            <div className="relative min-h-[320px] md:min-h-[448px]">
-              <div className="absolute bottom-8 left-12 text-white md:bottom-16 md:left-12">
+            <div className="relative aspect-3/4 md:aspect-auto md:min-h-[448px]">
+              <div className="absolute bottom-8 left-6 text-white md:bottom-16 md:left-12">
                 <p className="heading-card font-serif font-bold italic leading-normal">
                   Bavi Yassin
                 </p>

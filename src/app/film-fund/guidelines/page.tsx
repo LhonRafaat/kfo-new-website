@@ -37,7 +37,7 @@ export default function FundGuidelinesPage() {
             className="object-cover object-center"
           />
         </div>
-        <Navbar />
+        <Navbar tone="dark" />
 
         <main className="relative">
           <Container className="relative z-10 pt-20">

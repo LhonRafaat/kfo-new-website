@@ -16,9 +16,10 @@ import {
  * "A Land of Untold Stories" mosaic (Figma "Location DB Variant 3", 317:631):
  * four columns of two staggered tiles. One tile at a time carries the Figma's
  * treatment — grayscale, dark gradient, title and CTA pill — and it follows
- * the pointer, falling back to the Bazyan tile (the Figma's resting state)
- * when nothing is hovered. Column height is viewport-capped so the whole
- * section always fits within 100vh.
+ * the pointer. **At rest no tile carries it** (user, 2026-08-28): the Figma
+ * shows it on the Bazyan tile, but a permanent "Get access to all database"
+ * pill reads as a badge on one photo rather than as the hover affordance it
+ * is. Column height is viewport-capped so the whole section fits within 100vh.
  */
 function Tile({
   tile,
@@ -77,8 +78,8 @@ function Tile({
 }
 
 export function LocationsShowcase() {
-  // Index into the flattened column-major grid; 0 is Bazyan, the Figma default.
-  const [active, setActive] = useState(0);
+  // Index into the flattened column-major grid; null while nothing is hovered.
+  const [active, setActive] = useState<number | null>(null);
 
   return (
     <section className="relative">
@@ -101,7 +102,7 @@ export function LocationsShowcase() {
 
         <div
           className="mt-10 grid grid-cols-1 gap-3 md:grid-cols-[346fr_207fr_340fr_237fr] md:gap-4"
-          onMouseLeave={() => setActive(0)}
+          onMouseLeave={() => setActive(null)}
         >
           {locationShowcase.map((col, c) => (
             <Reveal

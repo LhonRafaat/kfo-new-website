@@ -27,6 +27,22 @@
     scroll-behavior: smooth;
   }
 
+  /* No native scrollbar anywhere (user, 2026-08-28). Opening the founder's
+     message or the menu locks body scroll, which takes the bar away and
+     reflows the whole page ~15px wider for as long as the overlay is up — the
+     jitter the user reported. Hiding the bar outright removes the width it
+     occupies, so locking scroll costs nothing. The page still scrolls by every
+     other means. */
+  html,
+  body {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* legacy Edge */
+  }
+  html::-webkit-scrollbar,
+  body::-webkit-scrollbar {
+    display: none; /* Chrome / Safari */
+  }
+
   body {
     @apply bg-cream text-ink font-sans antialiased;
     font-feature-settings:

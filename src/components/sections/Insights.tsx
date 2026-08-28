@@ -46,17 +46,23 @@ export function Insights() {
   const goPage = (dir: 1 | -1) =>
     setIndex(((page + dir + pages) % pages) * PAGE_SIZE);
 
+  // 44px on a phone — the Figma's 32px box is a comfortable mouse target but
+  // an awkward thumb one — stepping back to the drawn size from md up.
   const controlClass =
-    "flex h-8 w-8 items-center justify-center border-b-[0.57px] border-ink pb-1 text-ink transition-colors duration-300 hover:border-accent hover:text-accent";
+    "flex h-11 w-11 items-center justify-center border-b-[0.57px] border-ink pb-1.5 text-ink transition-colors duration-300 hover:border-accent hover:text-accent md:h-8 md:w-8 md:pb-1";
+  const controlIconClass = "h-[1.125rem] w-[1.125rem] md:h-3.5 md:w-3.5";
 
   return (
     <section className="relative">
       <Container className="relative z-10 py-12">
-        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        {/* Heading and the "read all" link share a row at every width. */}
+        <div className="flex flex-row items-center justify-between gap-4">
           <Reveal as="h2" className="heading-section text-ink">
             <em className="italic">Insights</em>
           </Reveal>
-          <AccentLink href="/news">Read all insights</AccentLink>
+          <AccentLink href="/news" className="shrink-0">
+            Read all insights
+          </AccentLink>
         </div>
 
         <div className="mt-10 grid grid-cols-1 gap-10 md:grid-cols-2">
@@ -94,7 +100,7 @@ export function Insights() {
               })}
             </div>
 
-            <div className="mt-12 flex items-center gap-[9px] md:mt-auto">
+            <div className="mt-12 flex items-center gap-3 md:mt-auto md:gap-[9px]">
               <button
                 type="button"
                 onClick={() => setPlaying((p) => !p)}
@@ -102,9 +108,9 @@ export function Insights() {
                 className={controlClass}
               >
                 {playing ? (
-                  <PauseSmall className="h-3.5 w-3.5" />
+                  <PauseSmall className={controlIconClass} />
                 ) : (
-                  <PlayIcon className="h-3.5 w-3.5" />
+                  <PlayIcon className={controlIconClass} />
                 )}
               </button>
               <button
@@ -113,7 +119,7 @@ export function Insights() {
                 aria-label="Previous articles"
                 className={controlClass}
               >
-                <ArrowUpSmall className="h-3.5 w-3.5" />
+                <ArrowUpSmall className={controlIconClass} />
               </button>
               <button
                 type="button"
@@ -121,7 +127,7 @@ export function Insights() {
                 aria-label="Next articles"
                 className={controlClass}
               >
-                <ArrowDownSmall className="h-3.5 w-3.5" />
+                <ArrowDownSmall className={controlIconClass} />
               </button>
             </div>
           </div>

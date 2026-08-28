@@ -3,17 +3,15 @@
 import Image from "next/image";
 import {
   useEffect,
-  useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
-  type PointerEvent,
 } from "react";
 import { CarouselArrow } from "@/components/icons";
+import { useDragSlider } from "@/lib/useDragSlider";
 import type { LocationEntry } from "@/lib/content";
 
 const SLIDE_MS = 700;
-const SWIPE_PX = 40;
 
 /**
  * Three-up photo strip under the body copy (Figma 338:1152–338:1154 with the
@@ -30,12 +28,14 @@ export function LocationSlider({
   const n = images.length;
   const [index, setIndex] = useState(n);
   const [animate, setAnimate] = useState(true);
-  const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const step = (dir: 1 | -1) => {
     setAnimate(true);
     setIndex((i) => i + dir);
   };
+
+  // Touch drag — the strip follows the finger and snaps on release.
+  const { handlers, dragX, dragging } = useDragSlider(step);
 
   useEffect(() => {
     if (index >= 2 * n || index < n) {
@@ -57,21 +57,6 @@ export function LocationSlider({
     }
   }, [index, animate, n]);
 
-  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "mouse") return;
-    swipeStart.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
-    const from = swipeStart.current;
-    swipeStart.current = null;
-    if (!from) return;
-    const dx = e.clientX - from.x;
-    if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(e.clientY - from.y))
-      return;
-    step(dx < 0 ? 1 : -1);
-  };
-
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight") step(1);
     else if (e.key === "ArrowLeft") step(-1);
@@ -80,9 +65,11 @@ export function LocationSlider({
   };
 
   const reel = [...images, ...images, ...images];
-  const ease = animate
-    ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-    : "transition-none";
+  // Still while a finger is on it — the transform is the finger's position.
+  const ease =
+    animate && !dragging
+      ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+      : "transition-none";
 
   return (
     <div
@@ -93,20 +80,20 @@ export function LocationSlider({
         <div
           role="group"
           tabIndex={0}
-          onPointerDown={onPointerDown}
-          onPointerUp={onPointerUp}
-          onPointerCancel={() => (swipeStart.current = null)}
+          {...handlers}
           onKeyDown={onKeyDown}
-          aria-label="Photo strip — use the arrow keys to page through"
+          aria-label="Photo strip — swipe, or use the arrow keys, to page through"
           className={`flex w-full touch-pan-y outline-offset-8 ${ease}`}
           style={
             {
               "--i": index,
               "--slide-w":
                 "calc((100% - (var(--per) - 1) * var(--gap)) / var(--per))",
+              // Live finger travel, 0 at rest.
+              "--drag": `${dragX}px`,
               gap: "var(--gap)",
               transform:
-                "translateX(calc(-1 * var(--i) * (100% + var(--gap)) / var(--per)))",
+                "translateX(calc(-1 * var(--i) * (100% + var(--gap)) / var(--per) + var(--drag)))",
             } as CSSProperties
           }
         >

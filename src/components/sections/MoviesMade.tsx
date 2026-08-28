@@ -3,21 +3,18 @@
 import Image from "next/image";
 import {
   useEffect,
-  useRef,
   useState,
   type CSSProperties,
   type KeyboardEvent,
-  type PointerEvent,
 } from "react";
 import { Container } from "@/components/ui/Container";
 import { Reveal } from "@/components/Reveal";
 import { CarouselArrow, Underline } from "@/components/icons";
+import { useDragSlider } from "@/lib/useDragSlider";
 import { movies } from "@/lib/content";
 
 const SLIDE_MS = 700;
 const N = movies.length;
-/** Horizontal travel (px) that counts as a swipe rather than a tap. */
-const SWIPE_PX = 40;
 
 /** Three copies of the reel so it can travel in either direction without ever
  *  running out of posters. The index lives in the middle copy; once it drifts
@@ -40,12 +37,14 @@ const reel = [...movies, ...movies, ...movies];
 export function MoviesMade() {
   const [index, setIndex] = useState(N); // first real poster of the middle copy
   const [animate, setAnimate] = useState(true);
-  const swipeStart = useRef<{ x: number; y: number } | null>(null);
 
   const step = (dir: 1 | -1) => {
     setAnimate(true);
     setIndex((i) => i + dir);
   };
+
+  // Touch drag — the strip follows the finger and snaps on release.
+  const { handlers, dragX, dragging } = useDragSlider(step);
 
   useEffect(() => {
     // Drifted out of the middle copy — wait for the slide to land, then jump
@@ -70,22 +69,6 @@ export function MoviesMade() {
     }
   }, [index, animate]);
 
-  const onPointerDown = (e: PointerEvent<HTMLDivElement>) => {
-    if (e.pointerType === "mouse") return; // mouse pages with the arrows
-    swipeStart.current = { x: e.clientX, y: e.clientY };
-  };
-
-  const onPointerUp = (e: PointerEvent<HTMLDivElement>) => {
-    const from = swipeStart.current;
-    swipeStart.current = null;
-    if (!from) return;
-    const dx = e.clientX - from.x;
-    // Ignore anything that reads as a vertical scroll rather than a swipe.
-    if (Math.abs(dx) < SWIPE_PX || Math.abs(dx) < Math.abs(e.clientY - from.y))
-      return;
-    step(dx < 0 ? 1 : -1);
-  };
-
   const onKeyDown = (e: KeyboardEvent<HTMLDivElement>) => {
     if (e.key === "ArrowRight") step(1);
     else if (e.key === "ArrowLeft") step(-1);
@@ -93,15 +76,19 @@ export function MoviesMade() {
     e.preventDefault();
   };
 
-  const ease = animate
-    ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
-    : "transition-none";
+  // The reel never animates while a finger is on it — the transform is the
+  // finger's position — and picks the transition back up when it lifts.
+  const ease =
+    animate && !dragging
+      ? "transition-transform duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:transition-none"
+      : "transition-none";
 
   return (
     <section
       // Target of the hero's "Find movies / Made in Kurdistan" quick link.
       id="movies-made-in-kurdistan"
-      className="relative scroll-mt-6"
+      // Clears the sticky header when the hero's quick link jumps here.
+      className="relative scroll-mt-24"
       aria-roledescription="carousel"
       aria-label="Movies made in Kurdistan"
     >
@@ -148,11 +135,9 @@ export function MoviesMade() {
           <div
             role="group"
             tabIndex={0}
-            onPointerDown={onPointerDown}
-            onPointerUp={onPointerUp}
-            onPointerCancel={() => (swipeStart.current = null)}
+            {...handlers}
             onKeyDown={onKeyDown}
-            aria-label="Film posters — use the arrow keys to page through"
+            aria-label="Film posters — swipe, or use the arrow keys, to page through"
             className={`flex w-full touch-pan-y outline-offset-8 ${ease}`}
             style={
               {
@@ -162,9 +147,11 @@ export function MoviesMade() {
                 // poster along whatever the current per-view is.
                 "--slide-w":
                   "calc((100% - (var(--per) - 1) * var(--gap)) / var(--per))",
+                // Live finger travel, 0 at rest.
+                "--drag": `${dragX}px`,
                 gap: "var(--gap)",
                 transform:
-                  "translateX(calc(-1 * var(--i) * (100% + var(--gap)) / var(--per)))",
+                  "translateX(calc(-1 * var(--i) * (100% + var(--gap)) / var(--per) + var(--drag)))",
               } as CSSProperties
             }
           >
