@@ -89,7 +89,6 @@ export function Testimonial() {
               </Reveal>
               <Reveal as="blockquote" delay={140} className="max-w-[512px]">
                 <p className="font-sans text-base leading-6 text-[#291A1C]">
-                  <span className="text-accent">&ldquo;</span>
                   Kurdistan Film Commission is the newly established non-profit
                   film commission in the Kurdistan region of Iraq. The northern
                   region of Iraq is well-known for its rich history, beautiful
